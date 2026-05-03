@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useInViewOnce } from '../hooks/useInViewOnce';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 
 /**
  * Scripted reenactment: messy spoken thought → polished sentence.
@@ -10,30 +9,29 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 const SCRIPT = [
   {
     spoken:
-      "ok so um can you reply to mireia and tell her uh the meeting on tuesday won't work for me because i'll be in lisbon and ask her to suggest like wednesday or thursday afternoon instead",
+      "could you reply to amelia and let her know tuesday won't work, i'll be in lisbon, suggest wednesday or thursday afternoon instead",
     polished:
-      "Hi Mireia — Tuesday won't work for me, I'll be in Lisbon. Could we move it to Wednesday or Thursday afternoon?",
-    locale: 'EN',
+      "Amelia, Tuesday won't work, I'll be in Lisbon. Could we move it to Wednesday or Thursday afternoon?",
+    locale: 'English',
   },
   {
     spoken:
-      "diga li al jordi que el deploy ja està fet, que faci el smoke test del payments i si tot va bé que tanqui la pr",
+      "let david know the deploy is live, ask him to run the payments smoke test and close the pull request if everything looks clean",
     polished:
-      "Hey Jordi — the deploy is live. Could you run the payments smoke test and close the PR if everything looks good?",
-    locale: 'CA → EN',
+      "David, the deploy is live. Could you run the payments smoke test and close the PR if it looks clean?",
+    locale: 'English',
   },
   {
     spoken:
-      "alright let me think... the q3 churn was actually mostly enterprise renewals not pricing, but the smb numbers held up better than we expected",
+      "the q3 churn was mostly enterprise renewals, not pricing, and the smb numbers held up a little better than we modeled",
     polished:
-      "Q3 churn came from enterprise renewals, not pricing. SMB held up better than expected.",
-    locale: 'EN',
+      "Q3 churn came from enterprise renewals, not pricing. SMB held up slightly better than modeled.",
+    locale: 'English',
   },
 ] as const;
 
 export function MagicMoment() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>('-25% 0px');
-  const reduced = useReducedMotion();
   const [step, setStep] = useState(0);
   const [phase, setPhase] = useState<'idle' | 'speaking' | 'thinking' | 'reveal'>('idle');
   const [spokenChars, setSpokenChars] = useState(0);
@@ -44,19 +42,6 @@ export function MagicMoment() {
   // Run the demo loop once it enters view.
   useEffect(() => {
     if (!inView) return;
-    if (reduced) {
-      // Reduced-motion: snap to final state, cycle slowly.
-      setPhase('reveal');
-      setSpokenChars(current.spoken.length);
-      const id = window.setTimeout(() => {
-        setStep((s) => (s + 1) % SCRIPT.length);
-      }, 5400);
-      timers.current.push(id);
-      return () => {
-        timers.current.forEach(clearTimeout);
-        timers.current = [];
-      };
-    }
 
     timers.current.forEach(clearTimeout);
     timers.current = [];
@@ -93,7 +78,7 @@ export function MagicMoment() {
       timers.current.forEach(clearTimeout);
       timers.current = [];
     };
-  }, [inView, step, reduced, current.spoken]);
+  }, [inView, step, current.spoken]);
 
   return (
     <section
@@ -113,13 +98,13 @@ export function MagicMoment() {
         }}
       >
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '1.5rem' }}>
-          <Eyebrow>The moment it earns its place</Eyebrow>
+          <Eyebrow>How it feels</Eyebrow>
           <span
             style={{
               fontFamily: 'var(--font-mono)',
               color: 'var(--ink-2)',
-              fontSize: 'var(--step--1)',
-              letterSpacing: '0.06em',
+              fontSize: 'calc(var(--step--1) * 0.95)',
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
           >
@@ -131,13 +116,13 @@ export function MagicMoment() {
           style={{
             margin: 0,
             fontSize: 'var(--step-4)',
-            letterSpacing: '-0.035em',
-            lineHeight: 1.02,
-            fontWeight: 500,
-            maxWidth: '24ch',
+            letterSpacing: '-0.04em',
+            lineHeight: 1.0,
+            fontWeight: 400,
+            maxWidth: '22ch',
           }}
         >
-          You ramble. You pause.
+          You think out loud.
           <br />
           <span style={{ color: 'var(--ink-1)' }}>It writes what you meant.</span>
         </h2>
@@ -225,8 +210,9 @@ function DemoFrame({
               color: 'var(--ink-1)',
               fontSize: 'var(--step-1)',
               lineHeight: 1.45,
-              letterSpacing: '-0.01em',
+              letterSpacing: '-0.012em',
               fontFamily: 'var(--font-sans)',
+              fontWeight: 380,
               minHeight: '3em',
               display: 'inline',
             }}
@@ -238,7 +224,7 @@ function DemoFrame({
 
         <Divider />
 
-        <Row label="What you meant">
+        <Row label="It wrote">
           <AnimatePresence mode="wait">
             {phase === 'reveal' ? (
               <motion.span
@@ -250,10 +236,10 @@ function DemoFrame({
                 style={{
                   display: 'inline-block',
                   fontSize: 'var(--step-2)',
-                  lineHeight: 1.35,
-                  letterSpacing: '-0.015em',
+                  lineHeight: 1.32,
+                  letterSpacing: '-0.018em',
                   color: 'var(--ink-0)',
-                  fontWeight: 500,
+                  fontWeight: 420,
                 }}
               >
                 {polished}

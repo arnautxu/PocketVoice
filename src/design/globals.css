@@ -32,9 +32,22 @@ body {
   font-family: var(--font-sans);
   font-feature-settings: 'cv11', 'ss03', 'ss05';
   font-size: var(--step-0);
+  font-weight: 380;
   line-height: 1.55;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.008em;
   overflow-x: hidden;
+}
+
+/* Atmospheric grain — fixed, pointer-events-none, no scroll repaint cost */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
 ::selection {
@@ -71,17 +84,6 @@ a {
 
 @media (hover: hover) and (pointer: fine) {
   /* hover-only refinements live with components */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
 
 /* Utility: monospaced numerals where data appears */

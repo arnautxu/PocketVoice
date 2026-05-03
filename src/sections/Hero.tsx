@@ -33,46 +33,48 @@ export function Hero() {
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '0.6rem',
-            padding: '0.4rem 0.85rem',
+            gap: '0.65rem',
+            padding: '0.4rem 0.95rem 0.4rem 0.55rem',
             border: '1px solid var(--hairline)',
             borderRadius: '999px',
             color: 'var(--ink-1)',
-            fontSize: 'var(--step--1)',
-            background: 'oklch(0.16 0.005 270 / 0.5)',
-            backdropFilter: 'blur(8px)',
-            marginBottom: '2.25rem',
+            fontSize: 'calc(var(--step--1) * 0.95)',
+            letterSpacing: '0.02em',
+            background: 'oklch(0.155 0.007 264 / 0.55)',
+            backdropFilter: 'blur(14px)',
+            marginBottom: '2.5rem',
           }}
         >
           <span
             aria-hidden
             style={{
-              width: 6,
-              height: 6,
+              position: 'relative',
+              width: 8,
+              height: 8,
               borderRadius: 999,
               background: 'var(--accent)',
-              boxShadow: '0 0 12px var(--accent-glow)',
+              boxShadow: '0 0 14px var(--accent-glow)',
             }}
           />
-          From Pocket. iOS first.
+          A new app from <span style={{ color: 'var(--ink-0)' }}>Pocket</span>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease, delay: 0.18 }}
+          transition={{ duration: 0.9, ease, delay: 0.18 }}
           style={{
             fontSize: 'var(--step-5)',
             lineHeight: 0.92,
-            letterSpacing: '-0.04em',
-            fontWeight: 500,
+            letterSpacing: '-0.045em',
+            fontWeight: 400,
             margin: 0,
             maxWidth: '14ch',
           }}
         >
           Speak.
           <br />
-          <span style={{ color: 'var(--ink-1)' }}>Polished text appears.</span>
+          <span style={{ color: 'var(--ink-1)' }}>It reads like you wrote it.</span>
         </motion.h1>
 
         <motion.p
@@ -81,17 +83,18 @@ export function Hero() {
           transition={{ duration: 0.7, ease, delay: 0.34 }}
           style={{
             color: 'var(--ink-1)',
-            maxWidth: '46ch',
+            maxWidth: '42ch',
             fontSize: 'var(--step-1)',
             lineHeight: 1.45,
-            letterSpacing: '-0.01em',
+            letterSpacing: '-0.012em',
+            fontWeight: 380,
             marginTop: '1.75rem',
             marginBottom: '2.5rem',
           }}
         >
-          Voice-to-text that understands what you're doing and writes the way
-          you would have typed it. Anywhere you type, in any language,
-          instantly.
+          Voice‑to‑text that understands the surface you’re writing in and
+          composes the sentence you would have typed. Any app. Any language.
+          Instantly.
         </motion.p>
 
         <motion.div
@@ -108,10 +111,11 @@ export function Hero() {
               fontSize: 'var(--step-0)',
               borderBottom: '1px solid var(--hairline-strong)',
               paddingBottom: 2,
+              letterSpacing: '-0.005em',
               transition: 'color var(--t-quick) var(--ease-out)',
             }}
           >
-            See it in motion
+            Watch a demo
           </a>
         </motion.div>
 
@@ -130,11 +134,11 @@ export function Hero() {
             textTransform: 'uppercase',
           }}
         >
-          <span>iOS 17.4+</span>
-          <span style={{ color: 'var(--hairline-strong)' }}>·</span>
+          <span>iPhone</span>
+          <span style={{ color: 'var(--hairline-strong)' }}>—</span>
           <span>108 languages</span>
-          <span style={{ color: 'var(--hairline-strong)' }}>·</span>
-          <span>On‑device first</span>
+          <span style={{ color: 'var(--hairline-strong)' }}>—</span>
+          <span>On‑device, private</span>
         </motion.div>
       </div>
     </section>

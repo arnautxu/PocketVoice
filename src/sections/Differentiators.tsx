@@ -18,9 +18,9 @@ const POINTS = [
   },
   {
     no: '03',
-    title: 'Speaks 108 languages.',
+    title: 'Fluent in 108 languages.',
     body:
-      'Code-switch mid-sentence. Mix Catalan and English, Hindi and Tamil, Arabic and French. Pocket Voice keeps up. No setting to flip, no language picker.',
+      'Switch mid‑sentence. Mix Spanish and English, Mandarin and French, Arabic and German. Pocket Voice keeps up — no toggle, no language picker, no menu to find first.',
     metric: { value: '108', unit: 'languages', caption: 'inline, no toggle' },
   },
 ];
@@ -58,25 +58,26 @@ export function Differentiators() {
             style={{
               margin: '1.25rem 0 0',
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.045em',
               lineHeight: 0.98,
-              fontWeight: 500,
+              fontWeight: 400,
               maxWidth: '15ch',
             }}
           >
-            Three things <span style={{ color: 'var(--ink-1)' }}>that have to be true</span> for
-            voice to replace typing.
+            Three things <span style={{ color: 'var(--ink-1)' }}>have to be true</span> before voice can replace typing.
           </h2>
           <p
             style={{
               color: 'var(--ink-1)',
-              maxWidth: '38ch',
+              maxWidth: '36ch',
               fontSize: 'var(--step-0)',
+              fontWeight: 380,
               marginTop: '1.75rem',
+              letterSpacing: '-0.008em',
             }}
           >
-            Most voice apps get one. Some get two. The category leader gets two and a half. Pocket
-            Voice was built to get all three at once.
+            Most apps get one. The category leader gets two. Pocket Voice was
+            built to get all three at once.
           </p>
         </motion.div>
 
@@ -138,9 +139,9 @@ export function Differentiators() {
                 style={{
                   margin: 0,
                   fontSize: 'var(--step-3)',
-                  letterSpacing: '-0.03em',
-                  lineHeight: 1.05,
-                  fontWeight: 500,
+                  letterSpacing: '-0.035em',
+                  lineHeight: 1.04,
+                  fontWeight: 420,
                 }}
               >
                 {p.title}
@@ -150,7 +151,8 @@ export function Differentiators() {
                   color: 'var(--ink-1)',
                   fontSize: 'var(--step-1)',
                   lineHeight: 1.45,
-                  letterSpacing: '-0.01em',
+                  letterSpacing: '-0.012em',
+                  fontWeight: 380,
                   margin: 0,
                   maxWidth: '52ch',
                 }}
@@ -200,9 +202,9 @@ function Metric({ value, unit }: { value: string; unit: string }) {
         className="tabular"
         style={{
           fontSize: 'var(--step-3)',
-          letterSpacing: '-0.04em',
+          letterSpacing: '-0.045em',
           color: 'var(--ink-0)',
-          fontWeight: 500,
+          fontWeight: 380,
         }}
       >
         {value}

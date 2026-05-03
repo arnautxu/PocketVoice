@@ -96,11 +96,11 @@ Motion is a brand element, not decoration. Custom curves only.
 --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like surfaces */
 ```
 
-Durations: 100–200ms interactive, 400–800ms narrative, never >300ms on rapid actions. Animate `transform` and `opacity` only. `prefers-reduced-motion: reduce` collapses to a static still — opacity transitions retained, position/scale transforms removed.
+Durations: 100–200ms interactive, 400–800ms narrative, never >300ms on rapid actions. Animate `transform` and `opacity` only.
 
 ## The signature object
 
-A liquid-metal morphing mesh as the hero scene. Custom shader, dark reflective material, scroll-driven uniforms. Non-figurative — never a microphone, never a soundwave. Reference: Apple Vision Pro material studies, Nothing transparent renders. Static AVIF poster as fallback for first paint and reduced-motion mode.
+A liquid-metal morphing mesh as the hero scene. Custom shader, dark reflective material, scroll-driven uniforms. Non-figurative — never a microphone, never a soundwave. Reference: Apple Vision Pro material studies, Nothing transparent renders. Static AVIF poster as fallback for first paint.
 
 ## The launch IA
 

@@ -4,13 +4,12 @@ import * as THREE from 'three';
 import { voiceFragment, voiceVertex } from './voiceShader';
 
 interface VoiceMeshProps {
-  reduced: boolean;
   scrollVelocityRef: React.MutableRefObject<number>;
   morphRef: React.MutableRefObject<number>;
 }
 
 /** The signature object: a slow, breathing liquid-metal mesh. */
-export function VoiceMesh({ reduced, scrollVelocityRef, morphRef }: VoiceMeshProps) {
+export function VoiceMesh({ scrollVelocityRef, morphRef }: VoiceMeshProps) {
   const matRef = useRef<THREE.ShaderMaterial>(null);
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -29,21 +28,16 @@ export function VoiceMesh({ reduced, scrollVelocityRef, morphRef }: VoiceMeshPro
     if (!matRef.current || !meshRef.current) return;
     const u = matRef.current.uniforms;
 
-    // Time always advances (even reduced motion: a faint living surface still helps the brand);
-    // but rotation/morph dampen to near zero if reduced.
     u.uTime.value += delta;
 
-    const targetActivity = reduced ? 0 : Math.min(scrollVelocityRef.current, 1.0);
+    const targetActivity = Math.min(scrollVelocityRef.current, 1.0);
     u.uActivity.value += (targetActivity - u.uActivity.value) * 0.06;
 
-    const targetMorph = reduced ? 0 : morphRef.current;
-    u.uMorph.value += (targetMorph - u.uMorph.value) * 0.04;
+    u.uMorph.value += (morphRef.current - u.uMorph.value) * 0.04;
 
     // Gentle perpetual rotation — slow, deliberate, not spinning.
-    if (!reduced) {
-      meshRef.current.rotation.y += delta * 0.06;
-      meshRef.current.rotation.x = Math.sin(u.uTime.value * 0.18) * 0.08;
-    }
+    meshRef.current.rotation.y += delta * 0.06;
+    meshRef.current.rotation.x = Math.sin(u.uTime.value * 0.18) * 0.08;
   });
 
   return (

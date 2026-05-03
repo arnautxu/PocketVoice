@@ -1,21 +1,19 @@
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 
 const VIGNETTES = [
-  { surface: 'iMessage',  fragment: 'on my way, 5 min', tone: 'reply' },
-  { surface: 'Linear',    fragment: 'cls-148 — payment retry loops on 402', tone: 'issue' },
-  { surface: 'Notion',    fragment: 'Q3 review · context, decisions, follow-ups', tone: 'doc' },
-  { surface: 'Slack',     fragment: 'pushed the fix, can someone smoke-test', tone: 'message' },
-  { surface: 'Mail',      fragment: 'Hi Anna — thanks for the deck. Two thoughts:', tone: 'email' },
-  { surface: 'Drafts',    fragment: 'idea: ambient mode for mornings', tone: 'note' },
-  { surface: 'Things',    fragment: 'reply to investor update by Friday', tone: 'task' },
-  { surface: 'Cursor',    fragment: '// extract this into a hook', tone: 'comment' },
-  { surface: 'Bear',      fragment: 'On translating taste from hardware', tone: 'essay' },
-  { surface: 'WhatsApp',  fragment: 'parlem demà al matí', tone: 'reply' },
+  { surface: 'iMessage',  fragment: 'On my way. Five minutes.',                     tone: 'Reply' },
+  { surface: 'Linear',    fragment: 'CLS‑148 — payment retry loops on 402.',        tone: 'Issue' },
+  { surface: 'Notion',    fragment: 'Q3 review — context, decisions, follow‑ups.',  tone: 'Doc' },
+  { surface: 'Slack',     fragment: 'Pushed the fix. Could someone smoke‑test?',    tone: 'Message' },
+  { surface: 'Mail',      fragment: 'Anna, thanks for the deck. Two thoughts.',     tone: 'Email' },
+  { surface: 'Drafts',    fragment: 'Idea — an ambient mode for mornings.',         tone: 'Note' },
+  { surface: 'Things',    fragment: 'Reply to the investor update by Friday.',      tone: 'Task' },
+  { surface: 'Cursor',    fragment: '// extract this into a hook.',                 tone: 'Comment' },
+  { surface: 'Bear',      fragment: 'On translating taste from hardware to software.', tone: 'Essay' },
+  { surface: 'WhatsApp',  fragment: 'Let’s speak tomorrow morning.',           tone: 'Reply' },
 ];
 
 export function AnywhereYouType() {
-  const reduced = useReducedMotion();
   const items = [...VIGNETTES, ...VIGNETTES];
 
   return (
@@ -27,18 +25,19 @@ export function AnywhereYouType() {
             style={{
               margin: 0,
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.045em',
               lineHeight: 1.0,
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             One gesture.
             <br />
             <span style={{ color: 'var(--ink-1)' }}>Every app you already use.</span>
           </h2>
-          <p style={{ margin: 0, color: 'var(--ink-1)', fontSize: 'var(--step-0)' }}>
-            iMessage, Mail, Notion, Linear, Slack, Cursor, Things, WhatsApp. Pocket Voice runs
-            system-wide. Press once, speak, the right text appears in the right place.
+          <p style={{ margin: 0, color: 'var(--ink-1)', fontSize: 'var(--step-0)', fontWeight: 380, letterSpacing: '-0.008em' }}>
+            iMessage, Mail, Notion, Linear, Slack, Cursor, Things, WhatsApp.
+            Pocket Voice runs system‑wide. Press once. Speak. The right text
+            appears in the right place.
           </p>
         </header>
       </div>
@@ -56,12 +55,8 @@ export function AnywhereYouType() {
       >
         <motion.ul
           aria-label="Surfaces Pocket Voice writes into"
-          animate={reduced ? undefined : { x: ['0%', '-50%'] }}
-          transition={
-            reduced
-              ? undefined
-              : { duration: 56, ease: 'linear', repeat: Infinity }
-          }
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 56, ease: 'linear', repeat: Infinity }}
           style={{
             display: 'flex',
             gap: '1rem',

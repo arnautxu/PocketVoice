@@ -45,9 +45,9 @@ export function FromPocket() {
             style={{
               margin: '1.25rem 0 1.5rem',
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.045em',
               lineHeight: 1.0,
-              fontWeight: 500,
+              fontWeight: 400,
               maxWidth: '14ch',
             }}
           >
@@ -58,16 +58,18 @@ export function FromPocket() {
           <p
             style={{
               color: 'var(--ink-1)',
-              maxWidth: '46ch',
+              maxWidth: '44ch',
               fontSize: 'var(--step-1)',
-              lineHeight: 1.5,
-              letterSpacing: '-0.01em',
+              lineHeight: 1.45,
+              letterSpacing: '-0.012em',
+              fontWeight: 380,
               margin: 0,
             }}
           >
-            Pocket Voice is the software expression of Pocket's philosophy. The same belief that
-            shaped our hardware now lives in something you already carry. Press once. Speak. The
-            interface gets out of the way.
+            Pocket Voice is the software expression of Pocket’s philosophy.
+            The same belief that shaped the hardware now lives in something
+            you already carry. Press once. Speak. The interface gets out of
+            the way.
           </p>
           <div style={{ marginTop: '2.25rem' }}>
             <InstallButton />

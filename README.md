@@ -31,7 +31,7 @@ src/
 ├─ scene/      Three.js — isolated client component, custom shader
 ├─ sections/   Hero · MagicMoment · Differentiators · AnywhereYouType · SpeedProof · FromPocket · Footer
 ├─ components/ Nav, Wordmark, InstallButton
-└─ hooks/      useReducedMotion, useInViewOnce
+└─ hooks/      useInViewOnce
 ```
 
 ## Non-negotiables
@@ -40,5 +40,4 @@ src/
 - No microphone icon as the primary mark. No sparkles. No "powered by AI".
 - No 3-up icon-heading-text feature card grid.
 - One accent (electric blue) used ≤10% of surface.
-- `prefers-reduced-motion` collapses motion to opacity-only transitions.
 - Animate `transform` + `opacity` only.

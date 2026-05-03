@@ -1,6 +1,5 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useRef } from 'react';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { VoiceMesh } from './VoiceMesh';
 
 interface HeroSceneProps {
@@ -12,7 +11,6 @@ interface HeroSceneProps {
  * Owns its own scroll listener so React tree doesn't re-render on scroll.
  */
 export function HeroScene({ morph = 0 }: HeroSceneProps) {
-  const reduced = useReducedMotion();
   const scrollVelocityRef = useRef(0);
   const morphRef = useRef(morph);
 
@@ -21,7 +19,6 @@ export function HeroScene({ morph = 0 }: HeroSceneProps) {
   }, [morph]);
 
   useEffect(() => {
-    if (reduced) return;
     let lastY = window.scrollY;
     let lastT = performance.now();
     let raf = 0;
@@ -40,7 +37,7 @@ export function HeroScene({ morph = 0 }: HeroSceneProps) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [reduced]);
+  }, []);
 
   return (
     <div
@@ -67,7 +64,6 @@ export function HeroScene({ morph = 0 }: HeroSceneProps) {
         <directionalLight position={[-2, -1, -2]} intensity={0.3} />
         <Suspense fallback={null}>
           <VoiceMesh
-            reduced={reduced}
             scrollVelocityRef={scrollVelocityRef}
             morphRef={morphRef}
           />

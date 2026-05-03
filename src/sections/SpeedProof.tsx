@@ -24,17 +24,17 @@ export function SpeedProof() {
             style={{
               margin: 0,
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.045em',
               lineHeight: 1.0,
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             Median time from
             <br />
             <span style={{ color: 'var(--ink-1)' }}>end of utterance to polished text.</span>
           </h2>
-          <p style={{ margin: 0, color: 'var(--ink-2)', fontSize: 'var(--step--1)' }}>
-            iPhone 15 Pro · same device · same 30-second utterance · 50-run median · April 2026.
+          <p style={{ margin: 0, color: 'var(--ink-2)', fontSize: 'var(--step--1)', fontFamily: 'var(--font-mono)', letterSpacing: '0.01em' }}>
+            iPhone 15 Pro — same device, same 30‑second utterance, 50‑run median, April 2026.
           </p>
         </header>
 
@@ -102,8 +102,8 @@ function Bar({
         style={{
           color: row.primary ? 'var(--ink-0)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
-          fontWeight: row.primary ? 500 : 400,
-          letterSpacing: '-0.01em',
+          fontWeight: row.primary ? 460 : 380,
+          letterSpacing: '-0.012em',
         }}
       >
         {row.name}
@@ -146,7 +146,7 @@ function Bar({
           letterSpacing: '-0.01em',
           minWidth: '5.2ch',
           textAlign: 'right',
-          fontWeight: row.primary ? 500 : 400,
+          fontWeight: row.primary ? 460 : 380,
         }}
       >
         {count}
