@@ -1,0 +1,60 @@
+/* Pocket Voice — design tokens. OKLCH only. No #000, no #fff. */
+
+:root {
+  /* Surfaces */
+  --surface-0: oklch(0.14 0.005 270);
+  --surface-1: oklch(0.18 0.006 270);
+  --surface-2: oklch(0.22 0.007 270);
+  --surface-3: oklch(0.28 0.008 270);
+
+  /* Ink */
+  --ink-0: oklch(0.97 0.005 270);
+  --ink-1: oklch(0.78 0.005 270);
+  --ink-2: oklch(0.55 0.005 270);
+
+  /* Accent — electric blue. Used ≤10% of surface. */
+  --accent: oklch(0.72 0.18 250);
+  --accent-soft: oklch(0.72 0.18 250 / 0.18);
+  --accent-glow: oklch(0.72 0.18 250 / 0.35);
+
+  /* Borders */
+  --hairline: oklch(0.97 0.005 270 / 0.08);
+  --hairline-strong: oklch(0.97 0.005 270 / 0.16);
+
+  /* Tinted shadows (matched to background hue, not neutral gray) */
+  --shadow-soft: 0 1px 0 oklch(0.97 0.005 270 / 0.04) inset,
+    0 24px 48px -16px oklch(0.05 0.01 270 / 0.6);
+  --shadow-edge: inset 0 1px 0 oklch(0.97 0.005 270 / 0.06);
+
+  /* Type scale (1.5 ratio) */
+  --step--1: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);
+  --step-0:  clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1:  clamp(1.25rem, 1.18rem + 0.4vw, 1.5rem);
+  --step-2:  clamp(1.625rem, 1.5rem + 0.6vw, 2rem);
+  --step-3:  clamp(2.25rem, 2rem + 1.2vw, 3rem);
+  --step-4:  clamp(3rem, 2.4rem + 3vw, 4.75rem);
+  --step-5:  clamp(4rem, 3rem + 5vw, 7.5rem);
+  --step-6:  clamp(5rem, 3.5rem + 8vw, 11rem);
+
+  /* Motion curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Durations */
+  --t-instant: 100ms;
+  --t-quick: 160ms;
+  --t-base: 220ms;
+  --t-slow: 420ms;
+  --t-narrative: 720ms;
+
+  /* Rhythm */
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --rail: clamp(2rem, 6vw, 6rem);
+  --max-w: 1320px;
+  --max-prose: 64ch;
+
+  /* Type */
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
