@@ -1,11 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 
-/**
- * Scripted reenactment: messy spoken thought → polished sentence.
- * Real timing approximating the product's behaviour. No fake claims.
- */
 const SCRIPT = [
   {
     spoken:
@@ -30,82 +27,78 @@ const SCRIPT = [
   },
 ] as const;
 
+const ease = [0.4, 0, 0.2, 1];
+
+const H2_L1 = 'You think out loud.';
+const H2_L2 = 'It writes what you meant.';
+const T_L2  = H2_L1.length * 12 + 160;
+
 export function MagicMoment() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>('-25% 0px');
-  const [step, setStep] = useState(0);
+  const l1 = useTypeIn(H2_L1, inView);
+  const l2 = useTypeIn(H2_L2, inView, T_L2);
+  const [step, setStep]   = useState(0);
   const [phase, setPhase] = useState<'idle' | 'speaking' | 'thinking' | 'reveal'>('idle');
   const [spokenChars, setSpokenChars] = useState(0);
   const timers = useRef<number[]>([]);
 
   const current = SCRIPT[step];
 
-  // Run the demo loop once it enters view.
   useEffect(() => {
     if (!inView) return;
-
     timers.current.forEach(clearTimeout);
     timers.current = [];
-
     setSpokenChars(0);
     setPhase('speaking');
 
     const text = current.spoken;
     const totalSpeak = 4400;
-    const frames = text.length;
-    const tickEvery = totalSpeak / frames;
-
+    const tickEvery = totalSpeak / text.length;
     let i = 0;
+
     const speakTick = () => {
       i++;
       setSpokenChars(i);
-      if (i < frames) {
-        const id = window.setTimeout(speakTick, tickEvery);
-        timers.current.push(id);
+      if (i < text.length) {
+        timers.current.push(window.setTimeout(speakTick, tickEvery));
       } else {
-        // brief 'thinking', then reveal
-        const t1 = window.setTimeout(() => setPhase('thinking'), 80);
-        const t2 = window.setTimeout(() => setPhase('reveal'), 380);
-        const t3 = window.setTimeout(() => {
-          setStep((s) => (s + 1) % SCRIPT.length);
-        }, 4200);
-        timers.current.push(t1, t2, t3);
+        timers.current.push(
+          window.setTimeout(() => setPhase('thinking'), 80),
+          window.setTimeout(() => setPhase('reveal'),   380),
+          window.setTimeout(() => setStep((s) => (s + 1) % SCRIPT.length), 4200),
+        );
       }
     };
-    const id0 = window.setTimeout(speakTick, 220);
-    timers.current.push(id0);
+    timers.current.push(window.setTimeout(speakTick, 220));
 
-    return () => {
-      timers.current.forEach(clearTimeout);
-      timers.current = [];
-    };
+    return () => { timers.current.forEach(clearTimeout); timers.current = []; };
   }, [inView, step, current.spoken]);
 
   return (
     <section
       id="magic"
       ref={ref}
-      style={{
-        position: 'relative',
-        padding: 'clamp(6rem, 12vh, 10rem) 0',
-      }}
+      style={{ position: 'relative', padding: 'clamp(6rem, 12vh, 10rem) 0' }}
     >
       <div
         className="rail"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr)',
-          gap: 'clamp(2.5rem, 6vh, 4rem)',
-        }}
+        style={{ display: 'grid', gap: 'clamp(2.5rem, 6vh, 4rem)' }}
       >
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '1.5rem' }}>
+        <header
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            flexWrap: 'wrap',
+            gap: '1.5rem',
+          }}
+        >
           <Eyebrow>How it feels</Eyebrow>
           <span
             style={{
-              fontFamily: 'var(--font-mono)',
               color: 'var(--ink-2)',
-              fontSize: 'calc(var(--step--1) * 0.95)',
+              fontSize: 'var(--step--1)',
               letterSpacing: '0.08em',
-              textTransform: 'uppercase',
             }}
           >
             {current.locale}
@@ -116,15 +109,18 @@ export function MagicMoment() {
           style={{
             margin: 0,
             fontSize: 'var(--step-4)',
-            letterSpacing: '-0.04em',
+            letterSpacing: '-0.03em',
             lineHeight: 1.0,
             fontWeight: 400,
             maxWidth: '22ch',
           }}
         >
-          You think out loud.
-          <br />
-          <span style={{ color: 'var(--ink-1)' }}>It writes what you meant.</span>
+          <span aria-label={H2_L1} style={{ display: 'block', minHeight: '1.05em' }}>
+            <span aria-hidden>{H2_L1.slice(0, l1)}</span>
+          </span>
+          <span aria-label={H2_L2} style={{ display: 'block', color: 'var(--ink-1)', minHeight: '1.05em' }}>
+            <span aria-hidden>{H2_L2.slice(0, l2)}</span>
+          </span>
         </h2>
 
         <DemoFrame
@@ -143,23 +139,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.55rem',
+        gap: '1ch',
         color: 'var(--ink-2)',
-        fontFamily: 'var(--font-mono)',
         fontSize: 'var(--step--1)',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
       }}
     >
-      <span
-        aria-hidden
-        style={{
-          display: 'inline-block',
-          width: 14,
-          height: 1,
-          background: 'var(--ink-2)',
-        }}
-      />
+      <span aria-hidden style={{ display: 'inline-block', width: '2ch', height: 1, background: 'var(--ink-2)' }} />
       {children}
     </span>
   );
@@ -179,70 +165,67 @@ function DemoFrame({
       style={{
         position: 'relative',
         border: '1px solid var(--hairline)',
-        borderRadius: 28,
         padding: 'clamp(1.5rem, 4vw, 2.75rem)',
-        background:
-          'linear-gradient(180deg, oklch(0.17 0.005 270) 0%, oklch(0.15 0.005 270) 100%)',
-        boxShadow: 'var(--shadow-soft)',
+        background: 'var(--surface-1)',
         overflow: 'hidden',
       }}
     >
-      {/* Ambient accent wash, tied to phase */}
-      <motion.div
-        aria-hidden
-        animate={{
-          opacity: phase === 'idle' ? 0 : phase === 'reveal' ? 0.25 : 0.6,
-        }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+      <div
         style={{
-          position: 'absolute',
-          inset: -1,
-          background:
-            'radial-gradient(60% 80% at 0% 0%, var(--accent-soft), transparent 60%)',
-          pointerEvents: 'none',
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gap: '2rem',
+          position: 'relative',
         }}
-      />
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.75rem', position: 'relative' }}>
+      >
         <Row label="You said">
           <span
             style={{
               color: 'var(--ink-1)',
               fontSize: 'var(--step-1)',
-              lineHeight: 1.45,
-              letterSpacing: '-0.012em',
-              fontFamily: 'var(--font-sans)',
-              fontWeight: 380,
+              lineHeight: 1.5,
               minHeight: '3em',
               display: 'inline',
             }}
           >
             {spoken}
-            <Caret active={phase === 'speaking'} />
+            <DemoCaret active={phase === 'speaking'} />
           </span>
         </Row>
 
-        <Divider />
+        {/* Mono dash separator */}
+        <div
+          aria-hidden="true"
+          style={{
+            color: 'var(--surface-3)',
+            fontSize: 'var(--step--1)',
+            letterSpacing: '0.1em',
+            userSelect: 'none',
+          }}
+        >
+          {'─'.repeat(48)}
+        </div>
 
         <Row label="It wrote">
           <AnimatePresence mode="wait">
             {phase === 'reveal' ? (
               <motion.span
                 key="polished"
-                initial={{ opacity: 0, y: 6, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.42, ease: [0.23, 1, 0.32, 1] }}
+                initial={{ opacity: 0, filter: 'blur(3px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease }}
                 style={{
                   display: 'inline-block',
                   fontSize: 'var(--step-2)',
-                  lineHeight: 1.32,
-                  letterSpacing: '-0.018em',
+                  lineHeight: 1.35,
+                  letterSpacing: '-0.015em',
                   color: 'var(--ink-0)',
-                  fontWeight: 420,
+                  fontWeight: 400,
                 }}
               >
                 {polished}
+                <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
               </motion.span>
             ) : (
               <motion.span
@@ -254,11 +237,10 @@ function DemoFrame({
                 style={{
                   color: 'var(--ink-2)',
                   fontSize: 'var(--step-1)',
-                  fontFamily: 'var(--font-mono)',
                   letterSpacing: 0,
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.55rem',
+                  gap: '1ch',
                   minHeight: '1.4em',
                 }}
               >
@@ -275,14 +257,19 @@ function DemoFrame({
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'clamp(7rem, 14vw, 9rem) 1fr', gap: '1.25rem', alignItems: 'baseline' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'clamp(7rem, 14vw, 9rem) 1fr',
+        gap: '1.5rem',
+        alignItems: 'baseline',
+      }}
+    >
       <span
         style={{
           color: 'var(--ink-2)',
-          fontFamily: 'var(--font-mono)',
           fontSize: 'var(--step--1)',
           letterSpacing: '0.06em',
-          textTransform: 'uppercase',
         }}
       >
         {label}
@@ -292,23 +279,22 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-function Divider() {
-  return <span style={{ height: 1, background: 'var(--hairline)' }} />;
-}
-
-function Caret({ active }: { active: boolean }) {
+/* Local caret for the demo — same blink rules, white accent */
+function DemoCaret({ active }: { active: boolean }) {
   return (
     <span
       aria-hidden
       style={{
         display: 'inline-block',
         width: 2,
-        height: '0.95em',
-        background: 'var(--accent)',
-        marginLeft: 4,
-        transform: 'translateY(2px)',
-        opacity: active ? 1 : 0,
-        animation: active ? 'pv-caret 1s steps(2, end) infinite' : 'none',
+        height: '0.8em',
+        background: 'var(--color-signal)',
+        marginLeft: '0.2ch',
+        verticalAlign: 'baseline',
+        position: 'relative',
+        top: '0.05em',
+        opacity: active ? undefined : 0,
+        animation: active ? 'pv-caret 1.2s linear infinite' : 'none',
       }}
     />
   );
@@ -316,13 +302,13 @@ function Caret({ active }: { active: boolean }) {
 
 function Pulse() {
   return (
-    <span style={{ position: 'relative', width: 8, height: 8 }}>
+    <span style={{ position: 'relative', display: 'inline-block', width: 8, height: 8 }}>
       <span
         style={{
           position: 'absolute',
           inset: 0,
           borderRadius: 999,
-          background: 'var(--accent)',
+          background: 'var(--ink-2)',
         }}
       />
       <span
@@ -330,7 +316,7 @@ function Pulse() {
           position: 'absolute',
           inset: -3,
           borderRadius: 999,
-          border: '1px solid var(--accent)',
+          border: '1px solid var(--ink-2)',
           opacity: 0.5,
           animation: 'pv-pulse 1.4s ease-out infinite',
         }}

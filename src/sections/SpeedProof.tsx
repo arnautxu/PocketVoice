@@ -1,42 +1,73 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 
 const ROWS = [
-  { name: 'Pocket Voice', ms: 180, primary: true },
-  { name: 'Wispr Flow',   ms: 460, primary: false },
-  { name: 'Superwhisper', ms: 540, primary: false },
-  { name: 'Aqua Voice',   ms: 610, primary: false },
+  { name: 'Pocket Voice',   ms: 180, primary: true  },
+  { name: 'Wispr Flow',     ms: 460, primary: false },
+  { name: 'Superwhisper',   ms: 540, primary: false },
+  { name: 'Aqua Voice',     ms: 610, primary: false },
   { name: 'Apple Dictation', ms: 920, primary: false },
 ];
 
 const MAX = Math.max(...ROWS.map((r) => r.ms));
+const ease = [0.4, 0, 0.2, 1];
+
+const H2_L1 = '180 ms.';
+const H2_L2 = 'Voice to composed text.';
+const T_L2  = H2_L1.length * 18 + 200;
 
 export function SpeedProof() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>('-20% 0px');
+  const l1 = useTypeIn(H2_L1, inView);
+  const l2 = useTypeIn(H2_L2, inView, T_L2);
 
   return (
     <section id="speed" ref={ref} style={{ padding: 'clamp(7rem, 12vh, 10rem) 0' }}>
       <div className="rail" style={{ display: 'grid', gap: 'clamp(2.5rem, 6vh, 4rem)' }}>
-        <header style={{ display: 'grid', gap: '1.25rem', maxWidth: '36ch' }}>
+        <header style={{ display: 'grid', gap: '1.5rem', maxWidth: '38ch' }}>
           <Eyebrow>Speed proof</Eyebrow>
           <h2
             style={{
               margin: 0,
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.045em',
+              letterSpacing: '-0.03em',
               lineHeight: 1.0,
               fontWeight: 400,
             }}
           >
-            Median time from
-            <br />
-            <span style={{ color: 'var(--ink-1)' }}>end of utterance to polished text.</span>
+            <span aria-label={H2_L1} style={{ display: 'block', minHeight: '1.05em' }}>
+              <span aria-hidden>{H2_L1.slice(0, l1)}</span>
+            </span>
+            <span aria-label={H2_L2} style={{ display: 'block', color: 'var(--ink-1)', minHeight: '1.05em' }}>
+              <span aria-hidden>{H2_L2.slice(0, l2)}</span>
+            </span>
           </h2>
-          <p style={{ margin: 0, color: 'var(--ink-2)', fontSize: 'var(--step--1)', fontFamily: 'var(--font-mono)', letterSpacing: '0.01em' }}>
-            iPhone 15 Pro — same device, same 30‑second utterance, 50‑run median, April 2026.
+          <p
+            style={{
+              margin: 0,
+              color: 'var(--ink-2)',
+              fontSize: 'var(--step--1)',
+              lineHeight: 1.55,
+            }}
+          >
+            iPhone 15 Pro · 30-second utterance · 50-run median · April 2026.
           </p>
         </header>
+
+        {/* Mono separator */}
+        <div
+          aria-hidden="true"
+          style={{
+            color: 'var(--surface-3)',
+            fontSize: 'var(--step--1)',
+            letterSpacing: '0.1em',
+            userSelect: 'none',
+          }}
+        >
+          {'─'.repeat(48)}
+        </div>
 
         <ol
           style={{
@@ -44,9 +75,7 @@ export function SpeedProof() {
             padding: 0,
             listStyle: 'none',
             display: 'grid',
-            gap: '1.1rem',
-            borderTop: '1px solid var(--hairline)',
-            paddingTop: '2rem',
+            gap: '0',
           }}
         >
           {ROWS.map((r, i) => (
@@ -74,13 +103,11 @@ function Bar({
   useEffect(() => {
     if (!active) return;
     const start = performance.now();
-    const dur = 1100 + index * 120;
-    const startVal = 0;
+    const dur = 1000 + index * 100;
     const tick = (now: number) => {
       const t = Math.min((now - start) / dur, 1);
-      // ease-out quart
       const eased = 1 - Math.pow(1 - t, 4);
-      setCount(Math.round(startVal + (row.ms - startVal) * eased));
+      setCount(Math.round(row.ms * eased));
       if (t < 1) raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
@@ -91,10 +118,10 @@ function Bar({
     <li
       style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 3fr) auto',
-        gap: '1.5rem',
+        gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 3fr) auto',
+        gap: '2ch',
         alignItems: 'center',
-        padding: '1rem 0',
+        padding: '1.25ch 0',
         borderBottom: '1px solid var(--hairline)',
       }}
     >
@@ -102,55 +129,51 @@ function Bar({
         style={{
           color: row.primary ? 'var(--ink-0)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
-          fontWeight: row.primary ? 460 : 380,
-          letterSpacing: '-0.012em',
+          fontWeight: row.primary ? 500 : 400,
         }}
       >
         {row.name}
       </span>
-      <div style={{ position: 'relative', height: 14 }}>
+
+      <div style={{ position: 'relative', height: 2 }}>
         <span
           style={{
             position: 'absolute',
             inset: 0,
             background: 'var(--surface-2)',
-            borderRadius: 999,
-            opacity: 0.5,
           }}
         />
         <motion.span
           initial={{ scaleX: 0 }}
           animate={{ scaleX: active ? target / 100 : 0 }}
           transition={{
-            duration: 1.1 + index * 0.12,
-            ease: [0.23, 1, 0.32, 1],
-            delay: index * 0.05,
+            duration: 1.0 + index * 0.10,
+            ease,
+            delay: index * 0.04,
           }}
           style={{
             position: 'absolute',
             inset: 0,
-            background: row.primary
-              ? 'linear-gradient(90deg, var(--accent), oklch(0.78 0.13 250))'
-              : 'oklch(0.45 0.005 270)',
-            borderRadius: 999,
+            background: row.primary ? 'var(--ink-0)' : 'var(--surface-3)',
             transformOrigin: 'left',
-            boxShadow: row.primary ? '0 0 24px var(--accent-glow)' : 'none',
           }}
         />
       </div>
+
       <span
         className="tabular"
         style={{
           color: row.primary ? 'var(--ink-0)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
-          letterSpacing: '-0.01em',
-          minWidth: '5.2ch',
+          minWidth: '5.5ch',
           textAlign: 'right',
-          fontWeight: row.primary ? 460 : 380,
+          fontWeight: row.primary ? 500 : 400,
         }}
       >
         {count}
-        <span style={{ color: 'var(--ink-2)', marginLeft: 4, fontSize: 'var(--step--1)' }}>ms</span>
+        <span style={{ color: 'var(--ink-2)', marginLeft: '0.5ch', fontSize: 'var(--step--1)' }}>
+          ms
+        </span>
       </span>
     </li>
   );
@@ -162,15 +185,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.55rem',
+        gap: '1ch',
         color: 'var(--ink-2)',
-        fontFamily: 'var(--font-mono)',
         fontSize: 'var(--step--1)',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
       }}
     >
-      <span aria-hidden style={{ display: 'inline-block', width: 14, height: 1, background: 'var(--ink-2)' }} />
+      <span aria-hidden style={{ display: 'inline-block', width: '2ch', height: 1, background: 'var(--ink-2)' }} />
       {children}
     </span>
   );

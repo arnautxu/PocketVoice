@@ -1,7 +1,22 @@
 import { motion } from 'framer-motion';
 import { InstallButton } from '../components/InstallButton';
+import { useTypeIn } from '../hooks/useTypeIn';
+import { useInViewOnce } from '../hooks/useInViewOnce';
+
+const ease = [0.4, 0, 0.2, 1];
+
+/* Pricing comparison — canonical composition from brand spec */
+const FREE_PLAN  = ['30 min / day', '3 languages', 'Standard speed'];
+const PRO_PLAN   = ['Unlimited',    'All languages', 'Priority speed'];
+
+const FP_SEG1 = 'Press once. ';   // 12 chars — default ink
+const FP_SEG2 = 'Walk away.';     // 10 chars — ink-1
+const FP_FULL = FP_SEG1 + FP_SEG2;
 
 export function FromPocket() {
+  const [h2Ref, h2InView] = useInViewOnce<HTMLHeadingElement>('-15% 0px');
+  const fc = useTypeIn(FP_FULL, h2InView);
+
   return (
     <section
       style={{
@@ -11,132 +26,134 @@ export function FromPocket() {
       }}
     >
       <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: '-20% -10% auto auto',
-          width: 'min(80vw, 800px)',
-          aspectRatio: '1',
-          background:
-            'radial-gradient(closest-side, var(--accent-soft), transparent 70%)',
-          filter: 'blur(48px)',
-          opacity: 0.6,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
         className="rail"
         style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
           gap: 'clamp(2.5rem, 6vw, 5rem)',
-          alignItems: 'end',
+          alignItems: 'start',
         }}
       >
+        {/* Left: brand statement */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-15% 0px' }}
-          transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 0.3, ease }}
         >
           <Eyebrow>From Pocket</Eyebrow>
           <h2
+            ref={h2Ref}
+            aria-label={FP_FULL}
             style={{
-              margin: '1.25rem 0 1.5rem',
+              margin: '1.5ch 0 2ch',
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.045em',
+              letterSpacing: '-0.03em',
               lineHeight: 1.0,
               fontWeight: 400,
               maxWidth: '14ch',
             }}
           >
-            Technology that
-            <br />
-            <span style={{ color: 'var(--ink-1)' }}>disappears.</span>
+            <span aria-hidden>
+              {FP_SEG1.slice(0, Math.min(fc, FP_SEG1.length))}
+              {fc > FP_SEG1.length && (
+                <span style={{ color: 'var(--ink-1)' }}>
+                  {FP_SEG2.slice(0, fc - FP_SEG1.length)}
+                </span>
+              )}
+            </span>
           </h2>
           <p
             style={{
               color: 'var(--ink-1)',
               maxWidth: '44ch',
-              fontSize: 'var(--step-1)',
-              lineHeight: 1.45,
-              letterSpacing: '-0.012em',
-              fontWeight: 380,
-              margin: 0,
+              fontSize: 'var(--step-0)',
+              lineHeight: 1.65,
+              margin: '0 0 2.5ch',
             }}
           >
-            Pocket Voice is the software expression of Pocket’s philosophy.
-            The same belief that shaped the hardware now lives in something
-            you already carry. Press once. Speak. The interface gets out of
-            the way.
+            Pocket Voice exists to get out of your way. Press once. Speak your
+            thought. By the time your hand reaches the keyboard, the message is
+            already written — in the right words, for the right surface.
+            <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
           </p>
-          <div style={{ marginTop: '2.25rem' }}>
-            <InstallButton />
-          </div>
+          <InstallButton size="lg" />
         </motion.div>
 
-        <motion.figure
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+        {/* Right: pricing comparison — canonical mono grid composition */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
-          transition={{ duration: 1.0, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 0.3, ease, delay: 0.06 }}
           style={{
-            margin: 0,
-            position: 'relative',
-            aspectRatio: '4 / 5',
-            borderRadius: 32,
             border: '1px solid var(--hairline)',
-            background:
-              'radial-gradient(120% 80% at 30% 20%, oklch(0.22 0.01 270) 0%, oklch(0.12 0.005 270) 70%)',
-            overflow: 'hidden',
-            boxShadow: 'var(--shadow-soft)',
-            display: 'grid',
-            placeItems: 'center',
+            background: 'var(--surface-1)',
+            padding: '2.5ch 3ch',
           }}
         >
-          {/* Stylised "pocket" — concentric apertures, brand DNA only */}
-          <svg
-            width="60%"
-            height="60%"
-            viewBox="0 0 200 200"
-            fill="none"
-            aria-hidden
-            style={{ display: 'block' }}
-          >
-            <defs>
-              <radialGradient id="pv-grad" cx="50%" cy="40%" r="60%">
-                <stop offset="0%" stopColor="oklch(0.72 0.18 250)" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="oklch(0.72 0.18 250)" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            <circle cx="100" cy="100" r="92" stroke="oklch(0.97 0.005 270 / 0.18)" />
-            <circle cx="100" cy="100" r="68" stroke="oklch(0.97 0.005 270 / 0.32)" />
-            <circle cx="100" cy="100" r="44" stroke="oklch(0.97 0.005 270 / 0.55)" />
-            <circle cx="100" cy="100" r="20" fill="url(#pv-grad)" />
-            <circle cx="100" cy="100" r="10" fill="oklch(0.97 0.005 270)" />
-          </svg>
-          <figcaption
+          {/* Header row */}
+          <div
             style={{
-              position: 'absolute',
-              left: '1.5rem',
-              bottom: '1.25rem',
-              right: '1.5rem',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              color: 'var(--ink-2)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--step--1)',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '2ch',
+              fontSize: 'var(--step-0)',
+              fontWeight: 500,
+              marginBottom: '0.75ch',
             }}
           >
-            <span>Open Vision Engineering</span>
-            <span>·</span>
-            <span>Est. Pocket</span>
-          </figcaption>
-        </motion.figure>
+            <span>Free</span>
+            <span style={{ color: 'var(--ink-1)' }}>Pro</span>
+          </div>
+
+          {/* Mono separator */}
+          <div
+            aria-hidden="true"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '2ch',
+              color: 'var(--ink-2)',
+              fontSize: 'var(--step--1)',
+              letterSpacing: '0.08em',
+              marginBottom: '1.5ch',
+              userSelect: 'none',
+            }}
+          >
+            <span>{'─'.repeat(12)}</span>
+            <span>{'─'.repeat(12)}</span>
+          </div>
+
+          {/* Feature rows */}
+          {FREE_PLAN.map((freeFeature, i) => (
+            <div
+              key={i}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '2ch',
+                color: 'var(--ink-1)',
+                fontSize: 'var(--step-0)',
+                lineHeight: 1.8,
+              }}
+            >
+              <span>{freeFeature}</span>
+              <span style={{ color: 'var(--ink-0)' }}>{PRO_PLAN[i]}</span>
+            </div>
+          ))}
+
+          {/* Pilcrow */}
+          <div
+            style={{
+              marginTop: '1.5ch',
+              color: 'var(--ink-2)',
+              fontSize: 'var(--step--1)',
+            }}
+          >
+            <span aria-hidden>¶</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -148,15 +165,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.55rem',
+        gap: '1ch',
         color: 'var(--ink-2)',
-        fontFamily: 'var(--font-mono)',
         fontSize: 'var(--step--1)',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
       }}
     >
-      <span aria-hidden style={{ display: 'inline-block', width: 14, height: 1, background: 'var(--ink-2)' }} />
+      <span aria-hidden style={{ display: 'inline-block', width: '2ch', height: 1, background: 'var(--ink-2)' }} />
       {children}
     </span>
   );

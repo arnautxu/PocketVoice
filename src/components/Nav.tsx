@@ -8,28 +8,26 @@ export function Nav() {
   const [solid, setSolid] = useState(false);
 
   useMotionValueEvent(scrollY, 'change', (y) => {
-    setSolid(y > 32);
+    setSolid(y > 40);
   });
 
   return (
     <motion.header
-      initial={{ y: -8, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1], delay: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 50,
-        padding: '1.1rem 0',
-        backdropFilter: solid ? 'saturate(140%) blur(14px)' : 'none',
-        background: solid
-          ? 'oklch(0.14 0.005 270 / 0.55)'
-          : 'transparent',
+        padding: '1.25ch 0',
+        background: solid ? 'rgba(10, 10, 10, 0.88)' : 'transparent',
         borderBottom: solid ? '1px solid var(--hairline)' : '1px solid transparent',
+        backdropFilter: solid ? 'blur(12px)' : 'none',
         transition:
-          'background var(--t-base) var(--ease-out), border-color var(--t-base) var(--ease-out), backdrop-filter var(--t-base) var(--ease-out)',
+          'background var(--t-macro) var(--ease), border-color var(--t-macro) var(--ease)',
       }}
     >
       <div
@@ -38,46 +36,27 @@ export function Nav() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '2rem',
+          gap: '2ch',
         }}
       >
-        <Wordmark small />
+        <Wordmark height="2rem" />
+
         <nav
           aria-label="Primary"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '2rem',
-            color: 'var(--ink-1)',
+            gap: '2ch',
             fontSize: 'var(--step--1)',
           }}
         >
-          <a className="navlink" href="#magic">
-            How it works
-          </a>
-          <a className="navlink" href="#different">
-            Different
-          </a>
-          <a className="navlink" href="#anywhere">
-            Anywhere
-          </a>
-          <a className="navlink" href="#speed">
-            Speed
-          </a>
-          <InstallButton size="sm" />
+          <a className="navlink" href="#magic">How it works</a>
+          <a className="navlink" href="#different">Different</a>
+          <a className="navlink" href="#anywhere">Anywhere</a>
+          <a className="navlink" href="#speed">Speed</a>
+          <InstallButton size="sm" label="Download" />
         </nav>
       </div>
-      <style>{`
-        .navlink {
-          position: relative;
-          padding: 4px 2px;
-          transition: color var(--t-quick) var(--ease-out);
-        }
-        .navlink:hover { color: var(--ink-0); }
-        @media (max-width: 720px) {
-          nav .navlink { display: none; }
-        }
-      `}</style>
     </motion.header>
   );
 }

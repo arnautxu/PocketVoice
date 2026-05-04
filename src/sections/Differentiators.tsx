@@ -1,39 +1,48 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { useTypeIn } from '../hooks/useTypeIn';
+import { useInViewOnce } from '../hooks/useInViewOnce';
 
 const POINTS = [
   {
     no: '01',
-    title: 'Faster than typing.',
+    title: 'Done before your hand moves.',
     body:
-      'Median latency is 180 ms from end-of-utterance to finalized text. The polished sentence appears before your hand reaches the keyboard.',
-    metric: { value: '180', unit: 'ms', caption: 'end → polished text' },
+      '180 ms from the last word you spoke to the finished sentence. The text is already waiting when your fingers reach the keyboard. Tested on iPhone 15 Pro, 50-run median.',
+    metric: { value: '180', unit: 'ms', caption: 'end-of-utterance to text' },
   },
   {
     no: '02',
-    title: 'Understands context.',
+    title: 'Reads where you\'re writing.',
     body:
-      'Pocket Voice reads the surface you\'re writing in. A reply in Mail sounds like an email. A note in Linear sounds like a Linear issue. Same voice, different register.',
+      'Pocket Voice identifies the surface — Mail, Slack, Linear, Notion. A message to a colleague sounds like a message. An issue description reads like a ticket. Same voice. The right register.',
     metric: { value: '94%', unit: 'tone match', caption: 'human-rated, internal corpus' },
   },
   {
     no: '03',
-    title: 'Fluent in 108 languages.',
+    title: '108 languages. No toggle.',
     body:
-      'Switch mid‑sentence. Mix Spanish and English, Mandarin and French, Arabic and German. Pocket Voice keeps up — no toggle, no language picker, no menu to find first.',
-    metric: { value: '108', unit: 'languages', caption: 'inline, no toggle' },
+      'Switch mid-sentence. Spanish into English. Mandarin into French. Pocket Voice follows without a language picker, a settings menu, or a second thought.',
+    metric: { value: '108', unit: 'languages', caption: 'inline switching, no menu' },
   },
 ];
 
-const ease = [0.23, 1, 0.32, 1];
+const ease = [0.4, 0, 0.2, 1];
+
+const D_SEG1 = 'Three reasons ';      // 14 chars — default ink
+const D_SEG2 = 'Pocket Voice';        // 12 chars — ink-1
+const D_SEG3 = ' replaces typing.';   // 17 chars — default ink
+const D_FULL = D_SEG1 + D_SEG2 + D_SEG3;
 
 export function Differentiators() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [h2Ref, h2InView] = useInViewOnce<HTMLHeadingElement>('-15% 0px');
+  const dc = useTypeIn(D_FULL, h2InView);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
-  const railShift = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const railShift = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   return (
     <section
@@ -50,34 +59,44 @@ export function Differentiators() {
           alignItems: 'start',
         }}
       >
-        <motion.div
-          style={{ y: railShift, position: 'sticky', top: '14vh' }}
-        >
+        <motion.div style={{ y: railShift, position: 'sticky', top: '14vh' }}>
           <Eyebrow>Why it's different</Eyebrow>
           <h2
+            ref={h2Ref}
+            aria-label={D_FULL}
             style={{
-              margin: '1.25rem 0 0',
+              margin: '1.5ch 0 0',
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.045em',
+              letterSpacing: '-0.03em',
               lineHeight: 0.98,
               fontWeight: 400,
-              maxWidth: '15ch',
+              maxWidth: '16ch',
             }}
           >
-            Three things <span style={{ color: 'var(--ink-1)' }}>have to be true</span> before voice can replace typing.
+            <span aria-hidden>
+              {D_SEG1.slice(0, Math.min(dc, D_SEG1.length))}
+              {dc > D_SEG1.length && (
+                <span style={{ color: 'var(--ink-1)' }}>
+                  {D_SEG2.slice(0, Math.min(dc - D_SEG1.length, D_SEG2.length))}
+                </span>
+              )}
+              {dc > D_SEG1.length + D_SEG2.length &&
+                D_SEG3.slice(0, dc - D_SEG1.length - D_SEG2.length)}
+            </span>
           </h2>
           <p
             style={{
               color: 'var(--ink-1)',
               maxWidth: '36ch',
               fontSize: 'var(--step-0)',
-              fontWeight: 380,
-              marginTop: '1.75rem',
-              letterSpacing: '-0.008em',
+              fontWeight: 400,
+              marginTop: '2ch',
+              lineHeight: 1.6,
             }}
           >
             Most apps get one. The category leader gets two. Pocket Voice was
             built to get all three at once.
+            <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
           </p>
         </motion.div>
 
@@ -93,18 +112,30 @@ export function Differentiators() {
           {POINTS.map((p, i) => (
             <motion.li
               key={p.no}
-              initial={{ opacity: 0, y: 32 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-15% 0px' }}
-              transition={{ duration: 0.7, ease, delay: i * 0.04 }}
+              transition={{ duration: 0.3, ease, delay: i * 0.04 }}
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(0, 1fr)',
-                gap: '1.5rem',
+                gap: '1.25rem',
                 paddingTop: 'clamp(2rem, 4vh, 3rem)',
-                borderTop: '1px solid var(--hairline)',
               }}
             >
+              {/* Mono dash separator */}
+              <div
+                aria-hidden="true"
+                style={{
+                  color: 'var(--surface-3)',
+                  fontSize: 'var(--step--1)',
+                  letterSpacing: '0.1em',
+                  userSelect: 'none',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                {'─'.repeat(32)}
+              </div>
+
               <div
                 style={{
                   display: 'flex',
@@ -129,36 +160,36 @@ export function Differentiators() {
                     color: 'var(--ink-2)',
                     fontSize: 'var(--step--1)',
                     letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
                   }}
                 >
                   {p.metric.caption}
                 </span>
               </div>
+
               <h3
                 style={{
                   margin: 0,
                   fontSize: 'var(--step-3)',
-                  letterSpacing: '-0.035em',
-                  lineHeight: 1.04,
-                  fontWeight: 420,
+                  letterSpacing: '-0.025em',
+                  lineHeight: 1.05,
+                  fontWeight: 400,
                 }}
               >
                 {p.title}
               </h3>
+
               <p
                 style={{
                   color: 'var(--ink-1)',
-                  fontSize: 'var(--step-1)',
-                  lineHeight: 1.45,
-                  letterSpacing: '-0.012em',
-                  fontWeight: 380,
+                  fontSize: 'var(--step-0)',
+                  lineHeight: 1.6,
                   margin: 0,
                   maxWidth: '52ch',
                 }}
               >
                 {p.body}
               </p>
+
               <Metric value={p.metric.value} unit={p.metric.unit} />
             </motion.li>
           ))}
@@ -174,15 +205,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.55rem',
+        gap: '1ch',
         color: 'var(--ink-2)',
-        fontFamily: 'var(--font-mono)',
         fontSize: 'var(--step--1)',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
       }}
     >
-      <span aria-hidden style={{ display: 'inline-block', width: 14, height: 1, background: 'var(--ink-2)' }} />
+      <span aria-hidden style={{ display: 'inline-block', width: '2ch', height: 1, background: 'var(--ink-2)' }} />
       {children}
     </span>
   );
@@ -194,7 +223,7 @@ function Metric({ value, unit }: { value: string; unit: string }) {
       style={{
         display: 'inline-flex',
         alignItems: 'baseline',
-        gap: '0.5rem',
+        gap: '0.75ch',
         marginTop: '0.5rem',
       }}
     >
@@ -202,9 +231,9 @@ function Metric({ value, unit }: { value: string; unit: string }) {
         className="tabular"
         style={{
           fontSize: 'var(--step-3)',
-          letterSpacing: '-0.045em',
+          letterSpacing: '-0.03em',
           color: 'var(--ink-0)',
-          fontWeight: 380,
+          fontWeight: 400,
         }}
       >
         {value}
@@ -212,10 +241,9 @@ function Metric({ value, unit }: { value: string; unit: string }) {
       <span
         className="tabular"
         style={{
-          fontSize: 'var(--step-0)',
+          fontSize: 'var(--step--1)',
           color: 'var(--ink-2)',
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
         }}
       >
         {unit}

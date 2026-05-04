@@ -1,43 +1,64 @@
 import { motion } from 'framer-motion';
+import { useTypeIn } from '../hooks/useTypeIn';
+import { useInViewOnce } from '../hooks/useInViewOnce';
 
 const VIGNETTES = [
-  { surface: 'iMessage',  fragment: 'On my way. Five minutes.',                     tone: 'Reply' },
-  { surface: 'Linear',    fragment: 'CLS‑148 — payment retry loops on 402.',        tone: 'Issue' },
-  { surface: 'Notion',    fragment: 'Q3 review — context, decisions, follow‑ups.',  tone: 'Doc' },
-  { surface: 'Slack',     fragment: 'Pushed the fix. Could someone smoke‑test?',    tone: 'Message' },
-  { surface: 'Mail',      fragment: 'Anna, thanks for the deck. Two thoughts.',     tone: 'Email' },
-  { surface: 'Drafts',    fragment: 'Idea — an ambient mode for mornings.',         tone: 'Note' },
-  { surface: 'Things',    fragment: 'Reply to the investor update by Friday.',      tone: 'Task' },
-  { surface: 'Cursor',    fragment: '// extract this into a hook.',                 tone: 'Comment' },
-  { surface: 'Bear',      fragment: 'On translating taste from hardware to software.', tone: 'Essay' },
-  { surface: 'WhatsApp',  fragment: 'Let’s speak tomorrow morning.',           tone: 'Reply' },
+  { surface: 'iMessage',  fragment: 'On my way. Five minutes.',                       tone: 'Reply'   },
+  { surface: 'Linear',    fragment: 'CLS-148 — payment retry loops on 402.',          tone: 'Issue'   },
+  { surface: 'Notion',    fragment: 'Q3 review — context, decisions, follow-ups.',    tone: 'Doc'     },
+  { surface: 'Slack',     fragment: 'Pushed the fix. Could someone smoke-test?',      tone: 'Message' },
+  { surface: 'Mail',      fragment: 'Anna, thanks for the deck. Two thoughts.',       tone: 'Email'   },
+  { surface: 'Drafts',    fragment: 'Idea — an ambient mode for mornings.',           tone: 'Note'    },
+  { surface: 'Things',    fragment: 'Reply to the investor update by Friday.',        tone: 'Task'    },
+  { surface: 'Cursor',    fragment: '// extract this into a hook.',                  tone: 'Comment' },
+  { surface: 'Bear',      fragment: 'On translating taste from hardware to software.', tone: 'Essay'  },
+  { surface: 'WhatsApp',  fragment: "Let's speak tomorrow morning.",                  tone: 'Reply'   },
 ];
+
+const H2_L1 = 'One press.';
+const H2_L2 = 'Every app you already have.';
+const T_L2  = H2_L1.length * 18 + 200;
 
 export function AnywhereYouType() {
   const items = [...VIGNETTES, ...VIGNETTES];
+  const [headingRef, headingInView] = useInViewOnce<HTMLElement>('-15% 0px');
+  const l1 = useTypeIn(H2_L1, headingInView);
+  const l2 = useTypeIn(H2_L2, headingInView, T_L2);
 
   return (
     <section id="anywhere" style={{ padding: 'clamp(7rem, 12vh, 10rem) 0', position: 'relative' }}>
       <div className="rail" style={{ display: 'grid', gap: '2.5rem' }}>
-        <header style={{ display: 'grid', gap: '1.25rem', maxWidth: '34ch' }}>
+        <header ref={headingRef} style={{ display: 'grid', gap: '1.5rem', maxWidth: '36ch' }}>
           <Eyebrow>Anywhere you type</Eyebrow>
           <h2
             style={{
               margin: 0,
               fontSize: 'var(--step-4)',
-              letterSpacing: '-0.045em',
+              letterSpacing: '-0.03em',
               lineHeight: 1.0,
               fontWeight: 400,
             }}
           >
-            One gesture.
-            <br />
-            <span style={{ color: 'var(--ink-1)' }}>Every app you already use.</span>
+            <span aria-label={H2_L1} style={{ display: 'block', minHeight: '1.05em' }}>
+              <span aria-hidden>{H2_L1.slice(0, l1)}</span>
+            </span>
+            <span aria-label={H2_L2} style={{ display: 'block', color: 'var(--ink-1)', minHeight: '1.05em' }}>
+              <span aria-hidden>{H2_L2.slice(0, l2)}</span>
+            </span>
           </h2>
-          <p style={{ margin: 0, color: 'var(--ink-1)', fontSize: 'var(--step-0)', fontWeight: 380, letterSpacing: '-0.008em' }}>
+          <p
+            style={{
+              margin: 0,
+              color: 'var(--ink-1)',
+              fontSize: 'var(--step-0)',
+              lineHeight: 1.6,
+              maxWidth: '48ch',
+            }}
+          >
+            Pocket Voice runs at the system level — not inside a single app.
             iMessage, Mail, Notion, Linear, Slack, Cursor, Things, WhatsApp.
-            Pocket Voice runs system‑wide. Press once. Speak. The right text
-            appears in the right place.
+            Press once. Speak. The text arrives in the right register for that surface.
+            <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
           </p>
         </header>
       </div>
@@ -47,19 +68,19 @@ export function AnywhereYouType() {
           marginTop: 'clamp(3rem, 7vh, 5rem)',
           position: 'relative',
           maskImage:
-            'linear-gradient(90deg, transparent 0, black 8%, black 92%, transparent 100%)',
+            'linear-gradient(90deg, transparent 0, #0A0A0A 6%, #0A0A0A 94%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(90deg, transparent 0, black 8%, black 92%, transparent 100%)',
+            'linear-gradient(90deg, transparent 0, #0A0A0A 6%, #0A0A0A 94%, transparent 100%)',
           overflow: 'hidden',
         }}
       >
         <motion.ul
           aria-label="Surfaces Pocket Voice writes into"
           animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 56, ease: 'linear', repeat: Infinity }}
+          transition={{ duration: 60, ease: 'linear', repeat: Infinity }}
           style={{
             display: 'flex',
-            gap: '1rem',
+            gap: '1ch',
             margin: 0,
             padding: 0,
             listStyle: 'none',
@@ -81,14 +102,12 @@ function Vignette({ surface, fragment, tone }: { surface: string; fragment: stri
   return (
     <div
       style={{
-        width: 320,
-        padding: '1.4rem 1.5rem',
-        borderRadius: 22,
+        width: 300,
+        padding: '1.5ch 2ch',
         border: '1px solid var(--hairline)',
-        background: 'oklch(0.17 0.005 270)',
-        boxShadow: 'var(--shadow-edge)',
+        background: 'var(--surface-1)',
         display: 'grid',
-        gap: '0.85rem',
+        gap: '1ch',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -97,7 +116,6 @@ function Vignette({ surface, fragment, tone }: { surface: string; fragment: stri
             color: 'var(--ink-0)',
             fontSize: 'var(--step--1)',
             fontWeight: 500,
-            letterSpacing: '-0.005em',
           }}
         >
           {surface}
@@ -106,34 +124,39 @@ function Vignette({ surface, fragment, tone }: { surface: string; fragment: stri
           className="tabular"
           style={{
             color: 'var(--ink-2)',
-            fontSize: 'calc(var(--step--1) * 0.85)',
+            fontSize: 'var(--step--1)',
             letterSpacing: '0.08em',
-            textTransform: 'uppercase',
           }}
         >
           {tone}
         </span>
       </div>
+
+      {/* Mono separator */}
+      <div
+        aria-hidden="true"
+        style={{
+          color: 'var(--surface-3)',
+          fontSize: 'calc(var(--step--1) * 0.75)',
+          letterSpacing: '0.1em',
+          userSelect: 'none',
+        }}
+      >
+        {'─'.repeat(28)}
+      </div>
+
       <p
         style={{
           margin: 0,
           color: 'var(--ink-1)',
           fontSize: 'var(--step-0)',
-          letterSpacing: '-0.005em',
-          lineHeight: 1.45,
-          minHeight: '2.6em',
+          lineHeight: 1.5,
+          minHeight: '2.8em',
         }}
       >
         {fragment}
+        <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
       </p>
-      <span
-        style={{
-          height: 1,
-          background:
-            'linear-gradient(90deg, var(--accent), transparent 70%)',
-          opacity: 0.5,
-        }}
-      />
     </div>
   );
 }
@@ -144,15 +167,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.55rem',
+        gap: '1ch',
         color: 'var(--ink-2)',
-        fontFamily: 'var(--font-mono)',
         fontSize: 'var(--step--1)',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
       }}
     >
-      <span aria-hidden style={{ display: 'inline-block', width: 14, height: 1, background: 'var(--ink-2)' }} />
+      <span aria-hidden style={{ display: 'inline-block', width: '2ch', height: 1, background: 'var(--ink-2)' }} />
       {children}
     </span>
   );

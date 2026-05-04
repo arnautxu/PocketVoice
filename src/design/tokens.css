@@ -1,60 +1,85 @@
-/* Pocket Voice — design tokens. OKLCH only. No #000, no #fff. */
+/* Pocket Voice — design tokens. Brand: caret as central element. Mono everywhere. */
 
 :root {
-  /* Surfaces — slightly warmer, deeper. The Vision Pro / Nothing register. */
-  --surface-0: oklch(0.115 0.006 264);
-  --surface-1: oklch(0.155 0.007 264);
-  --surface-2: oklch(0.20 0.008 264);
-  --surface-3: oklch(0.27 0.008 264);
+  /* ── Canonical color tokens ──────────────────────────────────────────────── */
+  /* Foundation — duotone system. Ink on paper. Signal is the only accent.     */
+  --color-ink:    #0A0A0A;   /* page background, text on light surfaces        */
+  --color-paper:  #F5F2ED;   /* primary text, surfaces on dark backgrounds     */
+  --color-signal: #1F44FF;   /* RESERVED: caret (animated), one active state   */
 
-  /* Ink — slightly cooler than warm, but never blue */
-  --ink-0: oklch(0.965 0.004 264);
-  --ink-1: oklch(0.74 0.005 264);
-  --ink-2: oklch(0.50 0.006 264);
+  /* Functional grays — 100 (darkest/near-bg) → 500 (lightest/near-fg)        */
+  --color-gray-100: #1A1A1A; /* surface elevation — cards, panels              */
+  --color-gray-200: #2E2E2E; /* dividers, subtle borders, structural dashes    */
+  --color-gray-300: #525252; /* disabled text, tertiary labels                 */
+  --color-gray-400: #8A8A8A; /* secondary text, metadata, eyebrows             */
+  --color-gray-500: #B8B8B8; /* caption text, hints, subtitles                 */
 
-  /* Accent — electric blue. Used ≤10% of surface. */
-  --accent: oklch(0.70 0.16 250);
-  --accent-soft: oklch(0.70 0.16 250 / 0.16);
-  --accent-glow: oklch(0.70 0.16 250 / 0.32);
+  /* Functional states — product UI only, never marketing pages                */
+  --color-success: #5CC68D;
+  --color-warning: #E8A547;
+  --color-error:   #E25555;
 
-  /* Borders */
-  --hairline: oklch(0.965 0.004 264 / 0.07);
-  --hairline-strong: oklch(0.965 0.004 264 / 0.14);
+  /* ── Typeface ─────────────────────────────────────────────────────────────── */
+  /* Mono is the DEFAULT — inherited by every element via body.                  */
+  /* Sans is the EXCEPTION — applied only to prose, dense UI, and microcopy.    */
+  --font-mono: 'IoskeleyMono', ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Tinted shadows (matched to background hue, not neutral gray) */
-  --shadow-soft: 0 1px 0 oklch(0.965 0.004 264 / 0.04) inset,
-    0 32px 64px -24px oklch(0.04 0.01 264 / 0.7);
-  --shadow-edge: inset 0 1px 0 oklch(0.965 0.004 264 / 0.06);
+  /* ── Grid units ──────────────────────────────────────────────────────────── */
+  --ch: 1ch;
+  --lh: 1.5rem;
 
-  /* Type scale (1.5 ratio) */
-  --step--1: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);
-  --step-0:  clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --step-1:  clamp(1.25rem, 1.18rem + 0.4vw, 1.5rem);
-  --step-2:  clamp(1.625rem, 1.5rem + 0.6vw, 2rem);
-  --step-3:  clamp(2.25rem, 2rem + 1.2vw, 3rem);
-  --step-4:  clamp(3rem, 2.4rem + 3vw, 4.75rem);
-  --step-5:  clamp(4rem, 3rem + 5vw, 7.5rem);
-  --step-6:  clamp(5rem, 3.5rem + 8vw, 11rem);
+  /* ── Backward-compat aliases — canonical names preferred in new code ─────── */
+  --surface-0: var(--color-ink);
+  --surface-1: var(--color-gray-100);
+  --surface-2: var(--color-gray-200);
+  --surface-3: var(--color-gray-200); /* structural dashes → divider gray      */
+  --ink-0:     var(--color-paper);
+  --ink-1:     var(--color-gray-400); /* secondary text                        */
+  --ink-2:     var(--color-gray-300); /* tertiary/disabled text                */
+  --accent:    var(--color-signal);
+  --gray-4:    var(--color-gray-400);
+  --gray-5:    var(--color-gray-500);
+  --accent-soft: rgba(31, 68, 255, 0.08);
+  --accent-glow: rgba(31, 68, 255, 0.18);
 
-  /* Motion curves */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* ── Borders ─────────────────────────────────────────────────────────────── */
+  --hairline:        rgba(245, 242, 237, 0.08);
+  --hairline-strong: rgba(245, 242, 237, 0.14);
+
+  /* ── Type scale (1.5 ratio, fluid) ──────────────────────────────────────── */
+  --step--1: clamp(0.75rem,  0.72rem + 0.15vw, 0.875rem);
+  --step-0:  clamp(0.875rem, 0.84rem + 0.20vw, 1rem);
+  --step-1:  clamp(1.125rem, 1.06rem + 0.35vw, 1.375rem);
+  --step-2:  clamp(1.5rem,   1.38rem + 0.60vw, 1.875rem);
+  --step-3:  clamp(2rem,     1.80rem + 1.00vw, 2.75rem);
+  --step-4:  clamp(2.75rem,  2.30rem + 2.25vw, 4.25rem);
+  --step-5:  clamp(3.5rem,   2.75rem + 3.75vw, 6.5rem);
+  --step-6:  clamp(4.5rem,   3.25rem + 6.25vw, 10rem);
+
+  /* ── Motion ──────────────────────────────────────────────────────────────── */
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1); /* standard easing for all transitions */
+  --ease-out:  cubic-bezier(0.0, 0, 0.2, 1);
+  --t-micro:   150ms; /* hover, focus, toggle */
+  --t-macro:   300ms; /* state changes, reveals */
+
+  /* legacy aliases (kept for backward compat in existing components) */
   --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --t-instant:  100ms;
+  --t-quick:    150ms;
+  --t-base:     300ms;
+  --t-slow:     300ms;
+  --t-narrative: 300ms;
 
-  /* Durations */
-  --t-instant: 100ms;
-  --t-quick: 160ms;
-  --t-base: 220ms;
-  --t-slow: 420ms;
-  --t-narrative: 720ms;
+  /* ── Shadows ─────────────────────────────────────────────────────────────── */
+  --shadow-soft: 0 1px 0 rgba(245, 245, 240, 0.03) inset,
+                 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+  --shadow-edge: inset 0 1px 0 rgba(245, 245, 240, 0.04);
 
-  /* Rhythm */
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --rail: clamp(2rem, 6vw, 6rem);
-  --max-w: 1320px;
-  --max-prose: 64ch;
-
-  /* Type */
-  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* ── Layout ──────────────────────────────────────────────────────────────── */
+  --gutter:   clamp(1.25rem, 4vw, 2.5rem);
+  --rail:     clamp(2rem, 6vw, 6rem);
+  --max-w:    1320px;
+  --max-prose: 65ch;
 }

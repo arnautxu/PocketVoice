@@ -4,11 +4,25 @@ export function Footer() {
   return (
     <footer
       style={{
-        borderTop: '1px solid var(--hairline)',
-        paddingBlock: '3rem 4rem',
-        marginTop: '4rem',
+        paddingBlock: '4ch 5ch',
+        marginTop: '4ch',
       }}
     >
+      {/* Mono separator */}
+      <div
+        className="rail"
+        aria-hidden="true"
+        style={{
+          color: 'var(--surface-3)',
+          fontSize: 'var(--step--1)',
+          letterSpacing: '0.1em',
+          marginBottom: '3ch',
+          userSelect: 'none',
+        }}
+      >
+        {'─'.repeat(80)}
+      </div>
+
       <div
         className="rail"
         style={{
@@ -19,14 +33,14 @@ export function Footer() {
           flexWrap: 'wrap',
         }}
       >
-        <div style={{ display: 'grid', gap: '0.75rem' }}>
+        <div style={{ display: 'grid', gap: '1ch' }}>
           <Wordmark />
           <span style={{ color: 'var(--ink-2)', fontSize: 'var(--step--1)' }}>
             From Pocket — Open Vision Engineering Inc.
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap', color: 'var(--ink-1)' }}>
+        <div style={{ display: 'flex', gap: '4ch', flexWrap: 'wrap', color: 'var(--ink-1)' }}>
           <Group title="Product">
             <FootLink href="#magic">How it works</FootLink>
             <FootLink href="#different">Why it's different</FootLink>
@@ -46,20 +60,17 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Bottom bar */}
       <div
         className="rail"
         style={{
-          marginTop: '3rem',
-          paddingTop: '1.5rem',
-          borderTop: '1px solid var(--hairline)',
+          marginTop: '3ch',
           display: 'flex',
           justifyContent: 'space-between',
           color: 'var(--ink-2)',
           fontSize: 'var(--step--1)',
-          fontFamily: 'var(--font-mono)',
-          letterSpacing: '0.04em',
           flexWrap: 'wrap',
-          gap: '0.75rem',
+          gap: '1ch',
         }}
       >
         <span>© {new Date().getFullYear()} Open Vision Engineering Inc.</span>
@@ -71,19 +82,17 @@ export function Footer() {
 
 function Group({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'grid', gap: '0.65rem' }}>
+    <div style={{ display: 'grid', gap: '0.75ch' }}>
       <span
         style={{
           color: 'var(--ink-2)',
-          fontFamily: 'var(--font-mono)',
           fontSize: 'var(--step--1)',
           letterSpacing: '0.08em',
-          textTransform: 'uppercase',
         }}
       >
         {title}
       </span>
-      <div style={{ display: 'grid', gap: '0.4rem' }}>{children}</div>
+      <div style={{ display: 'grid', gap: '0.5ch' }}>{children}</div>
     </div>
   );
 }
@@ -95,7 +104,7 @@ function FootLink({ href, children }: { href: string; children: React.ReactNode 
       style={{
         color: 'var(--ink-1)',
         fontSize: 'var(--step-0)',
-        transition: 'color var(--t-quick) var(--ease-out)',
+        transition: 'color var(--t-micro) var(--ease)',
       }}
       onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ink-0)')}
       onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-1)')}
