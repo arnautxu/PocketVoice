@@ -1,10 +1,8 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Caret } from '../components/Caret';
 import { InstallButton } from '../components/InstallButton';
 import { Wordmark } from '../components/Wordmark';
 import { HeroScene } from '../scene/HeroScene';
-import PocketVoiceStoryPair3D from '../scene/PocketVoiceStoryPair3D';
 
 /* ── Typewriter ──────────────────────────────────────────────────────────── */
 function useTypeIn(text: string, startMs: number, msPerChar = 22) {
@@ -50,7 +48,6 @@ const T_CARET_END   = T_LINE2_END + 150;
 const T_PARA_START  = T_LINE2_END + 380;
 const T_CTA_START   = T_PARA_START + 500;
 const T_STATS_START = T_CTA_START + 200;
-const T_SCENE_START = T_CTA_START + 400;
 
 /* ── Component ───────────────────────────────────────────────────────────── */
 export function Hero() {
@@ -60,7 +57,6 @@ export function Hero() {
   const [showPara,  setShowPara]  = useState(false);
   const [showCta,   setShowCta]   = useState(false);
   const [showStats, setShowStats] = useState(false);
-  const [showScene, setShowScene] = useState(false);
   const [endCaret,  setEndCaret]  = useState(false);
 
   useEffect(() => {
@@ -69,45 +65,30 @@ export function Hero() {
       window.setTimeout(() => setShowPara(true),  T_PARA_START),
       window.setTimeout(() => setShowCta(true),   T_CTA_START),
       window.setTimeout(() => setShowStats(true), T_STATS_START),
-      window.setTimeout(() => setShowScene(true), T_SCENE_START),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
 
   return (
-    <>
-      {/* Responsive collapse: single col on mobile, 3D panel hidden */}
-      <style>{`
-        @media (max-width: 767px) {
-          #pv-hero { grid-template-columns: 1fr !important; height: auto !important; min-height: 100dvh !important; }
-          #pv-hero-scene { display: none !important; }
-        }
-      `}</style>
+    <section
+      id="magic"
+      style={{
+        position: 'relative',
+        minHeight: '100dvh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        paddingTop:    'clamp(7rem, 16vh, 11rem)',
+        paddingBottom: 'clamp(4rem, 10vh, 7rem)',
+      }}
+    >
+      <HeroScene />
 
-      <section
-        id="pv-hero"
-        style={{
-          position: 'relative',
-          height: '100dvh',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Dot-grid background — spans full section */}
-        <HeroScene />
-
-        {/* ── Left: headline + CTA ─────────────────────────────────────── */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            padding: 'clamp(7rem, 16vh, 11rem) clamp(1.5rem, 3vw, 2.5rem) clamp(4rem, 10vh, 7rem) clamp(1.5rem, 6vw, 5rem)',
-          }}
-        >
+      <div className="rail" style={{ position: 'relative', zIndex: 1 }}>
+        {/* Editorial column — copy carries the hero entirely. The right ~40%   */}
+        {/* is intentional whitespace so the dot-grid breathes and the headline */}
+        {/* lands without competing with a product mockup.                      */}
+        <div style={{ maxWidth: 'min(58ch, 62%)' }}>
           <Wordmark
             height="clamp(3.5rem, 6vw, 5.5rem)"
             style={{
@@ -120,7 +101,6 @@ export function Hero() {
           <div
             aria-hidden="true"
             style={{
-              fontFamily: 'var(--font-mono)',
               color: 'var(--surface-2)',
               fontSize: 'var(--step--1)',
               letterSpacing: '0.08em',
@@ -160,9 +140,9 @@ export function Hero() {
             <p
               style={{
                 color: 'var(--ink-1)',
-                maxWidth: '46ch',
-                fontSize: 'var(--step-0)',
-                lineHeight: 1.65,
+                maxWidth: '52ch',
+                fontSize: 'var(--step-1)',
+                lineHeight: 1.55,
                 margin: '0 0 3ch',
                 opacity: 0,
                 animation: 'pv-char-in 0.3s var(--ease) forwards',
@@ -208,41 +188,25 @@ export function Hero() {
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '0.5ch',
                 color: 'var(--ink-2)',
-                fontFamily: 'var(--font-mono)',
                 fontSize: 'var(--step--1)',
+                fontVariantNumeric: 'tabular-nums',
                 letterSpacing: '0.06em',
                 opacity: 0,
                 animation: 'pv-char-in 0.3s var(--ease) forwards',
               }}
             >
               <span>iPhone</span>
-              <span style={{ padding: '0 1ch', color: 'var(--surface-3)' }}>──</span>
+              <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
               <span>180 ms median</span>
-              <span style={{ padding: '0 1ch', color: 'var(--surface-3)' }}>──</span>
+              <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
               <span>108 languages</span>
-              <span style={{ padding: '0 1ch', color: 'var(--surface-3)' }}>──</span>
+              <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
               <span>On-device</span>
             </div>
           )}
         </div>
-
-        {/* ── Right: 3D story pair ─────────────────────────────────────── */}
-        <motion.div
-          id="pv-hero-scene"
-          initial={{ opacity: 0 }}
-          animate={showScene ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.1, ease: [0.23, 1, 0.32, 1] }}
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            overflow: 'hidden',
-          }}
-        >
-          <PocketVoiceStoryPair3D showUI={false} cameraZ={7} />
-        </motion.div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
