@@ -1,37 +1,69 @@
-/* ── IoskeleyMono — self-hosted, /public/fonts ───────────────────────────── */
+/* ── Borna — self-hosted, /public/fonts ──────────────────────────────────── */
+/* Single brand family. 4 weights × 2 styles = 8 faces.                       */
+/* Replaces the previous IoskeleyMono + Inter pairing. Both --font-mono and   */
+/* --font-sans tokens now resolve to Borna; the names are preserved only for  */
+/* backward compatibility with existing call sites.                           */
 
 @font-face {
-  font-family: 'IoskeleyMono';
-  src: url('/fonts/IoskeleyMono-Regular.woff2') format('woff2');
+  font-family: 'Borna';
+  src: url('/fonts/Borna-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IoskeleyMono';
-  src: url('/fonts/IoskeleyMono-Medium.woff2') format('woff2');
+  font-family: 'Borna';
+  src: url('/fonts/Borna-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Borna';
+  src: url('/fonts/Borna-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IoskeleyMono';
-  src: url('/fonts/IoskeleyMono-Bold.woff2') format('woff2');
+  font-family: 'Borna';
+  src: url('/fonts/Borna-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Borna';
+  src: url('/fonts/Borna-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Borna';
+  src: url('/fonts/Borna-SemiBoldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Borna';
+  src: url('/fonts/Borna-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* ── Inter Variable — self-hosted, /public/fonts ─────────────────────────── */
-/* Used only for long-form prose, dense UI, and microcopy.                    */
-/* Never applied to headlines, CTAs, nav, or any brand-bearing element.       */
-
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-Variable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
+  font-family: 'Borna';
+  src: url('/fonts/Borna-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
   font-display: swap;
 }

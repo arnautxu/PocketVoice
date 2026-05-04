@@ -17,7 +17,7 @@ const INK   = '#0A0A0A';
 const PAPER  = '#F5F2ED'; // --color-paper
 const BLUE   = '#1F44FF'; // --color-signal
 const RED    = '#E0322B';
-const MONO   = '"Ioskeley Mono", ui-monospace, Menlo, monospace';
+const MONO   = "'Borna', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 // ── Shared sub-components ─────────────────────────────────────────────────
 

@@ -28,8 +28,9 @@
   --color-hairline: var(--hairline);
 
   /* ── Fonts ──────────────────────────────────────────────────── */
-  --font-mono: 'IoskeleyMono', ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Single brand family — Borna. Tokens kept distinct for backward compat. */
+  --font-mono: 'Borna', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Borna', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────────────────── */
