@@ -13,7 +13,7 @@ export function useTypeIn(
   text: string,
   triggered: boolean,
   startDelay = 0,
-  msPerChar = 14,
+  msPerChar = 22,
 ) {
   const [count, setCount] = useState(0);
 

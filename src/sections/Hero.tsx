@@ -8,7 +8,7 @@ import { HeroScene } from '../scene/HeroScene';
 /* ── Typewriter ──────────────────────────────────────────────────────────── */
 /* Recursive setTimeout — each char gets its own delay.                       */
 /* Sine ease-in-out: slow start → fast middle → slow end. ±20% jitter.       */
-function useTypeIn(text: string, startMs: number, msPerChar = 14) {
+function useTypeIn(text: string, startMs: number, msPerChar = 22) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     let tid: number;
@@ -45,9 +45,9 @@ const PARA  = "Pocket Voice reads the surface you're writing in. A reply in Mail
 
 /* Timing constants — calibrated for elastic typewriter (avg ~20ms/char).    */
 const T_LINE1_START = 500;
-const T_LINE1_END   = T_LINE1_START + 270;   /* "speak once." ~11 chars × 18ms avg + punct */
-const T_LINE2_START = T_LINE1_END + 220;
-const T_LINE2_END   = T_LINE2_START + 750;   /* "the right sentence appears." ~27 chars     */
+const T_LINE1_END   = T_LINE1_START + 420;   /* "speak once." ~11 chars × 28ms avg + punct  */
+const T_LINE2_START = T_LINE1_END + 240;
+const T_LINE2_END   = T_LINE2_START + 980;   /* "the right sentence appears." ~27 chars      */
 const T_CARET_END   = T_LINE2_END + 150;
 const T_PARA_START  = T_LINE2_END + 380;
 const T_CTA_START   = T_PARA_START + 500;
