@@ -14,8 +14,8 @@ import * as THREE from 'three';
 
 // ── Brand tokens ──────────────────────────────────────────────────────────
 const INK   = '#0A0A0A';
-const PAPER  = '#F5F2ED';
-const BLUE   = '#1F44FF';
+const PAPER  = '#F5F2ED'; // --color-paper
+const BLUE   = '#1F44FF'; // --color-signal
 const RED    = '#E0322B';
 const MONO   = '"Ioskeley Mono", ui-monospace, Menlo, monospace';
 
@@ -52,7 +52,7 @@ interface AppBarProps {
 }
 
 function AppBar({ leftText, center, rightText, rightColor, dark }: AppBarProps) {
-  const border = dark ? '#1A1A1A' : '#ECECEC';
+  const border = dark ? '#1A1A1A' : '#DEDBD6';
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -170,11 +170,11 @@ function DefaultTranscriptScreen() {
           <span style={{ color: BLUE, fontWeight: 700 }}>¶</span>
         </div>
       </div>
-      <div style={{ padding: '10px 14px 14px', borderTop: '1px solid #ECECEC', background: '#fff', display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ padding: '10px 14px 14px', borderTop: '1px solid #DEDBD6', background: PAPER, display: 'flex', alignItems: 'center', gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: 999, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><polygon points="6 4 20 12 6 20 6 4" /></svg>
         </div>
-        <div style={{ flex: 1, height: 3, background: '#ECECEC', position: 'relative' }}>
+        <div style={{ flex: 1, height: 3, background: '#DEDBD6', position: 'relative' }}>
           <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: '34%', background: INK }} />
         </div>
         <div style={{ fontSize: 11, color: '#6E6E6E', fontFamily: MONO }}>00:24 / 01:08</div>
@@ -376,12 +376,16 @@ interface PocketVoiceStoryPair3DProps {
   leftScreen?: React.ReactNode;
   rightScreen?: React.ReactNode;
   cameraZ?: number;
+  /** Hide in-scene headline + wordmark. Useful when embedded inside a hero
+   *  that supplies its own copy above the canvas. */
+  showUI?: boolean;
 }
 
 export default function PocketVoiceStoryPair3D({
   leftScreen = <DefaultRecorderScreen />,
   rightScreen = <DefaultTranscriptScreen />,
   cameraZ = 7,
+  showUI = true,
 }: PocketVoiceStoryPair3DProps) {
   const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -421,8 +425,8 @@ export default function PocketVoiceStoryPair3D({
 
         <Suspense fallback={null}>
           <Backdrop />
-          <HeadlineHTML />
-          <SceneWordmark />
+          {showUI && <HeadlineHTML />}
+          {showUI && <SceneWordmark />}
 
           <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.3}>
             <Phone3D
