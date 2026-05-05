@@ -47,7 +47,7 @@ export function BrandIcon({ style, size = '2rem', inverted = false }: BrandIconP
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512.1 512.1"
-      fill="currentColor"
+      fill="var(--color-signal)"
       aria-hidden="true"
       style={{ width: size, height: size, flexShrink: 0, ...style }}
     >
