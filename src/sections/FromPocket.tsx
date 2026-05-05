@@ -26,7 +26,7 @@ export function FromPocket() {
       }}
     >
       <div
-        className="rail"
+        className="rail fp-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',

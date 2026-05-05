@@ -1,0 +1,58 @@
+/* Pocket Voice — responsive breakpoints
+ * Central home for all @media rules.
+ * Component inline styles handle layout; this file handles breakpoint overrides.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Utility: box-drawing divider clip ─────────────────────────────────── */
+/* Prevents '─'.repeat(N) chars from causing horizontal scroll on narrow viewports */
+.pv-rule {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ─── ≤ 900 px — tablet / large mobile ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-phones { display: none !important; }
+}
+
+/* ─── ≤ 768 px — mobile ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Differentiators: 2-column side-by-side → single column stacked */
+  .diff-grid {
+    grid-template-columns: 1fr !important;
+    gap: clamp(2rem, 6vw, 3rem) !important;
+  }
+  /* Left heading: remove sticky — it overlaps content when stacked */
+  .diff-sticky {
+    position: static !important;
+  }
+
+  /* FromPocket: CTA + pricing side-by-side → stacked */
+  .fp-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Demo rows (MicDemo, MagicMoment): shrink label column */
+  .demo-row {
+    grid-template-columns: 4.5rem 1fr !important;
+    gap: 1rem !important;
+    align-items: start !important;
+  }
+
+  /* Speed proof bar rows: keep 3-column but tighter */
+  .speed-bar {
+    gap: 1ch !important;
+  }
+  .speed-bar-name {
+    font-size: var(--step--1) !important;
+  }
+}
+
+/* ─── ≤ 480 px — small phones ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* AnywhereYouType cards: fit on narrow screens */
+  .pv-card {
+    width: clamp(260px, 82vw, 320px) !important;
+  }
+}

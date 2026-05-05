@@ -10,7 +10,7 @@ export function Footer() {
     >
       {/* Mono separator */}
       <div
-        className="rail"
+        className="rail pv-rule"
         aria-hidden="true"
         style={{
           color: 'var(--surface-3)',

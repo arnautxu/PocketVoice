@@ -195,6 +195,7 @@ interface CardProps {
 function Card({ surface, tone, spoken, output }: CardProps) {
   return (
     <div
+      className="pv-card"
       style={{
         width: 'clamp(300px, 26vw, 380px)',
         padding: '2ch 2.5ch',
@@ -238,6 +239,7 @@ function Card({ surface, tone, spoken, output }: CardProps) {
       {/* Rule */}
       <div
         aria-hidden="true"
+        className="pv-rule"
         style={{
           color: 'var(--surface-3)',
           fontSize: 'calc(var(--step--1) * 0.7)',

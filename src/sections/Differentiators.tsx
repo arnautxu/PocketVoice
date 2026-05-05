@@ -51,7 +51,7 @@ export function Differentiators() {
       style={{ position: 'relative', padding: 'clamp(8rem, 14vh, 12rem) 0' }}
     >
       <div
-        className="rail"
+        className="rail diff-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.25fr)',
@@ -59,7 +59,7 @@ export function Differentiators() {
           alignItems: 'start',
         }}
       >
-        <motion.div style={{ y: railShift, position: 'sticky', top: '14vh' }}>
+        <motion.div className="diff-sticky" style={{ y: railShift, position: 'sticky', top: '14vh' }}>
           <Eyebrow>Why it's different</Eyebrow>
           <h2
             ref={h2Ref}
@@ -125,6 +125,7 @@ export function Differentiators() {
               {/* Mono dash separator */}
               <div
                 aria-hidden="true"
+                className="pv-rule"
                 style={{
                   color: 'var(--surface-3)',
                   fontSize: 'var(--step--1)',

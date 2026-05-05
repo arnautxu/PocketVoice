@@ -196,6 +196,7 @@ function DemoFrame({
         {/* Mono dash separator */}
         <div
           aria-hidden="true"
+          className="pv-rule"
           style={{
             color: 'var(--surface-3)',
             fontSize: 'var(--step--1)',
@@ -258,9 +259,10 @@ function DemoFrame({
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div
+      className="demo-row"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'clamp(7rem, 14vw, 9rem) 1fr',
+        gridTemplateColumns: 'clamp(6rem, 14vw, 9rem) 1fr',
         gap: '1.5rem',
         alignItems: 'baseline',
       }}

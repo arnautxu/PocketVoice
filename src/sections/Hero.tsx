@@ -75,10 +75,7 @@ export function Hero() {
 
   return (
     <>
-      {/* Responsive hide for phones column on narrow viewports */}
-      <style>{`
-        @media (max-width: 900px) { .hero-phones { display: none !important; } }
-      `}</style>
+      {/* hero-phones responsive hide is in src/design/responsive.css */}
 
       <section
         id="magic"
@@ -107,6 +104,7 @@ export function Hero() {
           />
           <div
             aria-hidden="true"
+            className="pv-rule"
             style={{
               color: 'var(--surface-2)',
               fontSize: 'var(--step--1)',

@@ -59,6 +59,7 @@ export function SpeedProof() {
         {/* Mono separator */}
         <div
           aria-hidden="true"
+          className="pv-rule"
           style={{
             color: 'var(--surface-3)',
             fontSize: 'var(--step--1)',
@@ -116,6 +117,7 @@ function Bar({
 
   return (
     <li
+      className="speed-bar"
       style={{
         display: 'grid',
         gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 3fr) auto',
@@ -126,6 +128,7 @@ function Bar({
       }}
     >
       <span
+        className="speed-bar-name"
         style={{
           color: row.primary ? 'var(--ink-0)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
