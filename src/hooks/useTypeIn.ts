@@ -51,7 +51,7 @@ function charDelay(i: number, text: string, base: number): number {
 
   // Punctuation pause on the char we just typed
   const prev = text[i - 1] ?? '';
-  const punctBonus = /[.,;:!?…—]/.test(prev) ? base * 3.5 : 0;
+  const punctBonus = /[.,;:!?…-]/.test(prev) ? base * 3.5 : 0;
   const spaceBonus  = prev === ' ' ? base * 0.4 : 0;
 
   // ±20% jitter for organic feel

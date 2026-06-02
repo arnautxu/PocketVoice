@@ -1,243 +1,159 @@
-import { useEffect, useState } from 'react';
-import { Caret } from '../components/Caret';
-import { HeroPhones } from '../components/PhoneFan';
-import { InstallButton } from '../components/InstallButton';
 import { Wordmark } from '../components/Wordmark';
-import { HeroScene } from '../scene/HeroScene';
+import { StoreBadges } from '../components/StoreBadges';
+import { CloudIcon } from '../components/CloudIcon';
+import { HeroPhone } from '../components/PhoneFan';
 
-/* ── Typewriter ──────────────────────────────────────────────────────────── */
-function useTypeIn(text: string, startMs: number, msPerChar = 22) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let tid: number;
-    const outer = window.setTimeout(() => {
-      let i = 0;
-      const tick = () => {
-        i++;
-        setCount(i);
-        if (i < text.length) {
-          tid = window.setTimeout(tick, heroCharDelay(i, text, msPerChar));
-        }
-      };
-      tid = window.setTimeout(tick, heroCharDelay(0, text, msPerChar));
-    }, startMs);
-    return () => { clearTimeout(outer); clearTimeout(tid); };
-  }, [text, startMs, msPerChar]);
-  return count;
-}
+/* ── Screen-in-sky hero ───────────────────────────────────────────────────────
+ * The brand's signature ad composition, built for the web: the lockup + a big
+ * Erode headline sit over the open blue sky on the left; a single iPhone floats
+ * on the right with the brand's cloud-textured app icons orbiting it. All motion
+ * is CSS (entrance + perpetual float) so the fold is always alive without rAF.
+ * ──────────────────────────────────────────────────────────────────────────── */
 
-function heroCharDelay(i: number, text: string, base: number): number {
-  const t = text.length > 1 ? i / (text.length - 1) : 0.5;
-  const speed = 0.3 + 0.7 * Math.sin(t * Math.PI);
-  const prev = text[i - 1] ?? '';
-  const punctBonus = /[.,;:!?…—]/.test(prev) ? base * 3.5 : 0;
-  const spaceBonus  = prev === ' ' ? base * 0.4 : 0;
-  const jitter = (Math.random() * 0.4 - 0.2) * base;
-  return Math.max(5, base / speed + jitter + punctBonus + spaceBonus);
-}
+/* Orbiting app icons - position (% of stage), cloud variant, size, float timing. */
+const ORBIT = [
+  { app: 'whatsapp', cloud: 3, top: '14%', left: '2%',   size: 104, delay: 0,   dur: 7.5 },
+  { app: 'slack',    cloud: 2, top: '6%',  left: '70%',  size: 116, delay: 0.8, dur: 8.5 },
+  { app: 'mail',     cloud: 4, top: '40%', left: '84%',  size: 100, delay: 1.6, dur: 7.0 },
+  { app: 'notes',    cloud: 1, top: '62%', left: '0%',   size: 108, delay: 1.2, dur: 8.0 },
+  { app: 'messages', cloud: 2, top: '74%', left: '74%',  size: 110, delay: 0.4, dur: 7.8 },
+] as const;
 
-/* ── Headline copy ───────────────────────────────────────────────────────── */
-const LINE1 = 'speak once.';
-const LINE2 = 'the right sentence appears.';
-const PARA  = "Pocket Voice reads the surface you're writing in. A reply in Mail becomes an email. A note in Linear becomes a ticket. Your voice, composed correctly — 180 ms after you stop speaking. Any app. 108 languages.";
-
-const T_LINE1_START = 500;
-const T_LINE1_END   = T_LINE1_START + 420;
-const T_LINE2_START = T_LINE1_END + 240;
-const T_LINE2_END   = T_LINE2_START + 980;
-const T_CARET_END   = T_LINE2_END + 150;
-const T_PARA_START  = T_LINE2_END + 380;
-const T_CTA_START   = T_PARA_START + 500;
-const T_STATS_START = T_CTA_START + 200;
-const T_PHONES_START = T_PARA_START;  // phones fade in with the paragraph
-
-/* ── Component ───────────────────────────────────────────────────────────── */
 export function Hero() {
-  const line1Chars = useTypeIn(LINE1, T_LINE1_START);
-  const line2Chars = useTypeIn(LINE2, T_LINE2_START);
-
-  const [showPara,   setShowPara]   = useState(false);
-  const [showCta,    setShowCta]    = useState(false);
-  const [showStats,  setShowStats]  = useState(false);
-  const [showPhones, setShowPhones] = useState(false);
-  const [endCaret,   setEndCaret]   = useState(false);
-
-  useEffect(() => {
-    const timers = [
-      window.setTimeout(() => setEndCaret(true),   T_CARET_END),
-      window.setTimeout(() => setShowPara(true),   T_PARA_START),
-      window.setTimeout(() => setShowCta(true),    T_CTA_START),
-      window.setTimeout(() => setShowStats(true),  T_STATS_START),
-      window.setTimeout(() => setShowPhones(true), T_PHONES_START),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
   return (
-    <>
-      {/* hero-phones responsive hide is in src/design/responsive.css */}
-
-      <section
-        id="magic"
+    <section
+      id="top"
+      style={{
+        position: 'relative',
+        minHeight: '100dvh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        paddingTop: 'clamp(7rem, 14vh, 11rem)',
+        paddingBottom: 'clamp(4rem, 10vh, 8rem)',
+      }}
+    >
+      {/* soft blue scrim - keeps white type legible wherever clouds drift behind it */}
+      <div
+        aria-hidden
         style={{
-          position: 'relative',
-          minHeight: '100dvh',
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-          paddingTop:    'clamp(7rem, 16vh, 11rem)',
-          paddingBottom: 'clamp(4rem, 10vh, 7rem)',
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(96deg, rgba(8,72,120,0.46) 0%, rgba(10,90,150,0.24) 34%, rgba(10,90,150,0) 58%)',
         }}
-      >
-        <HeroScene />
+      />
 
-        <div className="rail" style={{ position: 'relative', zIndex: 1, width: '100%' }}>
-
-          {/* ── Wordmark + divider — full width above both columns ── */}
+      <div className="rail hero-grid" style={{ position: 'relative', zIndex: 1, width: '100%' }}>
+        {/* ── Left: lockup + headline + badges ───────────────────────────── */}
+        <div className="hero-copy">
           <Wordmark
-            height="clamp(3.5rem, 6vw, 5.5rem)"
-            style={{
-              marginBottom: '3ch',
-              opacity: 0,
-              animation: 'pv-char-in 0.4s var(--ease) 0.1s forwards',
-            }}
+            tone="paper"
+            height="clamp(1.5rem, 2.4vw, 2rem)"
+            className="hero-rise"
+            style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.75rem)', animationDelay: '0.05s' } as React.CSSProperties}
           />
-          <div
-            aria-hidden="true"
-            className="pv-rule"
+
+          <h1
+            className="hero-rise"
             style={{
-              color: 'var(--surface-2)',
-              fontSize: 'var(--step--1)',
-              letterSpacing: '0.08em',
-              marginBottom: '3ch',
-              opacity: 0,
-              animation: 'pv-char-in 0.3s var(--ease) 0.3s forwards',
-              userSelect: 'none',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 400,
+              fontSize: 'var(--step-5)',
+              lineHeight: 0.98,
+              letterSpacing: '-0.02em',
+              color: 'var(--pv-paper)',
+              margin: '0 0 0.5em',
+              animationDelay: '0.14s',
+              textShadow: '0 2px 22px rgba(8,55,95,0.32)',
             }}
           >
-            {'─'.repeat(32)}
-          </div>
+            Every app
+            <br />
+            you&rsquo;d type in
+          </h1>
 
-          {/* ── Two-column: h1 + phones, top-aligned ─────────────── */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            gap: 'clamp(2rem, 5vw, 5rem)',
-          }}>
+          <p
+            className="hero-rise"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'var(--step-2)',
+              lineHeight: 1.18,
+              color: 'var(--pv-paper)',
+              margin: '0 0 0.35em',
+              animationDelay: '0.23s',
+              textShadow: '0 1px 14px rgba(8,55,95,0.28)',
+            }}
+          >
+            Slack. Mail. Messages. Notes.
+          </p>
 
-            {/* ── Copy column ─────────────────────────────────── */}
-            <div style={{ flex: '0 0 auto', maxWidth: 'min(52ch, 100%)' }}>
-              <h1
-                style={{
-                  fontSize: 'var(--step-5)',
-                  fontWeight: 400,
-                  lineHeight: 0.96,
-                  letterSpacing: '-0.02em',
-                  margin: '0 0 2ch',
-                }}
+          <p
+            className="hero-rise"
+            style={{
+              maxWidth: '34ch',
+              fontSize: 'var(--step-1)',
+              lineHeight: 1.45,
+              color: 'rgba(250,250,248,0.88)',
+              margin: '0 0 clamp(2rem, 5vh, 2.75rem)',
+              animationDelay: '0.32s',
+            }}
+          >
+            If there&rsquo;s a keyboard, you can talk instead.
+          </p>
+
+          <StoreBadges
+            className="hero-rise"
+            height={56}
+            style={{ animationDelay: '0.41s' } as React.CSSProperties}
+          />
+        </div>
+
+        {/* ── Right: floating phone with orbiting cloud icons ─────────────── */}
+        <div className="hero-stage" aria-hidden>
+          <div className="hero-stage-inner">
+            <div className="hero-phone-float">
+              <HeroPhone scale={0.62} />
+            </div>
+            {ORBIT.map((o) => (
+              <div
+                key={o.app}
+                className="hero-orbit"
+                style={{ top: o.top, left: o.left, width: o.size }}
               >
-                <span aria-label={LINE1} style={{ display: 'block', minHeight: '1.1em' }}>
-                  <span aria-hidden>{LINE1.slice(0, line1Chars)}</span>
-                </span>
-                <span
-                  aria-label={LINE2}
-                  style={{ display: 'block', color: 'var(--ink-1)', minHeight: '1.1em', position: 'relative' }}
-                >
-                  <span aria-hidden>{LINE2.slice(0, line2Chars)}</span>
-                  {endCaret && line2Chars >= LINE2.length && (
-                    <Caret active style={{ marginLeft: '0.2ch', top: '0.12em', fontSize: 'var(--step-5)' }} />
-                  )}
-                </span>
-              </h1>
-
-              {showPara && (
-                <p
-                  style={{
-                    color: 'var(--ink-1)',
-                    maxWidth: '52ch',
-                    fontSize: 'var(--step-1)',
-                    lineHeight: 1.55,
-                    margin: '0 0 3ch',
-                    opacity: 0,
-                    animation: 'pv-char-in 0.3s var(--ease) forwards',
-                  }}
-                >
-                  {PARA}
-                  <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
-                </p>
-              )}
-
-              {showCta && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '2ch',
-                    flexWrap: 'wrap',
-                    marginBottom: '4ch',
-                    opacity: 0,
-                    animation: 'pv-char-in 0.3s var(--ease) forwards',
-                  }}
-                >
-                  <InstallButton size="lg" />
-                  <a
-                    href="#different"
-                    style={{
-                      color: 'var(--ink-1)',
-                      fontSize: 'var(--step-0)',
-                      borderBottom: '1px solid var(--hairline-strong)',
-                      paddingBottom: '0.1ch',
-                      transition: 'color var(--t-micro) var(--ease)',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ink-0)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-1)')}
-                  >
-                    See how it works
-                  </a>
-                </div>
-              )}
-
-              {showStats && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    color: 'var(--ink-2)',
-                    fontSize: 'var(--step--1)',
-                    fontVariantNumeric: 'tabular-nums',
-                    letterSpacing: '0.06em',
-                    opacity: 0,
-                    animation: 'pv-char-in 0.3s var(--ease) forwards',
-                  }}
-                >
-                  <span>iPhone</span>
-                  <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
-                  <span>180 ms median</span>
-                  <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
-                  <span>108 languages</span>
-                  <span style={{ padding: '0 1.5ch', color: 'var(--surface-3)' }}>──</span>
-                  <span>On-device</span>
-                </div>
-              )}
-            </div>
-
-            {/* ── Phone fan column ────────────────────────────── */}
-            <div
-              className="hero-phones"
-              style={{
-                flexShrink: 0,
-                opacity: showPhones ? 1 : 0,
-                transform: showPhones ? 'translateY(0)' : 'translateY(2rem)',
-                transition: 'opacity 0.7s var(--ease), transform 0.7s var(--ease)',
-              }}
-            >
-              <HeroPhones scale={0.575} />
-            </div>
-
+                <CloudIcon
+                  app={o.app}
+                  cloud={o.cloud}
+                  size={o.size}
+                  delay={o.delay}
+                  duration={o.dur}
+                  style={{ width: '100%', height: 'auto', aspectRatio: '1 / 1' }}
+                />
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* scroll cue */}
+      <div
+        aria-hidden
+        style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)' }}
+      >
+        <span
+          style={{
+            display: 'block',
+            width: 22,
+            height: 34,
+            borderRadius: 12,
+            border: '1.5px solid rgba(255,255,255,0.7)',
+            opacity: 0.7,
+            position: 'relative',
+          }}
+        >
+          <span className="pv-scroll-dot" style={{ background: 'rgba(255,255,255,0.9)' }} />
+        </span>
+      </div>
+    </section>
   );
 }

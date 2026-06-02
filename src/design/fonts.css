@@ -1,69 +1,107 @@
-/* ── Borna — self-hosted, /public/fonts ──────────────────────────────────── */
-/* Single brand family. 4 weights × 2 styles = 8 faces.                       */
-/* Replaces the previous IoskeleyMono + Inter pairing. Both --font-mono and   */
-/* --font-sans tokens now resolve to Borna; the names are preserved only for  */
-/* backward compatibility with existing call sites.                           */
+/* ── Pocket Voice typefaces - self-hosted, /public/fonts ──────────────────── */
+/* Two families per Brand Manual v6:                                          */
+/*   Erode  (Indian Type Foundry, OFL) - DISPLAY: headlines, taglines, lead.  */
+/*   Satoshi(Indian Type Foundry, OFL) - TEXT: body, captions, specs, labels. */
+/* Replaces the previous Borna / IoskeleyMono / Inter faces.                  */
 
+/* ── Erode - display serif ─────────────────────────────────────────────── */
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-Regular.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Erode';
+  src: url('/fonts/Erode-LightItalic.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Erode';
+  src: url('/fonts/Erode-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-RegularItalic.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-Italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-Medium.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-MediumItalic.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-MediumItalic.woff2') format('woff2');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-SemiBold.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-Semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-SemiBoldItalic.otf') format('opentype');
+  font-family: 'Erode';
+  src: url('/fonts/Erode-SemiboldItalic.woff2') format('woff2');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
 }
 
+/* ── Satoshi - text sans ───────────────────────────────────────────────── */
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-Bold.otf') format('opentype');
-  font-weight: 700;
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Light.woff2') format('woff2');
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Borna';
-  src: url('/fonts/Borna-BoldItalic.otf') format('opentype');
-  font-weight: 700;
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Italic.woff2') format('woff2');
+  font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-MediumItalic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
   font-display: swap;
 }

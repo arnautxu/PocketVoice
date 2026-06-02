@@ -1,10 +1,9 @@
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
- * Brand-locked heading.
- * Always renders in IoskeleyMono — no override is possible.
- * Use for all marketing headlines and section titles.
- * Never apply font-sans to a heading; that's an anti-pattern per the type system.
+ * Brand-locked heading. H1–H3 render in Erode (display serif); level 4 in
+ * Satoshi Medium (text), per Brand Manual v6 scale (Erode tops the scale,
+ * Satoshi handles everything below H3).
  */
 interface HeadingProps {
   level?: 1 | 2 | 3 | 4;
@@ -36,11 +35,11 @@ export function Heading({ level = 2, children, style, className, id }: HeadingPr
       id={id}
       className={className}
       style={{
-        fontFamily: 'var(--font-mono)',
+        fontFamily: level === 4 ? 'var(--font-text)' : 'var(--font-display)',
         fontSize: sizeMap[level],
         fontWeight: weightMap[level],
         lineHeight: 1.1,
-        letterSpacing: '-0.02em',
+        letterSpacing: level === 4 ? '0' : '-0.015em',
         color: 'var(--ink-0)',
         margin: 0,
         ...style,

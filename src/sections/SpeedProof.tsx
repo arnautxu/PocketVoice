@@ -24,8 +24,12 @@ export function SpeedProof() {
   const l2 = useTypeIn(H2_L2, inView, T_L2);
 
   return (
-    <section id="speed" ref={ref} style={{ padding: 'clamp(7rem, 12vh, 10rem) 0' }}>
-      <div className="rail" style={{ display: 'grid', gap: 'clamp(2.5rem, 6vh, 4rem)' }}>
+    <section id="speed" ref={ref} style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
+      <div className="rail">
+        <div
+          className="glass reveal"
+          style={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)', padding: 'clamp(2rem, 5vw, 4rem)' }}
+        >
         <header style={{ display: 'grid', gap: '1.5rem', maxWidth: '38ch' }}>
           <Eyebrow>Speed proof</Eyebrow>
           <h2
@@ -83,6 +87,7 @@ export function SpeedProof() {
             <Bar key={r.name} row={r} index={i} active={inView} />
           ))}
         </ol>
+        </div>
       </div>
     </section>
   );
@@ -157,7 +162,7 @@ function Bar({
           style={{
             position: 'absolute',
             inset: 0,
-            background: row.primary ? 'var(--ink-0)' : 'var(--surface-3)',
+            background: row.primary ? 'var(--pv-blue)' : 'var(--surface-3)',
             transformOrigin: 'left',
           }}
         />
@@ -166,11 +171,11 @@ function Bar({
       <span
         className="tabular"
         style={{
-          color: row.primary ? 'var(--ink-0)' : 'var(--ink-1)',
+          color: row.primary ? 'var(--pv-blue)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
           minWidth: '5.5ch',
           textAlign: 'right',
-          fontWeight: row.primary ? 500 : 400,
+          fontWeight: row.primary ? 600 : 400,
         }}
       >
         {count}

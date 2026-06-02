@@ -1,82 +1,108 @@
-/* Pocket Voice — design tokens. Brand: caret as central element. Mono everywhere. */
+/* Pocket Voice - design tokens. Brand Manual v6: light/sky system.            */
+/* Pocket Blue carries the brand. Pocket Black grounds it. Neutrals make room   */
+/* for the work. Built on contrast, never on noise.                             */
 
 :root {
-  /* ── Canonical color tokens ──────────────────────────────────────────────── */
-  /* Foundation — duotone system. Ink on paper. Signal is the only accent.     */
-  --color-ink:    #0A0A0A;   /* page background, text on light surfaces        */
-  --color-paper:  #F5F2ED;   /* primary text, surfaces on dark backgrounds     */
-  --color-signal: #1F44FF;   /* RESERVED: caret (animated), one active state   */
+  /* ── Brand palette - canonical (Manual v6 · 03.1) ────────────────────────── */
+  --pv-blue:       #0E8ECE;  /* Pocket Blue - primary, carries the brand        */
+  --pv-blue-deep:  #0066A4;  /* Blue Deep - depth, gradients, hovers            */
+  --pv-black:      #1B1A19;  /* Pocket Black - primary text, grounds it         */
+  --pv-graphite:   #3A3937;  /* Graphite - secondary text                       */
+  --pv-ash:        #8A8783;  /* Ash - tertiary text, metadata                   */
+  --pv-fog:        #E8E6E2;  /* Fog - subtle surfaces, dividers                 */
+  --pv-paper:      #FAFAF8;  /* Paper - page background                         */
 
-  /* Functional grays — 100 (darkest/near-bg) → 500 (lightest/near-fg)        */
-  --color-gray-100: #1A1A1A; /* surface elevation — cards, panels              */
-  --color-gray-200: #2E2E2E; /* dividers, subtle borders, structural dashes    */
-  --color-gray-300: #525252; /* disabled text, tertiary labels                 */
-  --color-gray-400: #8A8A8A; /* secondary text, metadata, eyebrows             */
-  --color-gray-500: #B8B8B8; /* caption text, hints, subtitles                 */
+  /* Functional states */
+  --pv-success: #3FB67A;
+  --pv-warning: #E8A33D;
+  --pv-danger:  #D94B3A;
 
-  /* Functional states — product UI only, never marketing pages                */
-  --color-success: #5CC68D;
-  --color-warning: #E8A547;
-  --color-error:   #E25555;
+  /* Expressive gradients (surfaces/backdrops only - never text fill) */
+  --grad-atmosphere: radial-gradient(circle at 30% 30%, #0066A4, #0E8ECE);
+  --grad-sky:        linear-gradient(90deg, #0E8ECE 0%, #FAFAF8 100%);
+  --grad-sky-soft:   linear-gradient(180deg, #FAFAF8 0%, #EAF4FB 55%, #DCEDF8 100%);
+  --grad-voice:      linear-gradient(135deg, #1B1A19 0%, #003D6B 55%, #0E8ECE 100%);
 
-  /* ── Typeface ─────────────────────────────────────────────────────────────── */
-  /* Single brand family: Borna. Both tokens resolve to the same stack — the    */
-  /* mono/sans split is preserved only for backward compatibility with existing */
-  /* call sites. Hierarchy is now driven by weight (400/500/600/700) and style. */
-  --font-mono: 'Borna', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-sans: 'Borna', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Blue tints (low-chroma, perceptually soft) */
+  --accent-soft: rgba(14, 142, 206, 0.10);  /* hairline/ wash for blue accents  */
+  --accent-glow: rgba(14, 142, 206, 0.22);
+
+  /* ── Canonical color aliases ─────────────────────────────────────────────── */
+  /* These are the names existing call sites use. Light theme: ink = dark text,  */
+  /* paper = light surface. (Was inverted in the old dark-native build.)         */
+  --color-ink:    var(--pv-black);   /* primary text                            */
+  --color-paper:  var(--pv-paper);   /* page background                         */
+  --color-signal: var(--pv-blue);    /* the one accent                          */
+
+  /* ── Surfaces & text (semantic) ──────────────────────────────────────────── */
+  --surface-0: var(--pv-paper);   /* page background                            */
+  --surface-1: #F2F0EC;           /* elevated card (Paper, a touch deeper)       */
+  --surface-2: var(--pv-fog);     /* subtle panels                              */
+  --surface-3: rgba(27, 26, 25, 0.12); /* structural dashes / dividers          */
+
+  --ink-0: var(--pv-black);       /* primary text                               */
+  --ink-1: var(--pv-graphite);    /* secondary text                             */
+  --ink-2: var(--pv-ash);         /* tertiary / metadata                        */
+
+  --accent: var(--pv-blue);
+
+  /* Functional grays - kept for any product-UI call sites (now light-theme)    */
+  --color-gray-100: var(--pv-fog);
+  --color-gray-200: rgba(27, 26, 25, 0.12);
+  --color-gray-300: var(--pv-ash);
+  --color-gray-400: var(--pv-graphite);
+  --color-gray-500: var(--pv-graphite);
+  --gray-4: var(--pv-ash);
+  --gray-5: var(--pv-graphite);
+  --color-success: var(--pv-success);
+  --color-warning: var(--pv-warning);
+  --color-error:   var(--pv-danger);
+
+  /* ── Borders / hairlines (dark-on-light) ─────────────────────────────────── */
+  --hairline:        rgba(27, 26, 25, 0.08);
+  --hairline-strong: rgba(27, 26, 25, 0.16);
+
+  /* ── Typefaces ───────────────────────────────────────────────────────────── */
+  --font-display: 'Erode', Georgia, 'Times New Roman', serif;   /* H1–H3, lead  */
+  --font-text:    'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif; /* body */
+  /* Legacy aliases → Satoshi (existing call sites). */
+  --font-sans: var(--font-text);
+  --font-mono: var(--font-text);
 
   /* ── Grid units ──────────────────────────────────────────────────────────── */
   --ch: 1ch;
   --lh: 1.5rem;
 
-  /* ── Backward-compat aliases — canonical names preferred in new code ─────── */
-  --surface-0: var(--color-ink);
-  --surface-1: var(--color-gray-100);
-  --surface-2: var(--color-gray-200);
-  --surface-3: var(--color-gray-200); /* structural dashes → divider gray      */
-  --ink-0:     var(--color-paper);
-  --ink-1:     var(--color-gray-400); /* secondary text                        */
-  --ink-2:     var(--color-gray-300); /* tertiary/disabled text                */
-  --accent:    var(--color-signal);
-  --gray-4:    var(--color-gray-400);
-  --gray-5:    var(--color-gray-500);
-  --accent-soft: rgba(31, 68, 255, 0.08);
-  --accent-glow: rgba(31, 68, 255, 0.18);
-
-  /* ── Borders ─────────────────────────────────────────────────────────────── */
-  --hairline:        rgba(245, 242, 237, 0.08);
-  --hairline-strong: rgba(245, 242, 237, 0.14);
-
-  /* ── Type scale (1.5 ratio, fluid) ──────────────────────────────────────── */
-  --step--1: clamp(0.75rem,  0.72rem + 0.15vw, 0.875rem);
-  --step-0:  clamp(0.875rem, 0.84rem + 0.20vw, 1rem);
-  --step-1:  clamp(1.125rem, 1.06rem + 0.35vw, 1.375rem);
-  --step-2:  clamp(1.5rem,   1.38rem + 0.60vw, 1.875rem);
-  --step-3:  clamp(2rem,     1.80rem + 1.00vw, 2.75rem);
-  --step-4:  clamp(2.75rem,  2.30rem + 2.25vw, 4.25rem);
-  --step-5:  clamp(3.5rem,   2.75rem + 3.75vw, 6.5rem);
-  --step-6:  clamp(4.5rem,   3.25rem + 6.25vw, 10rem);
+  /* ── Type scale - 1.333 (perfect fourth), fluid ─────────────────────────── */
+  --step--1: clamp(0.78rem, 0.75rem + 0.13vw, 0.875rem);   /* labels · 11pt    */
+  --step-0:  clamp(1rem,    0.97rem + 0.16vw, 1.0625rem);  /* body · 15pt      */
+  --step-1:  clamp(1.25rem, 1.18rem + 0.34vw, 1.4375rem);  /* lead · 20pt      */
+  --step-2:  clamp(1.6rem,  1.42rem + 0.90vw, 2.25rem);    /* H3 · 32pt        */
+  --step-3:  clamp(2.4rem,  1.95rem + 2.20vw, 3.75rem);    /* H2 · 56pt        */
+  --step-4:  clamp(3rem,    2.30rem + 3.40vw, 5.5rem);     /* H1 · 88pt        */
+  --step-5:  clamp(3.4rem,  2.40rem + 4.80vw, 7rem);       /* hero display     */
+  --step-6:  clamp(4.5rem,  3.00rem + 7.20vw, 10rem);      /* giant            */
 
   /* ── Motion ──────────────────────────────────────────────────────────────── */
-  --ease:      cubic-bezier(0.4, 0, 0.2, 1); /* standard easing for all transitions */
-  --ease-out:  cubic-bezier(0.0, 0, 0.2, 1);
-  --t-micro:   150ms; /* hover, focus, toggle */
-  --t-macro:   300ms; /* state changes, reveals */
+  --ease:     cubic-bezier(0.23, 1, 0.32, 1);   /* strong ease-out (emil)       */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-micro:  150ms;  /* hover, focus, toggle */
+  --t-macro:  300ms;  /* state changes, reveals */
 
-  /* legacy aliases (kept for backward compat in existing components) */
+  /* legacy aliases */
   --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-  --t-instant:  100ms;
-  --t-quick:    150ms;
-  --t-base:     300ms;
-  --t-slow:     300ms;
+  --t-instant: 100ms;
+  --t-quick:   150ms;
+  --t-base:    300ms;
+  --t-slow:    300ms;
   --t-narrative: 300ms;
 
-  /* ── Shadows ─────────────────────────────────────────────────────────────── */
-  --shadow-soft: 0 1px 0 rgba(245, 245, 240, 0.03) inset,
-                 0 24px 48px -20px rgba(0, 0, 0, 0.7);
-  --shadow-edge: inset 0 1px 0 rgba(245, 245, 240, 0.04);
+  /* ── Shadows - light, diffuse, tinted toward Pocket Black / blue ─────────── */
+  --shadow-soft: 0 1px 2px rgba(27, 26, 25, 0.04),
+                 0 16px 40px -16px rgba(27, 26, 25, 0.14);
+  --shadow-edge: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --shadow-blue: 0 8px 24px -8px rgba(14, 142, 206, 0.45);
 
   /* ── Layout ──────────────────────────────────────────────────────────────── */
   --gutter:   clamp(1.25rem, 4vw, 2.5rem);

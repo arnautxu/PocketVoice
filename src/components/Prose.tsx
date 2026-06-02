@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
  * Long-form editorial content wrapper.
  * Applies Inter (font-sans) internally.
  * Any <code>, <kbd>, or <pre> inside automatically renders in IoskeleyMono.
- * Any <TranscriptionDisplay> inside also overrides back to mono — see that component.
+ * Any <TranscriptionDisplay> inside also overrides back to mono - see that component.
  *
  * USE ONLY FOR:
  * - Blog post bodies (>80 words)
@@ -15,7 +15,7 @@ import type { CSSProperties, ReactNode } from 'react';
  * DO NOT USE FOR:
  * - Headlines (use <Heading />)
  * - CTAs or buttons (use <Button />)
- * - Nav items — always mono
+ * - Nav items - always mono
  * - Any content that carries the brand voice
  */
 interface ProseProps {

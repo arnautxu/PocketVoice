@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 
-/* Web Speech API — not yet in all TS DOM libs */
+/* Web Speech API - not yet in all TS DOM libs */
 interface SR extends EventTarget {
   interimResults: boolean;
   continuous: boolean;
@@ -119,10 +119,12 @@ export function MicDemo() {
   }, []);
 
   return (
-    <section
-      style={{ padding: 'clamp(6rem, 12vh, 10rem) 0', position: 'relative' }}
-    >
-      <div className="rail" style={{ display: 'grid', gap: 'clamp(2.5rem, 6vh, 4rem)' }}>
+    <section style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
+      <div className="rail">
+        <div
+          className="glass reveal"
+          style={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)', padding: 'clamp(2rem, 5vw, 4rem)' }}
+        >
         <header ref={headingRef} style={{ display: 'grid', gap: '1.5rem', maxWidth: '44ch' }}>
           <Eyebrow>Try it now</Eyebrow>
           <h2
@@ -145,15 +147,13 @@ export function MicDemo() {
 
         <div
           style={{
-            border: '1px solid var(--hairline)',
-            background: 'var(--surface-1)',
-            padding: 'clamp(1.5rem, 4vw, 2.75rem)',
+            borderTop: '1px solid var(--hairline)',
+            paddingTop: 'clamp(1.5rem, 4vw, 2.5rem)',
           }}
         >
           {phase === 'unsupported' ? (
             <p style={{ color: 'var(--ink-2)', fontSize: 'var(--step-0)', margin: 0 }}>
               Your browser doesn't support live speech recognition. Try Chrome or Safari.
-              <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
             </p>
           ) : (
             <div style={{ display: 'grid', gap: '2rem' }}>
@@ -199,7 +199,6 @@ export function MicDemo() {
                       }}
                     >
                       {polished}
-                      <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
                     </motion.span>
                   ) : (
                     <motion.span
@@ -291,12 +290,13 @@ export function MicDemo() {
                       letterSpacing: '0.06em',
                     }}
                   >
-                    speak now — click again to stop
+                    speak now, click again to stop
                   </motion.span>
                 )}
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </section>

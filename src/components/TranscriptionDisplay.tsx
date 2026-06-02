@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
- * Renders user-transcribed text — the literal output of Pocket Voice.
+ * Renders user-transcribed text - the literal output of Pocket Voice.
  * Always IoskeleyMono. Even inside a <Prose> container, this overrides back to mono.
  * This is the product output and must carry the brand signature without exception.
  *

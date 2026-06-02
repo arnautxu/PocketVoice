@@ -23,9 +23,10 @@ export function Nav() {
         right: 0,
         zIndex: 50,
         padding: '1.25ch 0',
-        background: solid ? 'rgba(10, 10, 10, 0.88)' : 'transparent',
+        background: solid ? 'rgba(250, 250, 248, 0.82)' : 'transparent',
         borderBottom: solid ? '1px solid var(--hairline)' : '1px solid transparent',
-        backdropFilter: solid ? 'blur(12px)' : 'none',
+        backdropFilter: solid ? 'blur(14px) saturate(1.4)' : 'none',
+        WebkitBackdropFilter: solid ? 'blur(14px) saturate(1.4)' : 'none',
         transition:
           'background var(--t-macro) var(--ease), border-color var(--t-macro) var(--ease)',
       }}
@@ -50,7 +51,7 @@ export function Nav() {
             fontSize: 'var(--step--1)',
           }}
         >
-          <a className="navlink" href="#magic">How it works</a>
+          <a className="navlink" href="#speak">How it works</a>
           <a className="navlink" href="#different">Different</a>
           <a className="navlink" href="#anywhere">Anywhere</a>
           <a className="navlink" href="#speed">Speed</a>

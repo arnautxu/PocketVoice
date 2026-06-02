@@ -11,8 +11,8 @@ import type { CSSProperties, ReactNode } from 'react';
  * - Timestamps and metadata (dates, counts, file sizes)
  *
  * DO NOT USE FOR:
- * - Branded small text (stat labels, feature labels in pricing — those stay mono)
- * - Nav items or CTA text — always mono regardless of size
+ * - Branded small text (stat labels, feature labels in pricing - those stay mono)
+ * - Nav items or CTA text - always mono regardless of size
  * - Any copy that touches brand identity
  */
 interface MicrocopyProps {

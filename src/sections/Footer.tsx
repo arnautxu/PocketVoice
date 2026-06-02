@@ -36,13 +36,13 @@ export function Footer() {
         <div style={{ display: 'grid', gap: '1ch' }}>
           <Wordmark />
           <span style={{ color: 'var(--ink-2)', fontSize: 'var(--step--1)' }}>
-            From Pocket — Open Vision Engineering Inc.
+            From Pocket · Open Vision Engineering Inc.
           </span>
         </div>
 
         <div style={{ display: 'flex', gap: '4ch', flexWrap: 'wrap', color: 'var(--ink-1)' }}>
           <Group title="Product">
-            <FootLink href="#magic">How it works</FootLink>
+            <FootLink href="#speak">How it works</FootLink>
             <FootLink href="#different">Why it's different</FootLink>
             <FootLink href="#anywhere">Anywhere you type</FootLink>
             <FootLink href="#speed">Speed</FootLink>

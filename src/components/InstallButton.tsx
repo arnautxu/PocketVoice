@@ -4,58 +4,63 @@ interface InstallButtonProps {
   size?: 'sm' | 'lg';
   label?: string;
   href?: string;
+  /** For use on a blue/dark surface: Paper button, Blue Deep text. */
+  inverted?: boolean;
   style?: CSSProperties;
 }
 
 /**
- * Primary CTA — the one permitted Signal Blue moment on the marketing page.
+ * Primary CTA - the Blue + Paper brand moment (Manual v6 pairings).
  *
- * Default: paper background, ink text (clean, high-contrast).
- * Hover/active: Signal Blue background, paper text (one brand-maximum moment).
- *
+ * Default: Pocket Blue background, Paper text. Hover deepens to Blue Deep.
+ * Press: scale(0.97) for tactile feedback (emil-design-eng).
  * Only one primary button should be visible per viewport at any time.
- * Color rules are baked in — do not override via style prop.
  */
 export function InstallButton({
   size = 'lg',
   label = 'Download for iPhone',
   href = 'https://apps.apple.com/',
+  inverted = false,
   style,
 }: InstallButtonProps) {
   const isLg = size === 'lg';
 
+  const base = inverted ? 'var(--pv-paper)' : 'var(--pv-blue)';
+  const baseText = inverted ? 'var(--pv-blue-deep)' : 'var(--pv-paper)';
+  const hover = inverted ? 'var(--pv-fog)' : 'var(--pv-blue-deep)';
+
   return (
     <a
+      className="pv-cta"
       href={href}
       target="_blank"
       rel="noreferrer"
       style={{
         display: 'inline-block',
-        padding: isLg ? '0.7ch 2.5ch' : '0.4ch 1.75ch',
-        background: 'var(--color-paper)',
-        color: 'var(--color-ink)',
-        fontFamily: 'var(--font-mono)',
+        padding: isLg ? '0.8ch 2.5ch' : '0.5ch 1.75ch',
+        background: base,
+        color: baseText,
+        fontFamily: 'var(--font-text)',
         fontSize: isLg ? 'var(--step-0)' : 'var(--step--1)',
-        fontWeight: 400,
-        letterSpacing: '0.02em',
-        border: '1px solid var(--color-paper)',
-        borderRadius: 0,
+        fontWeight: 500,
+        letterSpacing: '0.01em',
+        border: `1px solid ${base}`,
+        borderRadius: '0.5ch',
+        boxShadow: inverted ? 'none' : 'var(--shadow-blue)',
         cursor: 'pointer',
         whiteSpace: 'nowrap',
         transition: `background var(--t-micro) var(--ease),
-                     color var(--t-micro) var(--ease),
-                     border-color var(--t-micro) var(--ease)`,
+                     border-color var(--t-micro) var(--ease),
+                     transform var(--t-micro) var(--ease)`,
         ...style,
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'var(--color-signal)';
-        e.currentTarget.style.color = 'var(--color-paper)';
-        e.currentTarget.style.borderColor = 'var(--color-signal)';
+        e.currentTarget.style.background = hover;
+        e.currentTarget.style.borderColor = hover;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'var(--color-paper)';
-        e.currentTarget.style.color = 'var(--color-ink)';
-        e.currentTarget.style.borderColor = 'var(--color-paper)';
+        e.currentTarget.style.background = base;
+        e.currentTarget.style.borderColor = base;
       }}
     >
       {label}

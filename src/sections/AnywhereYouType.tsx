@@ -12,32 +12,32 @@ const ROW1 = [
   {
     surface: 'Mail',
     tone: 'Email',
-    spoken: 'hey anna — loved the deck, two thoughts on pricing',
+    spoken: 'hey anna, loved the deck, two thoughts on pricing',
     output: 'Anna, thanks for the deck. Two thoughts on the pricing section, when you have a moment.',
   },
   {
     surface: 'Linear',
     tone: 'Issue',
     spoken: 'cls-148, payment retry loops on 402',
-    output: 'CLS-148 — payment retry loops on 402 error. Needs root-cause analysis before next release.',
+    output: 'CLS-148: payment retry loops on 402 error. Needs root-cause analysis before next release.',
   },
   {
     surface: 'Slack',
     tone: 'Message',
     spoken: 'pushed the fix, could someone smoke-test',
-    output: '@channel — pushed the fix. Could someone smoke-test before we deploy to prod?',
+    output: '@channel: pushed the fix. Could someone smoke-test before we deploy to prod?',
   },
   {
     surface: 'Notion',
     tone: 'Doc',
-    spoken: 'q3 review — context, decisions, follow-ups',
-    output: 'Q3 review — context, decisions made, follow-ups still open. Last updated today.',
+    spoken: 'q3 review, context, decisions, follow-ups',
+    output: 'Q3 review: context, decisions made, follow-ups still open. Last updated today.',
   },
   {
     surface: 'Cursor',
     tone: 'Comment',
     spoken: 'extract this into a hook, state logic is tangled',
-    output: '// extract into a hook — the state logic is tangled with the render cycle.',
+    output: '// extract into a hook: the state logic is tangled with the render cycle.',
   },
   {
     surface: 'Bear',
@@ -57,14 +57,14 @@ const ROW2 = [
   {
     surface: 'Drafts',
     tone: 'Note',
-    spoken: 'idea — ambient mode, slower interface for mornings',
-    output: 'Ambient mode — a slower interface for mornings. No pings. Just words.',
+    spoken: 'idea: ambient mode, slower interface for mornings',
+    output: 'Ambient mode: a slower interface for mornings. No pings. Just words.',
   },
   {
     surface: 'Things',
     tone: 'Task',
     spoken: 'reply to the investor update by friday',
-    output: 'Reply to investor update — by Friday.',
+    output: 'Reply to investor update by Friday.',
   },
   {
     surface: 'WhatsApp',
@@ -76,7 +76,7 @@ const ROW2 = [
     surface: 'Mail',
     tone: 'Cold reply',
     spoken: 'not the right fit right now but keep us in mind',
-    output: 'Thanks for reaching out. Not the right fit at this stage — please do keep us in mind.',
+    output: 'Thanks for reaching out. Not the right fit at this stage. Please do keep us in mind.',
   },
   {
     surface: 'Drafts',
@@ -100,11 +100,15 @@ export function AnywhereYouType() {
   const row2 = [...ROW2, ...ROW2];
 
   return (
-    <section id="anywhere" style={{ padding: 'clamp(7rem, 12vh, 10rem) 0', overflow: 'hidden' }}>
+    <section id="anywhere" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0', overflow: 'hidden' }}>
 
       {/* ── Header ──────────────────────────────────────────────────── */}
       <div className="rail" style={{ marginBottom: 'clamp(3rem, 6vh, 5rem)' }}>
-        <header ref={headingRef} style={{ maxWidth: '44ch' }}>
+        <header
+          ref={headingRef}
+          className="glass reveal"
+          style={{ maxWidth: '54ch', padding: 'clamp(1.75rem, 4vw, 3rem)' }}
+        >
           <Eyebrow>Any app. One press.</Eyebrow>
 
           <h2
@@ -137,8 +141,7 @@ export function AnywhereYouType() {
             }}
           >
             Pocket Voice reads the surface before it writes. A thought in Linear becomes a ticket.
-            A reply in Mail becomes prose. Same voice — different register, every time.
-            <span aria-hidden style={{ color: 'var(--ink-2)', marginLeft: '0.15ch' }}>¶</span>
+            A reply in Mail becomes prose. Same voice. Different register, every time.
           </p>
         </header>
       </div>
@@ -148,11 +151,11 @@ export function AnywhereYouType() {
         style={{
           display: 'grid',
           gap: '1ch',
-          maskImage: 'linear-gradient(90deg, transparent 0, #0A0A0A 7%, #0A0A0A 93%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(90deg, transparent 0, #0A0A0A 7%, #0A0A0A 93%, transparent 100%)',
+          maskImage: 'linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%)',
         }}
       >
-        {/* Row 1 — scrolls left */}
+        {/* Row 1 - scrolls left */}
         <motion.ul
           aria-label="Surfaces Pocket Voice adapts to"
           animate={{ x: ['0%', '-50%'] }}
@@ -166,7 +169,7 @@ export function AnywhereYouType() {
           ))}
         </motion.ul>
 
-        {/* Row 2 — scrolls right (counter-direction) */}
+        {/* Row 2 - scrolls right (counter-direction) */}
         <motion.ul
           aria-label="More surfaces Pocket Voice adapts to"
           animate={{ x: ['-50%', '0%'] }}
@@ -184,7 +187,7 @@ export function AnywhereYouType() {
   );
 }
 
-/* ── Card — the transformation proof ────────────────────────────────────── */
+/* ── Card - the transformation proof ────────────────────────────────────── */
 interface CardProps {
   surface: string;
   tone: string;
@@ -251,7 +254,7 @@ function Card({ surface, tone, spoken, output }: CardProps) {
         {'─'.repeat(34)}
       </div>
 
-      {/* Spoken input — what the user said */}
+      {/* Spoken input - what the user said */}
       <p
         style={{
           margin: 0,
@@ -264,13 +267,13 @@ function Card({ surface, tone, spoken, output }: CardProps) {
         "{spoken}"
       </p>
 
-      {/* Thin hairline — the transformation boundary */}
+      {/* Thin hairline - the transformation boundary */}
       <div
         aria-hidden="true"
         style={{ height: '1px', background: 'var(--hairline-strong)' }}
       />
 
-      {/* Written output — what Pocket Voice wrote */}
+      {/* Written output - what Pocket Voice wrote */}
       <p
         style={{
           margin: 0,
@@ -281,7 +284,6 @@ function Card({ surface, tone, spoken, output }: CardProps) {
         }}
       >
         {output}
-        <span aria-hidden style={{ color: 'var(--color-signal)', marginLeft: '0.15ch' }}>¶</span>
       </p>
     </div>
   );

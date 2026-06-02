@@ -1,4 +1,4 @@
-/* Pocket Voice — responsive breakpoints
+/* Pocket Voice - responsive breakpoints
  * Central home for all @media rules.
  * Component inline styles handle layout; this file handles breakpoint overrides.
  * ─────────────────────────────────────────────────────────────────────────── */
@@ -10,12 +10,33 @@
   white-space: nowrap;
 }
 
-/* ─── ≤ 900 px — tablet / large mobile ──────────────────────────────────── */
+/* ─── ≤ 900 px - tablet / large mobile ──────────────────────────────────── */
 @media (max-width: 900px) {
   .hero-phones { display: none !important; }
+
+  /* Screen-in-sky hero: stack copy over the phone stage, centered.
+   * Items keep their default stretch (so the stage fills the column and the
+   * phone/orbit get real width); centering is done with text-align + auto
+   * margins, NOT justify-items (that shrinks items to content → 0-width stage). */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: clamp(2.5rem, 7vw, 4rem) !important;
+    text-align: center;
+  }
+  .hero-copy { max-width: 34rem; margin-inline: auto; }
+  .hero-copy > svg { margin-inline: auto; }       /* lockup */
+  .hero-copy p { margin-inline: auto; }            /* sub copy block centering */
+  .hero-copy > div { justify-content: center; }    /* store badges row */
+  .hero-stage-inner { max-width: 440px; }
 }
 
-/* ─── ≤ 768 px — mobile ──────────────────────────────────────────────────── */
+/* ─── ≤ 600 px - phones: tighten the orbit so icons don't clip off-screen ── */
+@media (max-width: 600px) {
+  .hero-stage-inner { max-width: 340px; }
+  .hero-orbit { transform: scale(0.82); }
+}
+
+/* ─── ≤ 768 px - mobile ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
 
   /* Differentiators: 2-column side-by-side → single column stacked */
@@ -23,13 +44,18 @@
     grid-template-columns: 1fr !important;
     gap: clamp(2rem, 6vw, 3rem) !important;
   }
-  /* Left heading: remove sticky — it overlaps content when stacked */
+  /* Left heading: remove sticky - it overlaps content when stacked */
   .diff-sticky {
     position: static !important;
   }
 
   /* FromPocket: CTA + pricing side-by-side → stacked */
   .fp-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Speak: copy + transform side-by-side → stacked */
+  .speak-grid {
     grid-template-columns: 1fr !important;
   }
 
@@ -49,7 +75,7 @@
   }
 }
 
-/* ─── ≤ 480 px — small phones ───────────────────────────────────────────── */
+/* ─── ≤ 480 px - small phones ───────────────────────────────────────────── */
 @media (max-width: 480px) {
   /* AnywhereYouType cards: fit on narrow screens */
   .pv-card {

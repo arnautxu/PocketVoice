@@ -14,8 +14,8 @@ interface CaretProps {
  * - Use as brand signature: |Pocket Voice (via <Wordmark />).
  * - Never decorative. Never multiple on screen unless all are insertion points.
  *
- * Blink cycle: 1.2s total — fade-in 200ms, hold 400ms, fade-out 200ms, hold 400ms.
- * Color: var(--color-signal) — Signal Blue #1F44FF. One of the only two allowed uses.
+ * Blink cycle: 1.2s total - fade-in 200ms, hold 400ms, fade-out 200ms, hold 400ms.
+ * Color: var(--color-signal) - Signal Blue #1F44FF. One of the only two allowed uses.
  */
 export function Caret({ active = true, style }: CaretProps) {
   return (
