@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTypeIn } from '../hooks/useTypeIn';
+import { GlassPanel } from '../components/GlassPanel';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 
 const ROWS = [
@@ -26,9 +27,9 @@ export function SpeedProof() {
   return (
     <section id="speed" ref={ref} style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
       <div className="rail">
-        <div
-          className="glass reveal"
-          style={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)', padding: 'clamp(2rem, 5vw, 4rem)' }}
+        <GlassPanel
+          className="reveal"
+          innerStyle={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)', padding: 'clamp(2rem, 5vw, 4rem)' }}
         >
         <header style={{ display: 'grid', gap: '1.5rem', maxWidth: '38ch' }}>
           <Eyebrow>Speed proof</Eyebrow>
@@ -87,7 +88,7 @@ export function SpeedProof() {
             <Bar key={r.name} row={r} index={i} active={inView} />
           ))}
         </ol>
-        </div>
+        </GlassPanel>
       </div>
     </section>
   );

@@ -1,6 +1,14 @@
 import { useLayoutEffect } from 'react';
 import { gsap } from './lib/gsap';
-import { Nav } from './components/Nav';
+import { FloatingIslandNav } from './components/FloatingIslandNav';
+import { SkyBackground } from './components/SkyBackground';
+
+const NAV_LINKS = [
+  { name: 'How it works', href: '#speak' },
+  { name: 'Different', href: '#different' },
+  { name: 'Anywhere', href: '#anywhere' },
+  { name: 'Speed', href: '#speed' },
+];
 import { AnywhereYouType } from './sections/AnywhereYouType';
 import { Differentiators } from './sections/Differentiators';
 import { Footer } from './sections/Footer';
@@ -36,8 +44,8 @@ export default function App() {
 
   return (
     <>
-      <div className="app-sky" aria-hidden="true" />
-      <Nav />
+      <SkyBackground />
+      <FloatingIslandNav items={NAV_LINKS} className="fixed top-5 left-1/2 -translate-x-1/2 z-50" />
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
         <Speak />

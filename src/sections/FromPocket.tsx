@@ -1,6 +1,7 @@
 import { InstallButton } from '../components/InstallButton';
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
+import { GlassPanel } from '../components/GlassPanel';
 
 const FREE_PLAN = ['30 min / day', '3 languages', 'Standard speed'];
 const PRO_PLAN = ['Unlimited', 'All languages', 'Priority speed'];
@@ -16,9 +17,11 @@ export function FromPocket() {
   return (
     <section style={{ padding: 'clamp(3rem, 7vh, 7rem) 0' }}>
       <div className="rail">
-        <div
-          className="glass-blue reveal fp-grid"
-          style={{
+        <GlassPanel
+          blue
+          className="reveal"
+          innerClassName="fp-grid"
+          innerStyle={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
             gap: 'clamp(2.5rem, 6vw, 5rem)',
@@ -100,7 +103,7 @@ export function FromPocket() {
               </div>
             ))}
           </div>
-        </div>
+        </GlassPanel>
       </div>
     </section>
   );

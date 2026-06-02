@@ -1,5 +1,6 @@
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
+import { GlassPanel } from '../components/GlassPanel';
 
 const POINTS = [
   {
@@ -37,9 +38,10 @@ export function Differentiators() {
   return (
     <section id="different" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
       <div className="rail">
-        <div
-          className="glass reveal diff-grid"
-          style={{
+        <GlassPanel
+          className="reveal"
+          innerClassName="diff-grid"
+          innerStyle={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.25fr)',
             gap: 'clamp(2rem, 6vw, 5rem)',
@@ -180,7 +182,7 @@ export function Differentiators() {
             </li>
           ))}
         </ol>
-        </div>
+        </GlassPanel>
       </div>
     </section>
   );

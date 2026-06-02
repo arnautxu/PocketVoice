@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
+import { GlassPanel } from '../components/GlassPanel';
 
 /* ── Content ─────────────────────────────────────────────────────────────── */
 /*
@@ -92,7 +93,7 @@ const T_L2   = H2_L1.length * 20 + 180;
 
 /* ── Component ───────────────────────────────────────────────────────────── */
 export function AnywhereYouType() {
-  const [headingRef, headingInView] = useInViewOnce<HTMLElement>('-10% 0px');
+  const [headingRef, headingInView] = useInViewOnce<HTMLDivElement>('-10% 0px');
   const l1 = useTypeIn(H2_L1, headingInView);
   const l2 = useTypeIn(H2_L2, headingInView, T_L2);
 
@@ -104,10 +105,10 @@ export function AnywhereYouType() {
 
       {/* ── Header ──────────────────────────────────────────────────── */}
       <div className="rail" style={{ marginBottom: 'clamp(3rem, 6vh, 5rem)' }}>
-        <header
-          ref={headingRef}
-          className="glass reveal"
-          style={{ maxWidth: '54ch', padding: 'clamp(1.75rem, 4vw, 3rem)' }}
+        <GlassPanel
+          innerRef={headingRef}
+          className="reveal"
+          innerStyle={{ maxWidth: '54ch', padding: 'clamp(1.75rem, 4vw, 3rem)' }}
         >
           <Eyebrow>Any app. One press.</Eyebrow>
 
@@ -143,7 +144,7 @@ export function AnywhereYouType() {
             Pocket Voice reads the surface before it writes. A thought in Linear becomes a ticket.
             A reply in Mail becomes prose. Same voice. Different register, every time.
           </p>
-        </header>
+        </GlassPanel>
       </div>
 
       {/* ── Two-row marquee ─────────────────────────────────────────── */}

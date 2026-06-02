@@ -1,4 +1,5 @@
 import { VoiceTransform } from '../components/VoiceTransform';
+import { GlassPanel } from '../components/GlassPanel';
 import { Caret } from '../components/Caret';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 import { useTypeIn } from '../hooks/useTypeIn';
@@ -17,10 +18,11 @@ export function Speak() {
   return (
     <section id="speak" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
       <div className="rail">
-        <div
-          ref={ref}
-          className="glass reveal speak-grid"
-          style={{
+        <GlassPanel
+          innerRef={ref}
+          className="reveal"
+          innerClassName="speak-grid"
+          innerStyle={{
             display: 'grid',
             gridTemplateColumns: '1.05fr 1fr',
             alignItems: 'center',
@@ -58,7 +60,7 @@ export function Speak() {
 
           {/* Said → Written transform */}
           <VoiceTransform />
-        </div>
+        </GlassPanel>
       </div>
     </section>
   );
