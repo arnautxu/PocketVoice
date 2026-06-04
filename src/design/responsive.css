@@ -63,11 +63,14 @@
   .speed-bar-name { font-size: var(--step--1) !important; }
 }
 
-/* ─── ≤ 960 px — hero stacks: type over phone ──────────────────────────────────
+/* ─── hero stacks (≤1120px wide OR ≤780px tall) — type over phone ───────────────
  * The two-column hero collapses to one column (text block, then the phone centred
- * below). Clouds drop to 2 (slack + faster) flanking the centred device; the rest
- * would land in the wrong place once the phone is no longer on the right. */
-@media (max-width: 960px) {
+ * below) when there isn't room for a roomy side-by-side. Stacking on SHORT viewports
+ * too keeps the clouds' top/bottom margins intact (a 64vh phone leaves thin bands on
+ * a short screen). The hero goes min-height/auto so the taller stacked column can
+ * grow. Clouds drop to 2 (slack + faster) flanking the centred device. */
+@media (max-width: 1279px), (max-height: 780px) {
+  .hero-sky { height: auto !important; min-height: 100dvh; }
   .hero-grid { grid-template-columns: 1fr !important; row-gap: clamp(2rem, 5vh, 3rem); }
   .hero-phone-col { transform: none !important; }
   .hero-phone { height: auto !important; width: clamp(208px, 56vw, 264px) !important; }
@@ -79,8 +82,10 @@
     width: clamp(56px, 15vw, 84px) !important; opacity: 0.95 !important; filter: none !important;
   }
   .hc-faster {
-    top: auto !important; bottom: 4% !important; right: auto !important; left: 5% !important;
-    width: clamp(78px, 23vw, 116px) !important; opacity: 0.95 !important;
+    top: auto !important; bottom: 4% !important; right: auto !important; left: 4% !important;
+    /* min/vw kept small so the mark fully clears the centred phone on a 375 screen
+       (the phone is proportionally wide there); still ~full size on tablets. */
+    width: clamp(56px, 16vw, 116px) !important; opacity: 0.95 !important;
   }
 }
 

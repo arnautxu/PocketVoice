@@ -40,7 +40,10 @@ export function Hero() {
         position: 'relative',
         isolation: 'isolate',
         overflow: 'hidden',
-        minHeight: '100dvh',
+        // fixed height on desktop so the cloud layer is firmly clipped to the hero —
+        // nothing bleeds into the section below. Stacked layout (≤1120) switches back
+        // to min-height:auto so the text-over-phone column can grow (responsive.css).
+        height: '100dvh',
         display: 'flex',
         flexDirection: 'column',
         // start the content high (just below the nav) instead of centring it in the

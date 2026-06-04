@@ -290,11 +290,8 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   position: absolute;
   inset: 0;
   z-index: 1;            /* above .cloud-bleed/.hero-scrim (-1), below the rail (2) */
-  overflow: hidden;
+  overflow: hidden;     /* belt-and-suspenders: clip any cloud spill to the hero */
   pointer-events: none;
-  /* light scroll parallax — the cloud bank drifts slower than the phone for depth */
-  transform: translate3d(0, calc(var(--hero-shift, 0) * 0.045px), 0);
-  will-change: transform;
 }
 
 /* ── Two-column hero: type left, the Speak-to-Edit phone right ─────────────────── */
@@ -355,17 +352,11 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   72%  { opacity: calc(var(--rise-peak, 0.5) * 0.28); }
   100% { transform: translateY(-52px); opacity: 0; }
 }
-/* Centre-ish clouds (gmail, umm, actually) only appear once the rail centres and the
- * headline is proportionally narrow — below that they'd crowd the type. */
-@media (max-width: 1139px) {
-  .hero-cloud.hc-wide { display: none !important; }
-}
-/* Reduced motion: hold the clouds still and keep the risers visible (their animation
- * rests at opacity 0, which would otherwise hide them). */
+/* Reduced motion: hold the clouds + phone still (risers, if any, kept visible). */
 @media (prefers-reduced-motion: reduce) {
   .hero-cloud { animation: none !important; transform: none !important; }
   .hero-cloud.hc-rise { opacity: var(--rise-peak, 0.45) !important; }
-  .hero-clouds, .hero-phone-col, .hero-phone { animation: none !important; transform: none !important; }
+  .hero-phone-col, .hero-phone { animation: none !important; transform: none !important; }
 }
 
 /* INK — resolved output. Satoshi, tight, tabular-crisp. NEVER blurred. */
