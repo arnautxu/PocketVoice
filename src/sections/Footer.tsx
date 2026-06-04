@@ -3,24 +3,15 @@ import { Wordmark } from '../components/Wordmark';
 export function Footer() {
   return (
     <footer
+      className="alt-light"
       style={{
         paddingBlock: '4ch 5ch',
         marginTop: '4ch',
       }}
     >
-      {/* Mono separator */}
-      <div
-        className="rail pv-rule"
-        aria-hidden="true"
-        style={{
-          color: 'var(--surface-3)',
-          fontSize: 'var(--step--1)',
-          letterSpacing: '0.1em',
-          marginBottom: '3ch',
-          userSelect: 'none',
-        }}
-      >
-        {'─'.repeat(80)}
+      {/* Hairline separator */}
+      <div className="rail" aria-hidden="true" style={{ marginBottom: '3ch' }}>
+        <div style={{ height: 1, background: 'var(--rule)' }} />
       </div>
 
       <div
@@ -42,10 +33,9 @@ export function Footer() {
 
         <div style={{ display: 'flex', gap: '4ch', flexWrap: 'wrap', color: 'var(--ink-1)' }}>
           <Group title="Product">
-            <FootLink href="#speak">How it works</FootLink>
-            <FootLink href="#different">Why it's different</FootLink>
-            <FootLink href="#anywhere">Anywhere you type</FootLink>
-            <FootLink href="#speed">Speed</FootLink>
+            <FootLink href="#demo">Try it</FootLink>
+            <FootLink href="#surface">Surfaces</FootLink>
+            <FootLink href="#close">Pricing</FootLink>
           </Group>
           <Group title="Company">
             <FootLink href="https://pocket.computer">Pocket</FootLink>

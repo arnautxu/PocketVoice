@@ -1,71 +1,148 @@
-/* Pocket Voice - design tokens. Brand Manual v6: light/sky system.            */
-/* Pocket Blue carries the brand. Pocket Black grounds it. Neutrals make room   */
-/* for the work. Built on contrast, never on noise.                             */
+/* Pocket Voice — design tokens · "The Transcript" system.                      */
+/* The page is a document writing itself: VOICE (provisional) resolves into TEXT */
+/* (finished). Warm bone paper grounds it. Cobalt = composed/resolved. Vermilion */
+/* = live/now. Two complementary accents carry one idea. Decisions, not defaults.*/
 
 :root {
-  /* ── Brand palette - canonical (Manual v6 · 03.1) ────────────────────────── */
-  --pv-blue:       #0E8ECE;  /* Pocket Blue - primary, carries the brand        */
-  --pv-blue-deep:  #0066A4;  /* Blue Deep - depth, gradients, hovers            */
-  --pv-black:      #1B1A19;  /* Pocket Black - primary text, grounds it         */
-  --pv-graphite:   #3A3937;  /* Graphite - secondary text                       */
-  --pv-ash:        #8A8783;  /* Ash - tertiary text, metadata                   */
-  --pv-fog:        #E8E6E2;  /* Fog - subtle surfaces, dividers                 */
-  --pv-paper:      #FAFAF8;  /* Paper - page background                         */
+  /* ── Ground — warm bone paper ────────────────────────────────────────────── */
+  --paper:      #F5F2EC;  /* the page                                            */
+  --paper-deep: #ECE7DD;  /* recessed panels · text-side wash · asset slots      */
+  --paper-edge: #E2DCCF;  /* deeper edge for slot borders / fills                */
 
-  /* Functional states */
-  --pv-success: #3FB67A;
-  --pv-warning: #E8A33D;
-  --pv-danger:  #D94B3A;
+  /* ── Ink — warm near-black scale ─────────────────────────────────────────── */
+  --ink-0: #19171A;  /* primary text          · 16:1 on paper                   */
+  --ink-1: #57534B;  /* secondary text        · 6.9:1 on paper (AA)             */
+  --ink-2: #6B655A;  /* tertiary / metadata   · 5.2:1 on paper (AA, small text) */
 
-  /* Expressive gradients (surfaces/backdrops only - never text fill) */
-  --grad-atmosphere: radial-gradient(circle at 30% 30%, #0066A4, #0E8ECE);
-  --grad-sky:        linear-gradient(90deg, #0E8ECE 0%, #FAFAF8 100%);
-  --grad-sky-soft:   linear-gradient(180deg, #FAFAF8 0%, #EAF4FB 55%, #DCEDF8 100%);
-  --grad-voice:      linear-gradient(135deg, #1B1A19 0%, #003D6B 55%, #0E8ECE 100%);
+  /* ── Accents — the two-color narrative ───────────────────────────────────── */
+  --cobalt:      #1B36C9;  /* TEXT / composed / resolved — links, emphasis, marks */
+  --cobalt-deep: #142BA0;  /* hover / pressed                                     */
+  --live:        #F4471E;  /* VOICE / live / recording / now — rec dot, counter   */
+  --live-deep:   #D63A14;  /* hover / pressed                                     */
+  --live-wash:   rgba(244, 71, 30, 0.10);
+  --cobalt-wash: rgba(27, 54, 201, 0.08);
 
-  /* Blue tints (low-chroma, perceptually soft) */
-  --accent-soft: rgba(14, 142, 206, 0.10);  /* hairline/ wash for blue accents  */
-  --accent-glow: rgba(14, 142, 206, 0.22);
+  /* ══ THE SKY — altitude palette ═══════════════════════════════════════════ */
+  /* The page is an atmosphere. Scroll = descent. Color is derived from a real    */
+  /* sky gradient: stratosphere navy at the top, a warm horizon band, cloud white,*/
+  /* graphite ink for resolved text on the ground. Gradients are first-class.     */
+  --strato-0:     #081530;  /* deepest stratosphere navy — page top              */
+  --strato-1:     #102347;
+  --cloud-blue-0: #1E3A66;  /* upper cloud layer                                  */
+  --cloud-blue-1: #3A5B86;
+  --cloud-blue-2: #6E8FB8;  /* cloud break                                        */
+  --horizon-warm: #C9B79A;  /* the one warm band — vapor catching low light       */
+  --horizon-haze: #E6DECF;
+  --air:          #EEF3FA;  /* clearing air                                       */
+  --ground:       #F7FAFE;  /* near-white sky — the landing                       */
+  --cloud-white:  #EAF0F8;  /* type set into the sky                              */
+  --graphite:     #11151C;  /* resolved ink on the ground — surgically crisp      */
+  --graphite-1:   #39414E;  /* secondary ink on ground · 9.7:1 on --ground (AA)   */
+  --graphite-2:   #4F5663;  /* tertiary ink on ground — holds AA into the warm band */
 
-  /* ── Canonical color aliases ─────────────────────────────────────────────── */
-  /* These are the names existing call sites use. Light theme: ink = dark text,  */
-  /* paper = light surface. (Was inverted in the old dark-native build.)         */
-  --color-ink:    var(--pv-black);   /* primary text                            */
-  --color-paper:  var(--pv-paper);   /* page background                         */
-  --color-signal: var(--pv-blue);    /* the one accent                          */
+  /* The descent — pinned to the DOM, not to fixed scroll percentages. Section     */
+  /* heights shift with viewport width, so a single fixed-% body gradient drifts    */
+  /* off the section boundaries. Instead the descent is built from two pieces that  */
+  /* MEET at the same warm-horizon color (--horizon-warm), so the seam is invisible */
+  /* — it reads as one continuous sky — but the dark→light break always lands       */
+  /* exactly on the cloud-layer → ground boundary at any width.                     */
+  /*   --sky-descent  : behind Hero + Demo  (stratosphere navy → warm horizon)      */
+  /*   --ground-rise  : behind Surface…Footer (warm horizon → ground)               */
+  /* The 95.5% hold on --sky-descent keeps the warm break inside the Demo's bottom  */
+  /* padding, below its last line, so cloud-white type never sits on warm light.    */
+  --sky-descent: linear-gradient(180deg,
+    #081530 0%,
+    #0F2143 20%,
+    #19335F 42%,
+    #284668 64%,
+    #37597E 84%,
+    #486485 96.5%,   /* demo floor — dark; last line sits above this  */
+    #CFC2AC 100%);   /* warm horizon — reached only in the bottom pad  */
+  --ground-rise: linear-gradient(180deg,
+    #CFC2AC 0%,       /* warm horizon — matches the seam exactly       */
+    #DCD5C8 5%,
+    #E6E7E6 11%,
+    #EEF1F6 24%,
+    #F2F6FC 55%,
+    #F7FAFE 100%);
 
-  /* ── Surfaces & text (semantic) ──────────────────────────────────────────── */
-  --surface-0: var(--pv-paper);   /* page background                            */
-  --surface-1: #F2F0EC;           /* elevated card (Paper, a touch deeper)       */
-  --surface-2: var(--pv-fog);     /* subtle panels                              */
-  --surface-3: rgba(27, 26, 25, 0.12); /* structural dashes / dividers          */
+  /* Legacy single-gradient alias (no longer applied to the body). */
+  /* Stops are tuned to the measured section offsets: the dark zone (cloud-white   */
+  /* type — hero + demo) holds until 36.5%, then the page breaks through the cloud */
+  /* deck into clear air over a sharp 1.5% band (the inter-section gap), passing   */
+  /* the warm horizon, so every .alt-light section below sits on genuinely light   */
+  /* sky. Re-tune these two anchor stops if section heights change materially.     */
+  --altitude: linear-gradient(180deg,
+    #081530 0%,
+    #0F2143 10%,
+    #19335F 20%,
+    #264466 28%,
+    #355778 34%,
+    #486485 36.5%,   /* demo floor — still dark enough for white type       */
+    #788493 37.2%,   /* breaking through the cloud deck                     */
+    #CFC2AC 37.9%,   /* the warm horizon — a thin band of caught light      */
+    #DCD5C8 38.8%,   /* clear air — graphite type is safe from here down    */
+    #E6E7E6 40%,
+    #EEF1F6 47%,
+    #F2F6FC 63%,
+    #F7FAFE 100%);
 
-  --ink-0: var(--pv-black);       /* primary text                               */
-  --ink-1: var(--pv-graphite);    /* secondary text                             */
-  --ink-2: var(--pv-ash);         /* tertiary / metadata                        */
+  /* Altitude-aware text tokens. Dark sections flip ink → cloud-white; ground      */
+  /* sections resolve ink → graphite. Applied via .alt-dark / .alt-light.          */
 
-  --accent: var(--pv-blue);
+  /* ── The spine — persistent transcript rule ──────────────────────────────── */
+  --rule:        rgba(25, 23, 26, 0.14);
+  --rule-soft:   rgba(25, 23, 26, 0.07);
+  --rule-strong: rgba(25, 23, 26, 0.24);
+  --rule-sky:        rgba(234, 240, 248, 0.22);  /* hairline on dark sky          */
+  --rule-sky-soft:   rgba(234, 240, 248, 0.12);
 
-  /* Functional grays - kept for any product-UI call sites (now light-theme)    */
-  --color-gray-100: var(--pv-fog);
-  --color-gray-200: rgba(27, 26, 25, 0.12);
-  --color-gray-300: var(--pv-ash);
-  --color-gray-400: var(--pv-graphite);
-  --color-gray-500: var(--pv-graphite);
-  --gray-4: var(--pv-ash);
-  --gray-5: var(--pv-graphite);
+  /* ── Legacy brand aliases → remapped onto the new system ──────────────────── */
+  /* Keeps existing call sites (Nav, Footer, InstallButton, StoreBadges, Wordmark)*/
+  /* rendering in the new palette with no edits.                                  */
+  --pv-blue:      var(--cobalt);
+  --pv-blue-deep: var(--cobalt-deep);
+  --pv-black:     var(--ink-0);
+  --pv-graphite:  var(--ink-1);
+  --pv-ash:       var(--ink-2);
+  --pv-fog:       var(--paper-deep);
+  --pv-paper:     var(--paper);
+  --pv-success:   #2F8F5B;
+  --pv-warning:   #C77A1A;
+  --pv-danger:    var(--live-deep);
+
+  --accent-soft: var(--cobalt-wash);
+  --accent-glow: rgba(27, 54, 201, 0.16);
+
+  --color-ink:    var(--ink-0);
+  --color-paper:  var(--paper);
+  --color-signal: var(--cobalt);
+
+  --surface-0: var(--paper);
+  --surface-1: var(--paper-deep);
+  --surface-2: var(--paper-edge);
+  --surface-3: var(--rule);
+
+  --ink: var(--ink-0);
+  --accent: var(--cobalt);
+
+  --color-gray-100: var(--paper-deep);
+  --color-gray-200: var(--rule);
+  --color-gray-300: var(--ink-2);
+  --color-gray-400: var(--ink-1);
+  --color-gray-500: var(--ink-1);
+  --gray-4: var(--ink-2);
+  --gray-5: var(--ink-1);
   --color-success: var(--pv-success);
   --color-warning: var(--pv-warning);
   --color-error:   var(--pv-danger);
 
-  /* ── Borders / hairlines (dark-on-light) ─────────────────────────────────── */
-  --hairline:        rgba(27, 26, 25, 0.08);
-  --hairline-strong: rgba(27, 26, 25, 0.16);
+  --hairline:        var(--rule-soft);
+  --hairline-strong: var(--rule-strong);
 
-  /* ── Typefaces ───────────────────────────────────────────────────────────── */
-  --font-display: 'Erode', Georgia, 'Times New Roman', serif;   /* H1–H3, lead  */
-  --font-text:    'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif; /* body */
-  /* Legacy aliases → Satoshi (existing call sites). */
+  /* ── Typefaces — Erode (finished text) · Satoshi (voice / UI) ─────────────── */
+  --font-display: 'Erode', Georgia, 'Times New Roman', serif;
+  --font-text:    'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-sans: var(--font-text);
   --font-mono: var(--font-text);
 
@@ -73,21 +150,32 @@
   --ch: 1ch;
   --lh: 1.5rem;
 
-  /* ── Type scale - 1.333 (perfect fourth), fluid ─────────────────────────── */
-  --step--1: clamp(0.78rem, 0.75rem + 0.13vw, 0.875rem);   /* labels · 11pt    */
-  --step-0:  clamp(1rem,    0.97rem + 0.16vw, 1.0625rem);  /* body · 15pt      */
-  --step-1:  clamp(1.25rem, 1.18rem + 0.34vw, 1.4375rem);  /* lead · 20pt      */
-  --step-2:  clamp(1.6rem,  1.42rem + 0.90vw, 2.25rem);    /* H3 · 32pt        */
-  --step-3:  clamp(1.85rem, 1.55rem + 1.30vw, 2.5rem);     /* H3 · tightened   */
-  --step-4:  clamp(2.25rem, 1.85rem + 1.80vw, 3.25rem);    /* H2 · tightened   */
-  --step-5:  clamp(2.75rem, 2.10rem + 2.80vw, 4.5rem);     /* hero display     */
-  --step-6:  clamp(4.5rem,  3.00rem + 7.20vw, 10rem);      /* giant            */
+  /* ── Type scale — 1.333 perfect-fourth, fluid (kept) ─────────────────────── */
+  --step--1: clamp(0.78rem, 0.75rem + 0.13vw, 0.875rem);
+  --step-0:  clamp(1rem,    0.97rem + 0.16vw, 1.0625rem);
+  --step-1:  clamp(1.25rem, 1.18rem + 0.34vw, 1.4375rem);
+  --step-2:  clamp(1.6rem,  1.42rem + 0.90vw, 2.25rem);
+  --step-3:  clamp(1.85rem, 1.55rem + 1.30vw, 2.5rem);
+  --step-4:  clamp(2.25rem, 1.85rem + 1.80vw, 3.25rem);
+  --step-5:  clamp(2.75rem, 2.10rem + 2.80vw, 4.5rem);
+  --step-6:  clamp(4.5rem,  3.00rem + 7.20vw, 10rem);
+
+  /* Erode display set tight & editorial; eyebrows/labels set wide. */
+  --track-display: -0.022em;
+  --track-label:    0.14em;
+
+  /* ── Two-track transcript grid ───────────────────────────────────────────── */
+  --track-voice: 0.85fr;   /* VOICE — provisional, narrower                      */
+  --track-text:  1.15fr;   /* TEXT  — finished, wider (asymmetric on purpose)    */
+  --track-gap:   clamp(1.25rem, 3.5vw, 3rem);
 
   /* ── Motion ──────────────────────────────────────────────────────────────── */
-  --ease:     cubic-bezier(0.23, 1, 0.32, 1);   /* strong ease-out (emil)       */
+  --ease:     cubic-bezier(0.23, 1, 0.32, 1);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --t-micro:  150ms;  /* hover, focus, toggle */
-  --t-macro:  300ms;  /* state changes, reveals */
+  --snap:     cubic-bezier(0.16, 1, 0.3, 1);   /* the voice→text resolve         */
+  --t-micro:  150ms;
+  --t-macro:  300ms;
+  --t-snap:   420ms;
 
   /* legacy aliases */
   --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
@@ -98,15 +186,15 @@
   --t-slow:    300ms;
   --t-narrative: 300ms;
 
-  /* ── Shadows - light, diffuse, tinted toward Pocket Black / blue ─────────── */
-  --shadow-soft: 0 1px 2px rgba(27, 26, 25, 0.04),
-                 0 16px 40px -16px rgba(27, 26, 25, 0.14);
-  --shadow-edge: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --shadow-blue: 0 8px 24px -8px rgba(14, 142, 206, 0.45);
+  /* ── Shadows — light, warm, minimal ──────────────────────────────────────── */
+  --shadow-soft: 0 1px 2px rgba(25, 23, 26, 0.04),
+                 0 18px 44px -22px rgba(25, 23, 26, 0.18);
+  --shadow-edge: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-blue: 0 8px 22px -10px rgba(27, 54, 201, 0.40);
 
   /* ── Layout ──────────────────────────────────────────────────────────────── */
-  --gutter:   clamp(1.25rem, 4vw, 2.5rem);
-  --rail:     clamp(2rem, 6vw, 6rem);
-  --max-w:    1200px;
+  --gutter:    clamp(1.25rem, 4vw, 2.5rem);
+  --rail:      clamp(2rem, 6vw, 6rem);
+  --max-w:     1180px;
   --max-prose: 65ch;
 }

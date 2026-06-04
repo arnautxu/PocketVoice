@@ -18,17 +18,16 @@
   --color-error:   var(--color-error);
 
   /* ── Legacy aliases still exposed to Tailwind ───────────────── */
-  --color-surface-0: var(--color-ink);
+  --color-surface-0: var(--color-paper);
   --color-surface-1: var(--color-gray-100);
   --color-surface-2: var(--color-gray-200);
-  --color-ink-0: var(--color-paper);
+  --color-ink-0: var(--color-ink);
   --color-ink-1: var(--color-gray-400);
   --color-ink-2: var(--color-gray-300);
   --color-accent: var(--color-signal);
   --color-hairline: var(--hairline);
 
-  /* ── Fonts ──────────────────────────────────────────────────── */
-  /* Erode (display serif) + Satoshi (text sans), per Brand Manual v6.    */
+  /* ── Fonts — Erode (display) + Satoshi (text), Brand Manual v6 ── */
   --font-display: 'Erode', Georgia, 'Times New Roman', serif;
   --font-text: 'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -43,15 +42,19 @@
   text-rendering: optimizeLegibility;
 }
 
-/* ── Base ────────────────────────────────────────────────────────────────────── */
-html {
-  background: var(--pv-paper);
-}
+/* ══ THE ATMOSPHERE — altitude = scroll ═══════════════════════════════════════
+ * The whole document sits on ONE continuous sky gradient. The page is as tall as
+ * its content, so the gradient stretches across the entire scroll: scrolling down
+ * is a descent through the atmosphere — stratosphere navy → warm horizon → ground.
+ * Every section is transparent and rides this single sky; nothing paints an opaque
+ * band over it. Text tokens flip per altitude (.alt-dark / .alt-light).
+ * ════════════════════════════════════════════════════════════════════════════ */
+html { background: var(--strato-0); }
 body {
   margin: 0;
   padding: 0;
-  background: var(--pv-paper); /* solid page; sky lives only in the hero now */
-  color: var(--ink-0);
+  background: var(--ground);
+  color: var(--cloud-white);
   font-family: var(--font-text);
   font-size: var(--step-0);
   font-weight: 400;
@@ -60,83 +63,109 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Full-page sky ─────────────────────────────────────────────────────────────
- * One fixed sky behind everything. Content (glass panels) scrolls over it, which
- * reads as smooth parallax with zero per-frame JS. A very slow compositor-only
- * drift keeps it alive. */
-.app-sky {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  /* Fallback sky (shown under reduced-motion / before WebGL paints). The
-   * ForgeUI Cloudscape canvas, when mounted, fully covers this. */
-  background: linear-gradient(180deg, #1C8AC9 0%, #7FC0E8 46%, #FFFFFF 100%);
-}
-.app-sky::after {
-  /* very soft top-down depth so glass panels still read; kept light so it
-   * doesn't mute the animated cloudscape underneath */
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(250,250,248,0.16) 100%);
-}
-/* Sky stays static - scrolling glass panels over it IS the parallax, and a static
- * backdrop avoids constant backdrop-filter re-blur (the real jank source). */
+/* The two descent pieces, each sized to its own content height (background-size
+ * 100% 100% so the gradient stretches across the wrapper, not the viewport). They
+ * meet at --horizon-warm, so the join is seamless. */
+.sky-zone    { background: var(--sky-descent) no-repeat; background-size: 100% 100%; }
+.ground-zone { background: var(--ground-rise) no-repeat; background-size: 100% 100%; }
 
-/* ── Liquid glass ──────────────────────────────────────────────────────────────
- * Frosted panel with edge refraction (inset highlight + 1px light border) and a
- * soft sky-tinted drop shadow. Dark text reads cleanly over the bright sky. */
-.glass {
-  position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(255,255,255,0.50));
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
-  backdrop-filter: blur(16px) saturate(1.6);
-  border: 1px solid rgba(255,255,255,0.6);
-  transform: translateZ(0); /* own layer → smoother compositing */
-  border-radius: clamp(20px, 2.4vw, 34px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.85),
-    inset 0 0 0 1px rgba(255,255,255,0.04),
-    0 30px 70px -32px rgba(13,75,130,0.40);
+/* Altitude-aware ink. Set on a section to resolve its text to the right register
+ * for its height in the sky. */
+.alt-dark {
+  --ink-0: var(--cloud-white);
+  --ink-1: rgba(234, 240, 248, 0.84);
+  --ink-2: rgba(234, 240, 248, 0.66);
+  color: var(--ink-0);
 }
-/* Expressive blue glass - CTA / brand moment */
-.glass-blue {
-  position: relative;
-  color: var(--pv-paper);
-  background: linear-gradient(160deg, rgba(14,142,206,0.52), rgba(0,90,150,0.62));
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  backdrop-filter: blur(20px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.32);
-  border-radius: clamp(20px, 2.4vw, 34px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.45),
-    0 30px 70px -30px rgba(0,55,100,0.55);
-  --ink-0: var(--pv-paper);
-  --ink-1: rgba(250,250,248,0.86);
-  --ink-2: rgba(250,250,248,0.66);
-  --hairline: rgba(255,255,255,0.22);
-  --hairline-strong: rgba(255,255,255,0.34);
-  --surface-1: rgba(255,255,255,0.10);
-  --surface-2: rgba(255,255,255,0.16);
-  --surface-3: rgba(255,255,255,0.30);
+.alt-light {
+  --ink-0: var(--graphite);
+  --ink-1: var(--graphite-1);
+  --ink-2: var(--graphite-2);
+  color: var(--ink-0);
 }
 
-/* ── Headings - Erode display for H1–H3; Satoshi handles everything below ── */
+/* ── Headings — Erode for display (h1/h2); Satoshi below ─────────────────────── */
 h1, h2 {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--track-display);
 }
-/* h3 + smaller drop to sans (Satoshi) — serif reserved for display headlines */
 h3 {
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-/* ── Caret blink animation ───────────────────────────────────────────────────── */
-/* 1.2s cycle: fade-in 200ms → hold 400ms → fade-out 200ms → hold 400ms        */
+/* ══════════════════════════════════════════════════════════════════════════════
+ * THE TRANSCRIPT — the spine of the page.
+ * VOICE (left, provisional) | rule | TEXT (right, finished). A persistent 1px
+ * hairline runs between the two tracks; it lands at the same x in every section,
+ * so the rule reads as one continuous line down the document.
+ * ════════════════════════════════════════════════════════════════════════════ */
+.transcript {
+  display: grid;
+  grid-template-columns: var(--track-voice) 1px var(--track-text);
+  column-gap: var(--track-gap);
+  align-items: start;
+}
+.transcript > * { min-width: 0; }
+.transcript-rule {
+  align-self: stretch;
+  width: 1px;
+  background: var(--rule);
+}
+
+/* Track labels — the small "you say" / "pocket voice writes" markers. */
+.track-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8ch;
+  font-family: var(--font-text);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* VOICE text — Satoshi, raw, provisional. */
+.voice-text {
+  font-family: var(--font-text);
+  font-weight: 400;
+  color: var(--ink-1);
+  line-height: 1.5;
+}
+/* TEXT — Erode, the finished artifact. */
+.text-out {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ink-0);
+  letter-spacing: var(--track-display);
+  line-height: 1.18;
+}
+
+/* ── Recording dot — the live signal (vermilion) ─────────────────────────────── */
+.rec-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--live);
+  box-shadow: 0 0 0 0 var(--live-wash);
+  animation: pv-rec 1.3s ease-in-out infinite;
+}
+@keyframes pv-rec {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(244,71,30,0.30); }
+  50%      { opacity: 0.55; box-shadow: 0 0 0 6px rgba(244,71,30,0); }
+}
+
+/* ── The resolve — raw collapses into composed ───────────────────────────────── */
+@keyframes pv-snap {
+  from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
+  to   { opacity: 1; transform: none;            filter: blur(0); }
+}
+.snap-in { animation: pv-snap var(--t-snap) var(--snap) both; }
+
+/* ── Caret blink — live typing cursor ────────────────────────────────────────── */
 @keyframes pv-caret {
   0%    { opacity: 0; }
   16.7% { opacity: 1; }
@@ -145,145 +174,34 @@ h3 {
   100%  { opacity: 0; }
 }
 
-/* Pulse for "listening" state */
+/* ── Pulse — "composing" / listening ring ────────────────────────────────────── */
 @keyframes pv-pulse {
   0%   { transform: scale(0.6); opacity: 0.7; }
   100% { transform: scale(2.4); opacity: 0; }
 }
 
-/* Character reveal for text-in animation */
-@keyframes pv-char-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* Rise-in: fade + gentle upward translate (hero, section reveals) */
+/* ── Section / element reveals ───────────────────────────────────────────────────
+ * Transform-only: content is ALWAYS opacity 1, so it can never be trapped hidden
+ * if the entrance animation is paused (backgrounded tab) or never runs. The slide
+ * is the enhancement; legibility is the baseline. */
 @keyframes pv-rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(14px); }
+  to   { transform: translateY(0); }
 }
 @keyframes pv-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+.rise { animation: pv-rise 0.7s var(--ease) both; }
 
-/* Hero entrance - CSS so the fold is always visible (GSAP adds parallax only) */
-.hero-rise { opacity: 0; animation: pv-rise 0.7s cubic-bezier(0.23, 1, 0.32, 1) both; }
-.hero-mark-wrap { opacity: 0; animation: pv-fade-in 1.1s ease 0.15s both; }
-
-/* Gentle perpetual float for the hero cloud icon (compositor-only) */
-@keyframes pv-mark-float {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, 18px, 0); }
-}
-.hero-mark {
-  animation: pv-mark-float 7s ease-in-out infinite alternate;
-  will-change: transform;
-}
-
-/* ── Screen-in-sky hero layout ───────────────────────────────────────────── */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.04fr 1fr;
-  align-items: center;
-  gap: clamp(2rem, 4vw, 4.5rem);
-}
-.hero-copy { max-width: 40rem; }
-.hero-stage { position: relative; }
-.hero-stage-inner {
-  position: relative;
-  width: 100%;
-  max-width: 540px;
-  margin-inline: auto;
-  aspect-ratio: 4 / 5;
-}
-.hero-phone-float {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  animation: pv-hero-phone 9s ease-in-out infinite;
-  will-change: transform;
-}
-@keyframes pv-hero-phone {
-  0%, 100% { transform: translate(-50%, -50%); }
-  50%      { transform: translate(-50%, calc(-50% - 14px)); }
-}
-.hero-orbit { position: absolute; z-index: 3; }
-
-/* Cloud app icons - gentle perpetual float (compositor-only, varied per icon
- * via inline animation-delay/-duration). Drop shadow lives on the element. */
-@keyframes pv-cloud-float {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50%  { transform: translate3d(0, -12px, 0) rotate(-1.2deg); }
-  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-}
-.cloud-icon {
-  animation-name: pv-cloud-float;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  will-change: transform;
-}
-
-/* ── Voice transform (Speak section) ─────────────────────────────────────── */
-/* Animated voice line - bars scale on a staggered, compositor-only loop. */
-.pv-wave {
-  display: inline-flex;
-  align-items: center;
-  gap: 2.5px;
-  height: 20px;
-}
-.pv-wave > span {
-  width: 3px;
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--pv-blue), var(--pv-blue-deep));
-  transform: scaleY(var(--h, 0.5));
-  transform-origin: center;
-  animation: pv-wave-bar 0.9s ease-in-out infinite alternate;
-}
-@keyframes pv-wave-bar {
-  from { transform: scaleY(calc(var(--h, 0.5) * 0.32)); }
-  to   { transform: scaleY(var(--h, 0.5)); }
-}
-
-/* Filler words struck out as Pocket Voice composes the clean sentence. */
-.pv-cut {
-  color: var(--ink-2);
-  text-decoration: line-through;
-  text-decoration-color: transparent;
-  transition: text-decoration-color 0.4s var(--ease), opacity 0.5s var(--ease);
-}
-.pv-cut-go {
-  text-decoration-color: var(--pv-danger);
-  opacity: 0.4;
-  transition-delay: var(--cut-delay, 0s);
-}
-
-/* Panel reveal fallback (used if JS/GSAP is unavailable - content stays visible) */
+/* Panel reveal fallback — content stays visible if GSAP is unavailable. */
 .reveal { opacity: 1; }
 
-/* Hero scroll cue - a dot falling inside a mouse outline */
-.pv-scroll-dot {
-  position: absolute;
-  left: 50%;
-  top: 7px;
-  width: 3px;
-  height: 7px;
-  border-radius: 2px;
-  background: var(--pv-graphite);
-  transform: translateX(-50%);
-  animation: pv-scroll-dot 1.8s var(--ease) infinite;
-}
-@keyframes pv-scroll-dot {
-  0%   { opacity: 0; transform: translate(-50%, 0); }
-  30%  { opacity: 1; }
-  70%  { opacity: 1; transform: translate(-50%, 10px); }
-  100% { opacity: 0; transform: translate(-50%, 12px); }
-}
+/* ── Speed-proof bar fill ────────────────────────────────────────────────────── */
+.bar-track { position: relative; height: 3px; background: var(--paper-edge); }
+.bar-fill  { position: absolute; inset: 0; transform-origin: left; transform: scaleX(0); }
 
-/* Respect reduced motion - settle everything to its end state instantly */
+/* Respect reduced motion — settle everything to its end state instantly. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -296,15 +214,11 @@ h3 {
 /* ── Selection ───────────────────────────────────────────────────────────────── */
 ::selection {
   background: var(--accent-glow);
-  color: var(--pv-blue-deep);
+  color: var(--cobalt-deep);
 }
 
 /* ── Elements ────────────────────────────────────────────────────────────────── */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
+a { color: inherit; text-decoration: none; }
 button {
   font: inherit;
   color: inherit;
@@ -314,28 +228,14 @@ button {
   padding: 0;
   margin: 0;
 }
-
-button, [role='button'], a {
-  -webkit-tap-highlight-color: transparent;
-}
+button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
 
 :focus-visible {
-  outline: 2px solid var(--color-signal);
-  outline-offset: 2px;
+  outline: 2px solid var(--cobalt);
+  outline-offset: 3px;
 }
-
-/* ── Inverted pages (legal, docs, print-style) ───────────────────────────── */
-/* Signal Blue is forbidden inside .inverted. All signal references become ink. */
-.inverted {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-}
-.inverted .signal,
-.inverted [class*='text-signal'],
-.inverted [class*='bg-signal'] {
-  color: var(--color-ink);
-  background-color: transparent;
-}
+/* On the dark sky, a cobalt ring disappears into the navy — use cloud-white. */
+.alt-dark :focus-visible { outline-color: var(--cloud-white); }
 
 /* ── Container ───────────────────────────────────────────────────────────────── */
 .rail {
@@ -345,30 +245,124 @@ button, [role='button'], a {
   padding-inline: var(--gutter);
 }
 
-/* ── Section backgrounds — solid, alternating, grounded ──────────────────────────
- * Replaces the full-page sky. Light = off-white page; dark = flat deep blue with the
- * ink/surface tokens remapped to light so all child text stays WCAG-AA legible. */
-.section-light {
-  background: var(--pv-paper);
+/* ── Section grounds — transparent; the sky shows through every section ───────── */
+.section-light { background: transparent; }
+.band          { background: transparent; }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ * VAPOR → INK — the condensation system (the metaphor, enacted).
+ * Speech is formless vapor; finished text precipitates as crisp ink. Spoken
+ * content is set in ERODE, blurred and drifting like cloud. Resolved output is
+ * set in SATOSHI, razor-sharp and tabular. The tension between the soft serif in
+ * the sky and the surgical sans on the ground IS the design.
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+/* VAPOR — raw speech. Erode, loose, soft, hanging in the air. Carries blur. */
+.vapor {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1.32;
+  color: var(--cloud-white);
+  text-shadow: 0 1px 24px rgba(6, 20, 40, 0.55);
 }
-.section-dark {
-  background: #1a3a5c;
-  color: var(--pv-paper);
-  --ink-0: #ffffff;
-  --ink-1: rgba(255, 255, 255, 0.84);
-  --ink-2: rgba(255, 255, 255, 0.66);
-  --hairline: rgba(255, 255, 255, 0.16);
-  --hairline-strong: rgba(255, 255, 255, 0.30);
-  --surface-1: rgba(255, 255, 255, 0.06);
-  --surface-2: rgba(255, 255, 255, 0.12);
-  --surface-3: rgba(255, 255, 255, 0.24);
-  /* lighter blue so accents/metrics clear AA on the deep-blue ground */
-  --pv-blue: #6FC2EC;
-  --pv-blue-deep: #A7DBF5;
-  --accent: #6FC2EC;
+/* Unresolved vapor hangs blurred and translucent, drifting slowly upward. */
+.vapor-soft {
+  filter: blur(6px);
+  opacity: 0.62;
+  transform: translateY(0);
+  animation: pv-drift 7s ease-in-out infinite alternate;
+  will-change: transform, filter;
+}
+@keyframes pv-drift {
+  from { transform: translateY(3px); }
+  to   { transform: translateY(-5px); }
 }
 
-/* 12-column rail grid for multi-column sections. */
+/* INK — resolved output. Satoshi, tight, tabular-crisp. NEVER blurred. */
+.ink-out {
+  font-family: var(--font-text);
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.24;
+  color: var(--graphite);
+}
+
+/* The condensation — vapor resolves to ink: blur clears, opacity lands, the line
+ * settles. Paired with the 180 ms readout, this is the moment of precipitation. */
+@keyframes pv-condense {
+  from { opacity: 0; filter: blur(9px); transform: translateY(7px); letter-spacing: 0.04em; }
+  to   { opacity: 1; filter: blur(0);   transform: translateY(0);   letter-spacing: -0.012em; }
+}
+.condense-in { animation: pv-condense var(--t-snap) var(--snap) both; }
+
+/* The baseline rule that draws under a condensed line — the "drop" landing. */
+@keyframes pv-baseline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.ink-baseline {
+  height: 1px;
+  background: var(--graphite);
+  opacity: 0.18;
+  transform-origin: left;
+  animation: pv-baseline 560ms var(--snap) both;
+  animation-delay: 120ms;
+}
+
+/* ── Cloud material — full-bleed sky imagery, blended into the altitude ────────
+ * The cloud is allowed to be large and full-bleed where it appears (hero, demo,
+ * close). It is the brand's material, not wallpaper in a frame: it bleeds edge to
+ * edge and dissolves into the surrounding gradient via mask fades, so there is no
+ * "photo in a box" seam. */
+.cloud-bleed {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+/* Hero cloud sea: a bright cloudscape filling the frame, masked out of the top
+ * strip so the nav and the head of the headline rest on pure stratosphere navy. */
+.cloud-hero {
+  background-image: url('/brand/sky/hero.webp');
+  background-position: center 70%;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 16%, #000 40%, #000 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, transparent 16%, #000 40%, #000 100%);
+}
+/* Dramatic cumulus for the condensation centerpiece. */
+.cloud-demo {
+  background-image: url('/brand/sky/clouds.webp');
+  background-position: center 40%;
+}
+/* Ground cloudbank for the close — bright clouds at eye level, fading up to air. */
+.cloud-ground {
+  background-image: url('/brand/sky/hero.webp');
+  background-position: center 64%;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 40%, #000 86%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 40%, #000 86%, transparent 100%);
+}
+
+/* A scrim that lets type sit INTO the sky while the sky still owns the frame. */
+.sky-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* Hero scrim — a strong veil on the left, behind the type, dissolving to clear on
+ * the right so the cloud sea stays bright and full-height. (Mobile override in
+ * responsive.css switches this to a full-width veil for single-column text.) */
+.hero-scrim {
+  background:
+    linear-gradient(98deg,
+      rgba(7,17,40,0.93) 0%, rgba(7,17,40,0.90) 50%,
+      rgba(7,17,40,0.52) 66%, rgba(7,17,40,0.12) 78%, rgba(7,17,40,0) 86%),
+    linear-gradient(180deg, rgba(7,17,40,0) 70%, rgba(6,15,36,0.42) 100%);
+}
+
+/* 12-column rail grid for asymmetric multi-column sections. */
 .grid-12 {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -376,21 +370,10 @@ button, [role='button'], a {
 }
 
 /* ── Typography utilities ────────────────────────────────────────────────────── */
-/* Explicit overrides - mono is the inherited default and needs no class.         */
+.font-mono { font-family: var(--font-mono) !important; }
+.font-sans { font-family: var(--font-sans); }
+.tabular   { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
 
-/* Force mono - use when an element sits inside a .prose or .font-sans context   */
-/* and must stay branded: transcription output, code blocks, labels, CTAs.       */
-.font-mono {
-  font-family: var(--font-mono) !important;
-}
-
-/* Explicit sans - justified by the typography rules only.                        */
-.font-sans {
-  font-family: var(--font-sans);
-}
-
-/* Long-form editorial content (>80 words / >4 consecutive lines).               */
-/* Applies sans to the block; code elements inside revert to mono automatically. */
 .prose {
   font-family: var(--font-sans);
   font-size: var(--step-0);
@@ -398,20 +381,12 @@ button, [role='button'], a {
   color: var(--ink-1);
   max-width: var(--max-prose);
 }
-.prose code,
-.prose kbd,
-.prose pre,
-.prose samp,
-.prose var {
-  font-family: var(--font-mono);
-}
 .prose h1, .prose h2, .prose h3,
 .prose h4, .prose h5, .prose h6 {
   font-family: var(--font-display);
   color: var(--ink-0);
 }
 
-/* Legal / docs pages - applies sans to the whole page section.                   */
 .legal {
   font-family: var(--font-sans);
   font-size: var(--step-0);
@@ -423,11 +398,6 @@ button, [role='button'], a {
   color: var(--ink-0);
 }
 
-/* ── Mono data utility ───────────────────────────────────────────────────────── */
-.tabular {
-  font-variant-numeric: tabular-nums;
-}
-
 /* ── Nav links ───────────────────────────────────────────────────────────────── */
 .navlink {
   position: relative;
@@ -437,26 +407,8 @@ button, [role='button'], a {
 }
 .navlink:hover { color: var(--ink-0); }
 
-/* ── Primary CTA press feedback ─────────────────────────────────────────────── */
+/* ── Primary CTA press feedback ──────────────────────────────────────────────── */
 .pv-cta:active { transform: scale(0.97); }
-
-/* ── Expressive brand moment - Atmosphere gradient, Paper-on-Blue ──────────── */
-/* Scopes the ink/surface tokens to their dark-surface values so children that  */
-/* read var(--ink-*) flip automatically. Blue + Paper = CTA & brand moments.    */
-.brand-moment {
-  background: var(--grad-atmosphere);
-  color: var(--pv-paper);
-  --ink-0: var(--pv-paper);
-  --ink-1: rgba(250, 250, 248, 0.84);
-  --ink-2: rgba(250, 250, 248, 0.64);
-  --surface-1: rgba(255, 255, 255, 0.10);
-  --surface-2: rgba(255, 255, 255, 0.16);
-  --surface-3: rgba(255, 255, 255, 0.30);
-  --hairline: rgba(255, 255, 255, 0.22);
-  --hairline-strong: rgba(255, 255, 255, 0.34);
-  --accent: var(--pv-paper);
-  --color-signal: var(--pv-paper);
-}
 
 @media (max-width: 720px) {
   nav .navlink { display: none; }

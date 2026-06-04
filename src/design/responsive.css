@@ -1,91 +1,63 @@
-/* Pocket Voice - responsive breakpoints
- * Central home for all @media rules.
+/* Pocket Voice — responsive breakpoints · "The Transcript".
  * Component inline styles handle layout; this file handles breakpoint overrides.
+ * The two-track transcript collapses to stacked VOICE-over-TEXT on narrow, and the
+ * center rule becomes a left rule on the voice block so the spine still reads.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-/* ─── Utility: box-drawing divider clip ─────────────────────────────────── */
-/* Prevents '─'.repeat(N) chars from causing horizontal scroll on narrow viewports */
-.pv-rule {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* ─── ≤ 900 px - tablet / large mobile ──────────────────────────────────── */
-@media (max-width: 900px) {
-  .hero-phones { display: none !important; }
-
-  /* Screen-in-sky hero: stack copy over the phone stage, centered.
-   * Items keep their default stretch (so the stage fills the column and the
-   * phone/orbit get real width); centering is done with text-align + auto
-   * margins, NOT justify-items (that shrinks items to content → 0-width stage). */
-  .hero-grid {
+/* ─── ≤ 880 px — collapse the two-track transcript ─────────────────────────── */
+@media (max-width: 880px) {
+  .transcript {
     grid-template-columns: 1fr !important;
-    gap: clamp(2.5rem, 7vw, 4rem) !important;
-    text-align: center;
+    row-gap: clamp(1.25rem, 4vw, 2rem);
   }
-  .hero-copy { max-width: 34rem; margin-inline: auto; }
-  .hero-copy > svg { margin-inline: auto; }       /* lockup */
-  .hero-copy p { margin-inline: auto; }            /* sub copy block centering */
-  .hero-copy > div { justify-content: center; }    /* store badges row */
-  .hero-stage-inner { max-width: 440px; }
+  /* The vertical center rule has no place in a single column — drop it. */
+  .transcript-rule { display: none !important; }
+
+  /* Hero: single-column text, so the scrim becomes a full-width vertical veil
+     instead of a left-anchored one — every line clears AA over the cloud. */
+  .hero-scrim {
+    background:
+      linear-gradient(180deg,
+        rgba(7,17,40,0.66) 0%, rgba(7,17,40,0.86) 15%,
+        rgba(6,15,36,0.90) 100%) !important;
+  }
+  .hero-head { font-size: clamp(3rem, 13vw, 5rem) !important; }
+
+  /* The condensation card stacks: vapor over ink, the divider becomes a top rule. */
+  .condense-card { grid-template-columns: 1fr !important; }
+  .condense-ink { border-left: 0 !important; border-top: 1px solid var(--rule) !important; }
+
+  /* TEXT block gets a short left rule so the voice→text relationship survives. */
+  .transcript > *:last-child {
+    padding-left: clamp(1rem, 4vw, 1.5rem);
+    border-left: 2px solid var(--rule-strong);
+  }
+  /* Surface rows: tighten the gap between spoken + composed when stacked. */
+  .surface-row { row-gap: 1rem; }
 }
 
-/* ─── ≤ 600 px - phones: tighten the orbit so icons don't clip off-screen ── */
-@media (max-width: 600px) {
-  .hero-stage-inner { max-width: 340px; }
-  .hero-orbit { transform: scale(0.82); }
-}
-
-/* ─── ≤ 768 px - mobile ──────────────────────────────────────────────────── */
+/* ─── ≤ 768 px — section grids stack ───────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Surface header / stats span full width. */
+  .grid-12 > * { grid-column: auto !important; }
+  .grid-12 { gap: clamp(2rem, 6vw, 3rem); }
 
-  /* Differentiators: 2-column side-by-side → single column stacked */
-  .diff-grid {
-    grid-template-columns: 1fr !important;
-    gap: clamp(2rem, 6vw, 3rem) !important;
-  }
-  /* Reset grid-12 spans so children stack naturally */
-  .diff-grid > * { grid-column: auto !important; }
-  /* Left heading: remove sticky - it overlaps content when stacked */
-  .diff-sticky {
-    position: static !important;
-  }
+  /* Close: brand statement over price table. */
+  .close-grid { grid-template-columns: 1fr !important; }
 
-  /* FromPocket: CTA + pricing side-by-side → stacked */
-  .fp-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .fp-grid > * { grid-column: auto !important; }
+  /* Surface stats: figures over the asset slot. */
+  .surface-stats { grid-template-columns: 1fr !important; }
 
-  /* Speak: copy + transform side-by-side → stacked */
-  .speak-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .speak-grid > * { grid-column: auto !important; }
-
-  /* AnywhereYouType header: remove span constraint */
-  .rail.grid-12 > .reveal { grid-column: auto !important; }
-
-  /* Demo rows (MicDemo, MagicMoment): shrink label column */
-  .demo-row {
-    grid-template-columns: 4.5rem 1fr !important;
-    gap: 1rem !important;
-    align-items: start !important;
-  }
-
-  /* Speed proof bar rows: keep 3-column but tighter */
-  .speed-bar {
-    gap: 1ch !important;
-  }
-  .speed-bar-name {
-    font-size: var(--step--1) !important;
-  }
+  /* Speed-proof bars: keep 3-column but tighter. */
+  .speed-bar { gap: 1ch !important; }
+  .speed-bar-name { font-size: var(--step--1) !important; }
 }
 
-/* ─── ≤ 480 px - small phones ───────────────────────────────────────────── */
+/* ─── ≤ 480 px — small phones ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  /* AnywhereYouType cards: fit on narrow screens */
-  .pv-card {
-    width: clamp(260px, 82vw, 320px) !important;
+  .speed-bar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
   }
+  /* Drop the inline bar track on the smallest screens — name + number is enough. */
+  .speed-bar .bar-track { display: none !important; }
 }

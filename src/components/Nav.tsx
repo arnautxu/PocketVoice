@@ -23,16 +23,17 @@ export function Nav() {
         right: 0,
         zIndex: 50,
         padding: '1.25ch 0',
-        background: solid ? 'rgba(250, 250, 248, 0.82)' : 'transparent',
-        borderBottom: solid ? '1px solid var(--hairline)' : '1px solid transparent',
-        backdropFilter: solid ? 'blur(14px) saturate(1.4)' : 'none',
-        WebkitBackdropFilter: solid ? 'blur(14px) saturate(1.4)' : 'none',
+        // Over the sky the bar is a translucent navy that keeps light type legible
+        // at every altitude — a strip of stratosphere that follows you down.
+        background: solid ? 'rgba(9, 20, 44, 0.55)' : 'transparent',
+        borderBottom: solid ? '1px solid var(--rule-sky-soft)' : '1px solid transparent',
+        backdropFilter: solid ? 'blur(16px) saturate(1.3)' : 'none',
+        WebkitBackdropFilter: solid ? 'blur(16px) saturate(1.3)' : 'none',
+        ['--ink-0' as string]: 'var(--cloud-white)',
+        ['--ink-1' as string]: 'rgba(234, 240, 248, 0.82)',
         transition:
           'background var(--t-macro) var(--ease), border-color var(--t-macro) var(--ease)',
-        // When transparent over the cloud hero, remap ink tokens to light so the
-        // logo + links stay legible; solid state uses the default dark tokens.
-        ...(solid ? {} : { ['--ink-0']: '#fff', ['--ink-1']: 'rgba(255,255,255,0.88)' }),
-      } as React.CSSProperties}
+      }}
     >
       <div
         className="rail"
@@ -43,21 +44,22 @@ export function Nav() {
           gap: '2ch',
         }}
       >
-        <Wordmark height="2rem" tone={solid ? 'ink' : 'paper'} />
+        <a href="#top" aria-label="Pocket Voice — top">
+          <Wordmark height="1.85rem" tone="paper" />
+        </a>
 
         <nav
           aria-label="Primary"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '2ch',
+            gap: '2.5ch',
             fontSize: 'var(--step--1)',
           }}
         >
-          <a className="navlink" href="#speak">How it works</a>
-          <a className="navlink" href="#different">Different</a>
-          <a className="navlink" href="#anywhere">Anywhere</a>
-          <a className="navlink" href="#speed">Speed</a>
+          <a className="navlink" href="#demo">Try it</a>
+          <a className="navlink" href="#surface">Surfaces</a>
+          <a className="navlink" href="#close">Pricing</a>
           <InstallButton size="sm" label="Download" />
         </nav>
       </div>
