@@ -18,7 +18,7 @@ export function Close() {
     <section
       id="close"
       className="section-light alt-light"
-      style={{ position: 'relative', isolation: 'isolate', overflow: 'hidden', padding: 'clamp(6rem, 14vh, 10rem) 0' }}
+      style={{ position: 'relative', isolation: 'isolate', overflow: 'hidden', padding: 'var(--space-xl) 0' }}
     >
       {/* full-bleed cloud bank at eye level, fading up into clear air */}
       <div className="cloud-bleed cloud-ground" aria-hidden style={{ opacity: 0.9 }} />

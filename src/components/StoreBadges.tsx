@@ -37,8 +37,8 @@ export function AppStoreBadge({ href = 'https://apps.apple.com/', height = 56, s
       onMouseLeave={(e) => hoverLift(e, false)}
     >
       <svg width={w} height={height} viewBox="0 0 180 60" role="img" aria-hidden>
-        <rect width="180" height="60" rx="11" fill="#000" />
-        <rect x="0.5" y="0.5" width="179" height="59" rx="10.5" fill="none" stroke="#3A3A3A" />
+        <rect width="180" height="60" rx="11" fill="#1B1A19" />
+        <rect x="0.5" y="0.5" width="179" height="59" rx="10.5" fill="none" stroke="#3A3937" />
         {/* Apple logo */}
         <path
           fill="#fff"
@@ -65,8 +65,8 @@ export function GooglePlayBadge({ href = 'https://play.google.com/store', height
       onMouseLeave={(e) => hoverLift(e, false)}
     >
       <svg width={w} height={height} viewBox="0 0 180 60" role="img" aria-hidden>
-        <rect width="180" height="60" rx="11" fill="#000" />
-        <rect x="0.5" y="0.5" width="179" height="59" rx="10.5" fill="none" stroke="#3A3A3A" />
+        <rect width="180" height="60" rx="11" fill="#1B1A19" />
+        <rect x="0.5" y="0.5" width="179" height="59" rx="10.5" fill="none" stroke="#3A3937" />
         {/* Play triangle */}
         <g transform="translate(22 17)">
           <path fill="#00D3FF" d="M0 1.3v23.4c0 .9.9 1.4 1.6 1L13 19 1.6.3C.9-.1 0 .4 0 1.3z" />

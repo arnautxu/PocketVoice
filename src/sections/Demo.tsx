@@ -144,8 +144,8 @@ export function Demo() {
   const showVapor = phase === 'listening' || (interim && phase !== 'reveal');
 
   return (
-    <section id="demo" className="section-light alt-dark" style={{ position: 'relative', padding: 'clamp(5.5rem, 12vh, 9rem) 0' }}>
-      <div className="rail" style={{ display: 'grid', gap: 'clamp(3rem, 7vh, 5rem)' }}>
+    <section id="demo" className="section-light alt-dark" style={{ position: 'relative', padding: 'var(--space-xl) 0' }}>
+      <div className="rail" style={{ display: 'grid', gap: 'var(--space-lg)' }}>
         {/* ── Header ─────────────────────────────────────────────────────── */}
         <header style={{ display: 'grid', gap: '1.5rem', maxWidth: '24ch' }}>
           <Eyebrow>Try it &mdash; your microphone, right here</Eyebrow>
@@ -407,7 +407,7 @@ const MAX = Math.max(...ROWS.map((r) => r.ms));
 function SpeedProof() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>('-15% 0px');
   return (
-    <div ref={ref} style={{ display: 'grid', gap: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
+    <div ref={ref} style={{ display: 'grid', gap: 'var(--space-sm)' }}>
       <header style={{ display: 'grid', gap: '0.75rem' }}>
         <h3 className="vapor" style={{ margin: 0, fontWeight: 400, fontSize: 'var(--step-2)', letterSpacing: '-0.02em' }}>
           180&nbsp;ms, measured.
@@ -473,13 +473,16 @@ function Bar({ row, index, active }: { row: (typeof ROWS)[number]; index: number
           initial={{ scaleX: 0 }}
           animate={{ scaleX: active ? target / 100 : 0 }}
           transition={{ duration: 1.0 + index * 0.1, ease, delay: index * 0.04 }}
-          style={{ background: row.primary ? 'var(--live)' : 'var(--cloud-white)', opacity: row.primary ? 1 : 0.42 }}
+          // Winner = solid cloud-white; competitors dimmed. (Pocket Blue is only
+          // ~1.4:1 on the blue sky here — the bold white number + solid short bar is
+          // the standout, not colour.)
+          style={{ background: 'var(--cloud-white)', opacity: row.primary ? 1 : 0.42 }}
         />
       </div>
       <span
         className="tabular"
         style={{
-          color: row.primary ? 'var(--live)' : 'var(--ink-1)',
+          color: row.primary ? 'var(--cloud-white)' : 'var(--ink-1)',
           fontSize: 'var(--step-0)',
           minWidth: '5.5ch',
           textAlign: 'right',
@@ -487,7 +490,7 @@ function Bar({ row, index, active }: { row: (typeof ROWS)[number]; index: number
         }}
       >
         {count}
-        <span style={{ color: 'var(--ink-2)', marginLeft: '0.5ch', fontSize: 'var(--step--1)' }}>ms</span>
+        <span style={{ color: row.primary ? 'var(--ink-1)' : 'var(--ink-2)', marginLeft: '0.5ch', fontSize: 'var(--step--1)' }}>ms</span>
       </span>
     </li>
   );
@@ -506,9 +509,11 @@ function MicButton({ active, disabled, onClick }: { active: boolean; disabled: b
         alignItems: 'center',
         gap: '1ch',
         padding: '0.85ch 2ch',
-        border: '1px solid var(--graphite)',
-        background: active ? 'var(--live)' : 'var(--graphite)',
-        borderColor: active ? 'var(--live)' : 'var(--graphite)',
+        // idle = Pocket Black (brand token, not a near-black default); recording
+        // flips to Pocket Blue (the live/primary signal).
+        border: '1px solid var(--pocket-black)',
+        background: active ? 'var(--live)' : 'var(--pocket-black)',
+        borderColor: active ? 'var(--live)' : 'var(--pocket-black)',
         color: 'var(--paper)',
         fontSize: 'var(--step--1)',
         fontWeight: 500,

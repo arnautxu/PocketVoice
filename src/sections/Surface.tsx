@@ -32,7 +32,7 @@ const EXAMPLES = [
 
 export function Surface() {
   return (
-    <section id="surface" className="section-light alt-light" style={{ padding: 'clamp(3rem, 6.5vh, 5rem) 0' }}>
+    <section id="surface" className="section-light alt-light" style={{ padding: 'var(--space-lg) 0' }}>
       <div className="rail" style={{ display: 'grid', gap: 'clamp(1.5rem, 3.5vh, 2.25rem)' }}>
         {/* Header — asymmetric, left */}
         <header className="grid-12">

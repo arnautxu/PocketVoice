@@ -46,9 +46,11 @@
 
 /* ─── ≤ 768 px — section grids stack ───────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Surface header / stats span full width. */
+  /* Collapse the 12-col rail to a single column. Without resetting the track count
+     the 11 empty column-gaps (~32px each) stay in the layout and force the grid —
+     and the whole rail — wider than the viewport (horizontal scroll on phones). */
+  .grid-12 { grid-template-columns: 1fr !important; gap: clamp(1.75rem, 6vw, 3rem); }
   .grid-12 > * { grid-column: auto !important; }
-  .grid-12 { gap: clamp(2rem, 6vw, 3rem); }
 
   /* Close: brand statement over price table. */
   .close-grid { grid-template-columns: 1fr !important; }
@@ -63,9 +65,10 @@
 
 /* ─── ≤ 480 px — small phones ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
+  /* Keep the comparison BAR visible (it is the whole point) — name auto, bar flexes
+     to fill, number auto. Tighter gap so all three fit a 320px-ish phone. */
   .speed-bar {
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 0.75ch !important;
   }
-  /* Drop the inline bar track on the smallest screens — name + number is enough. */
-  .speed-bar .bar-track { display: none !important; }
 }

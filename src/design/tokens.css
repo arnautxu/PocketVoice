@@ -222,4 +222,15 @@
   --rail:      clamp(2rem, 6vw, 6rem);
   --max-w:     1180px;
   --max-prose: 65ch;
+
+  /* ── Vertical rhythm — one deliberate spacing scale ───────────────────────────
+   * Section padding and major intra-section gaps draw from these three steps so the
+   * page breathes consistently instead of reading as default padding. Desktop
+   * targets ≈120 / 96 / 72 px; each tightens fluidly toward ≈72 / 56 / 40 px on
+   * narrow screens. Use --space-xl between movements, -lg for major blocks, -md for
+   * tighter groupings. */
+  --space-xl: clamp(4.5rem, 9vw, 7.5rem);   /*  72 → 120 px */
+  --space-lg: clamp(3.5rem, 7vw, 6rem);     /*  56 →  96 px */
+  --space-md: clamp(2.5rem, 5vw, 4.5rem);   /*  40 →  72 px */
+  --space-sm: clamp(1.5rem, 3vw, 2.25rem);  /*  24 →  36 px */
 }

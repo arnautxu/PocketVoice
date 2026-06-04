@@ -20,9 +20,13 @@ export function Hero() {
         minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        paddingTop: 'clamp(8rem, 16vh, 11rem)',
-        paddingBottom: 'clamp(3.5rem, 9vh, 6rem)',
+        // start the content high (just below the nav) instead of centring it in the
+        // viewport, which left an empty top third reading as default padding. Nav
+        // clearance + one deliberate step above; a full --space-xl below before the
+        // descent. The cloud sea still fills the open sky beneath the claims.
+        justifyContent: 'flex-start',
+        paddingTop: 'clamp(6rem, 11vh, 8rem)',
+        paddingBottom: 'var(--space-xl)',
       }}
     >
       {/* full-bleed cloud sea, rising from the bottom into the navy */}
@@ -91,10 +95,27 @@ export function Hero() {
           }}
         >
           <StoreBadges height={54} />
+          {/* Secondary scroll cue. Self-sufficient: a solid Pocket Black pill with
+              Paper text (~16:1) so it stays legible on its own — independent of the
+              cloud image, and readable even if the image fails to load. */}
           <a
             href="#demo"
-            className="navlink"
-            style={{ color: 'var(--cloud-white)', fontWeight: 500, fontSize: 'var(--step-0)' }}
+            className="pv-cta hero-watch"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.7ch',
+              padding: '0.7ch 1.5ch',
+              background: 'var(--pocket-black)',
+              color: 'var(--paper)',
+              border: '1px solid rgba(250, 250, 248, 0.22)',
+              borderRadius: '0.5ch',
+              fontWeight: 500,
+              fontSize: 'var(--step-0)',
+              transition: 'background var(--t-micro) var(--ease), border-color var(--t-micro) var(--ease)',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(250,250,248,0.5)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(250,250,248,0.22)'; }}
           >
             Watch it condense &darr;
           </a>
