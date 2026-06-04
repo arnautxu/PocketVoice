@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTypeIn } from '../hooks/useTypeIn';
-import { GlassPanel } from '../components/GlassPanel';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 
 /* Web Speech API - not yet in all TS DOM libs */
@@ -120,11 +119,11 @@ export function MicDemo() {
   }, []);
 
   return (
-    <section style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
+    <section className="section-dark" style={{ padding: 'clamp(4rem, 8vh, 7rem) 0' }}>
       <div className="rail">
-        <GlassPanel
+        <div
           className="reveal"
-          innerStyle={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)', padding: 'clamp(2rem, 5vw, 4rem)' }}
+          style={{ display: 'grid', gap: 'clamp(2rem, 5vh, 3rem)' }}
         >
         <header ref={headingRef} style={{ display: 'grid', gap: '1.5rem', maxWidth: '44ch' }}>
           <Eyebrow>Try it now</Eyebrow>
@@ -298,7 +297,7 @@ export function MicDemo() {
             </div>
           )}
         </div>
-        </GlassPanel>
+        </div>
       </div>
     </section>
   );

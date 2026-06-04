@@ -44,6 +44,8 @@
     grid-template-columns: 1fr !important;
     gap: clamp(2rem, 6vw, 3rem) !important;
   }
+  /* Reset grid-12 spans so children stack naturally */
+  .diff-grid > * { grid-column: auto !important; }
   /* Left heading: remove sticky - it overlaps content when stacked */
   .diff-sticky {
     position: static !important;
@@ -53,11 +55,16 @@
   .fp-grid {
     grid-template-columns: 1fr !important;
   }
+  .fp-grid > * { grid-column: auto !important; }
 
   /* Speak: copy + transform side-by-side → stacked */
   .speak-grid {
     grid-template-columns: 1fr !important;
   }
+  .speak-grid > * { grid-column: auto !important; }
+
+  /* AnywhereYouType header: remove span constraint */
+  .rail.grid-12 > .reveal { grid-column: auto !important; }
 
   /* Demo rows (MicDemo, MagicMoment): shrink label column */
   .demo-row {

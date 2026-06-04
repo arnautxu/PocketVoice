@@ -1,5 +1,4 @@
 import { VoiceTransform } from '../components/VoiceTransform';
-import { GlassPanel } from '../components/GlassPanel';
 import { Caret } from '../components/Caret';
 import { useInViewOnce } from '../hooks/useInViewOnce';
 import { useTypeIn } from '../hooks/useTypeIn';
@@ -16,22 +15,15 @@ export function Speak() {
   const showCaret = l2 >= LINE2.length;
 
   return (
-    <section id="speak" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
+    <section id="speak" className="section-light" style={{ padding: 'clamp(4rem, 8vh, 7rem) 0' }}>
       <div className="rail">
-        <GlassPanel
-          innerRef={ref}
-          className="reveal"
-          innerClassName="speak-grid"
-          innerStyle={{
-            display: 'grid',
-            gridTemplateColumns: '1.05fr 1fr',
-            alignItems: 'center',
-            gap: 'clamp(2rem, 5vw, 5rem)',
-            padding: 'clamp(2rem, 5vw, 4rem)',
-          }}
+        <div
+          ref={ref}
+          className="reveal speak-grid grid-12"
+          style={{ alignItems: 'center' }}
         >
           {/* Copy */}
-          <div style={{ maxWidth: 'min(48ch, 100%)' }}>
+          <div style={{ gridColumn: 'span 6' }}>
             <h2
               style={{
                 fontSize: 'var(--step-4)',
@@ -59,8 +51,10 @@ export function Speak() {
           </div>
 
           {/* Said → Written transform */}
-          <VoiceTransform />
-        </GlassPanel>
+          <div style={{ gridColumn: 'span 6', gridColumnStart: 7 }}>
+            <VoiceTransform />
+          </div>
+        </div>
       </div>
     </section>
   );

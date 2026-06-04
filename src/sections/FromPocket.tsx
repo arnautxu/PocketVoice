@@ -1,7 +1,6 @@
 import { InstallButton } from '../components/InstallButton';
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
-import { GlassPanel } from '../components/GlassPanel';
 
 const FREE_PLAN = ['30 min / day', '3 languages', 'Standard speed'];
 const PRO_PLAN = ['Unlimited', 'All languages', 'Priority speed'];
@@ -15,22 +14,14 @@ export function FromPocket() {
   const fc = useTypeIn(FP_FULL, h2InView);
 
   return (
-    <section style={{ padding: 'clamp(3rem, 7vh, 7rem) 0' }}>
+    <section className="section-dark" style={{ padding: 'clamp(4rem, 8vh, 7rem) 0' }}>
       <div className="rail">
-        <GlassPanel
-          blue
-          className="reveal"
-          innerClassName="fp-grid"
-          innerStyle={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-            gap: 'clamp(2.5rem, 6vw, 5rem)',
-            alignItems: 'center',
-            padding: 'clamp(2.25rem, 5vw, 4rem)',
-          }}
+        <div
+          className="reveal fp-grid grid-12"
+          style={{ alignItems: 'center' }}
         >
           {/* Left: brand statement */}
-          <div>
+          <div style={{ gridColumn: 'span 5' }}>
             <Eyebrow>From Pocket</Eyebrow>
             <h2
               ref={h2Ref}
@@ -65,6 +56,8 @@ export function FromPocket() {
           {/* Right: pricing comparison */}
           <div
             style={{
+              gridColumn: 'span 6',
+              gridColumnStart: 7,
               background: 'rgba(255,255,255,0.10)',
               border: '1px solid rgba(255,255,255,0.18)',
               borderRadius: '16px',
@@ -103,7 +96,7 @@ export function FromPocket() {
               </div>
             ))}
           </div>
-        </GlassPanel>
+        </div>
       </div>
     </section>
   );

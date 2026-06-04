@@ -29,7 +29,10 @@ export function Nav() {
         WebkitBackdropFilter: solid ? 'blur(14px) saturate(1.4)' : 'none',
         transition:
           'background var(--t-macro) var(--ease), border-color var(--t-macro) var(--ease)',
-      }}
+        // When transparent over the cloud hero, remap ink tokens to light so the
+        // logo + links stay legible; solid state uses the default dark tokens.
+        ...(solid ? {} : { ['--ink-0']: '#fff', ['--ink-1']: 'rgba(255,255,255,0.88)' }),
+      } as React.CSSProperties}
     >
       <div
         className="rail"
@@ -40,7 +43,7 @@ export function Nav() {
           gap: '2ch',
         }}
       >
-        <Wordmark height="2rem" />
+        <Wordmark height="2rem" tone={solid ? 'ink' : 'paper'} />
 
         <nav
           aria-label="Primary"

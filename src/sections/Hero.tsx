@@ -31,16 +31,17 @@ export function Hero() {
         overflow: 'hidden',
         paddingTop: 'clamp(7rem, 14vh, 11rem)',
         paddingBottom: 'clamp(4rem, 10vh, 8rem)',
+        background: "url('/brand/sky/hero.webp') center / cover no-repeat",
       }}
     >
-      {/* soft blue scrim - keeps white type legible wherever clouds drift behind it */}
+      {/* blue scrim - darkens the left text zone so white type clears WCAG AA over the cloud */}
       <div
         aria-hidden
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(96deg, rgba(8,72,120,0.46) 0%, rgba(10,90,150,0.24) 34%, rgba(10,90,150,0) 58%)',
+            'linear-gradient(100deg, rgba(7,38,66,0.52) 0%, rgba(9,52,90,0.30) 40%, rgba(10,66,108,0.06) 62%, rgba(10,66,108,0) 78%)',
         }}
       />
 
@@ -112,6 +113,25 @@ export function Hero() {
         {/* ── Right: floating phone with orbiting cloud icons ─────────────── */}
         <div className="hero-stage" aria-hidden>
           <div className="hero-stage-inner">
+            {/* restrained glass accent — a frosted stage behind the device (hero only) */}
+            <div
+              aria-hidden
+              style={{
+                position: 'absolute',
+                top: '12%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '78%',
+                height: '74%',
+                borderRadius: '32px',
+                background: 'rgba(255,255,255,0.14)',
+                border: '1px solid rgba(255,255,255,0.28)',
+                backdropFilter: 'blur(14px) saturate(1.3)',
+                WebkitBackdropFilter: 'blur(14px) saturate(1.3)',
+                boxShadow: '0 30px 70px -30px rgba(8,40,70,0.5)',
+                zIndex: 1,
+              }}
+            />
             <div className="hero-phone-float">
               <HeroPhone scale={0.62} />
             </div>

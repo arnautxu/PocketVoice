@@ -101,7 +101,7 @@ const GLYPHS: Record<AppGlyph, React.ReactNode> = {
 
 interface CloudIconProps {
   app: AppGlyph;
-  /** Cloud texture variant 1–4 (/brand/icons/cloud-N.png). */
+  /** Deprecated (cloud texture removed) — accepted but ignored. */
   cloud?: 1 | 2 | 3 | 4;
   /** Rendered box size in px (responsive caller can override via style). */
   size?: number;
@@ -117,9 +117,8 @@ interface CloudIconProps {
 
 export function CloudIcon({
   app,
-  cloud = 1,
   size = 96,
-  glyphScale = 0.46,
+  glyphScale = 0.56,
   delay = 0,
   duration = 7,
   style,
@@ -132,10 +131,10 @@ export function CloudIcon({
         width: size,
         height: size,
         position: 'relative',
-        backgroundImage: `url('/brand/icons/cloud-${cloud}.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        filter: 'drop-shadow(0 18px 26px rgba(20,70,120,0.28))',
+        background: '#ffffff',
+        borderRadius: '23%',
+        border: '1px solid rgba(20,40,70,0.07)',
+        boxShadow: '0 10px 22px -10px rgba(20,50,90,0.35), inset 0 1px 0 rgba(255,255,255,0.9)',
         animationDelay: `${delay}s`,
         animationDuration: `${duration}s`,
         ...style,
@@ -155,7 +154,6 @@ export function CloudIcon({
           style={{
             width: `${glyphScale * 100}%`,
             height: `${glyphScale * 100}%`,
-            filter: 'drop-shadow(0 4px 6px rgba(20,60,110,0.30))',
           }}
         >
           {GLYPHS[app]}

@@ -140,8 +140,9 @@ export function VoiceTransform() {
         aria-label={RESULT}
         style={{
           fontSize: 'var(--step-2)',
-          fontFamily: 'var(--font-display)',
-          lineHeight: 1.2,
+          fontFamily: 'var(--font-text)',
+          fontWeight: 600,
+          lineHeight: 1.25,
           letterSpacing: '-0.01em',
           color: 'var(--ink-0)',
           margin: 0,

@@ -45,13 +45,12 @@
 
 /* ── Base ────────────────────────────────────────────────────────────────────── */
 html {
-  /* fallback sky tint behind the fixed photo (avoids white flash) */
-  background: #cfe6f6;
+  background: var(--pv-paper);
 }
 body {
   margin: 0;
   padding: 0;
-  background: transparent; /* the fixed .app-sky shows through */
+  background: var(--pv-paper); /* solid page; sky lives only in the hero now */
   color: var(--ink-0);
   font-family: var(--font-text);
   font-size: var(--step-0);
@@ -125,10 +124,15 @@ body {
 }
 
 /* ── Headings - Erode display for H1–H3; Satoshi handles everything below ── */
-h1, h2, h3 {
+h1, h2 {
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.015em;
+}
+/* h3 + smaller drop to sans (Satoshi) — serif reserved for display headlines */
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* ── Caret blink animation ───────────────────────────────────────────────────── */
@@ -339,6 +343,36 @@ button, [role='button'], a {
   max-width: var(--max-w);
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+
+/* ── Section backgrounds — solid, alternating, grounded ──────────────────────────
+ * Replaces the full-page sky. Light = off-white page; dark = flat deep blue with the
+ * ink/surface tokens remapped to light so all child text stays WCAG-AA legible. */
+.section-light {
+  background: var(--pv-paper);
+}
+.section-dark {
+  background: #1a3a5c;
+  color: var(--pv-paper);
+  --ink-0: #ffffff;
+  --ink-1: rgba(255, 255, 255, 0.84);
+  --ink-2: rgba(255, 255, 255, 0.66);
+  --hairline: rgba(255, 255, 255, 0.16);
+  --hairline-strong: rgba(255, 255, 255, 0.30);
+  --surface-1: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.12);
+  --surface-3: rgba(255, 255, 255, 0.24);
+  /* lighter blue so accents/metrics clear AA on the deep-blue ground */
+  --pv-blue: #6FC2EC;
+  --pv-blue-deep: #A7DBF5;
+  --accent: #6FC2EC;
+}
+
+/* 12-column rail grid for multi-column sections. */
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
 }
 
 /* ── Typography utilities ────────────────────────────────────────────────────── */

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
-import { GlassPanel } from '../components/GlassPanel';
 
 /* ── Content ─────────────────────────────────────────────────────────────── */
 /*
@@ -101,14 +100,14 @@ export function AnywhereYouType() {
   const row2 = [...ROW2, ...ROW2];
 
   return (
-    <section id="anywhere" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0', overflow: 'hidden' }}>
+    <section id="anywhere" className="section-dark" style={{ padding: 'clamp(4rem, 8vh, 7rem) 0', overflow: 'hidden' }}>
 
       {/* ── Header ──────────────────────────────────────────────────── */}
-      <div className="rail" style={{ marginBottom: 'clamp(3rem, 6vh, 5rem)' }}>
-        <GlassPanel
-          innerRef={headingRef}
+      <div className="rail grid-12" style={{ marginBottom: 'clamp(3rem, 6vh, 5rem)' }}>
+        <div
+          ref={headingRef}
           className="reveal"
-          innerStyle={{ maxWidth: '54ch', padding: 'clamp(1.75rem, 4vw, 3rem)' }}
+          style={{ gridColumn: 'span 7' }}
         >
           <Eyebrow>Any app. One press.</Eyebrow>
 
@@ -144,7 +143,7 @@ export function AnywhereYouType() {
             Pocket Voice reads the surface before it writes. A thought in Linear becomes a ticket.
             A reply in Mail becomes prose. Same voice. Different register, every time.
           </p>
-        </GlassPanel>
+        </div>
       </div>
 
       {/* ── Two-row marquee ─────────────────────────────────────────── */}

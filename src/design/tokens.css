@@ -78,9 +78,9 @@
   --step-0:  clamp(1rem,    0.97rem + 0.16vw, 1.0625rem);  /* body · 15pt      */
   --step-1:  clamp(1.25rem, 1.18rem + 0.34vw, 1.4375rem);  /* lead · 20pt      */
   --step-2:  clamp(1.6rem,  1.42rem + 0.90vw, 2.25rem);    /* H3 · 32pt        */
-  --step-3:  clamp(2.4rem,  1.95rem + 2.20vw, 3.75rem);    /* H2 · 56pt        */
-  --step-4:  clamp(3rem,    2.30rem + 3.40vw, 5.5rem);     /* H1 · 88pt        */
-  --step-5:  clamp(3.4rem,  2.40rem + 4.80vw, 7rem);       /* hero display     */
+  --step-3:  clamp(1.85rem, 1.55rem + 1.30vw, 2.5rem);     /* H3 · tightened   */
+  --step-4:  clamp(2.25rem, 1.85rem + 1.80vw, 3.25rem);    /* H2 · tightened   */
+  --step-5:  clamp(2.75rem, 2.10rem + 2.80vw, 4.5rem);     /* hero display     */
   --step-6:  clamp(4.5rem,  3.00rem + 7.20vw, 10rem);      /* giant            */
 
   /* ── Motion ──────────────────────────────────────────────────────────────── */
@@ -107,6 +107,6 @@
   /* ── Layout ──────────────────────────────────────────────────────────────── */
   --gutter:   clamp(1.25rem, 4vw, 2.5rem);
   --rail:     clamp(2rem, 6vw, 6rem);
-  --max-w:    1320px;
+  --max-w:    1200px;
   --max-prose: 65ch;
 }

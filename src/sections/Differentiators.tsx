@@ -1,6 +1,5 @@
 import { useTypeIn } from '../hooks/useTypeIn';
 import { useInViewOnce } from '../hooks/useInViewOnce';
-import { GlassPanel } from '../components/GlassPanel';
 
 const POINTS = [
   {
@@ -36,20 +35,13 @@ export function Differentiators() {
   const dc = useTypeIn(D_FULL, h2InView);
 
   return (
-    <section id="different" style={{ padding: 'clamp(3rem, 7vh, 6rem) 0' }}>
+    <section id="different" className="section-light" style={{ padding: 'clamp(4rem, 8vh, 7rem) 0' }}>
       <div className="rail">
-        <GlassPanel
-          className="reveal"
-          innerClassName="diff-grid"
-          innerStyle={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.25fr)',
-            gap: 'clamp(2rem, 6vw, 5rem)',
-            alignItems: 'start',
-            padding: 'clamp(2rem, 5vw, 4rem)',
-          }}
+        <div
+          className="reveal diff-grid grid-12"
+          style={{ alignItems: 'start' }}
         >
-        <div className="diff-sticky" style={{ position: 'sticky', top: '14vh' }}>
+        <div className="diff-sticky" style={{ gridColumn: 'span 4', position: 'sticky', top: '14vh' }}>
           <Eyebrow>Why it's different</Eyebrow>
           <h2
             ref={h2Ref}
@@ -92,6 +84,8 @@ export function Differentiators() {
         <ol
           className="diff-list"
           style={{
+            gridColumn: 'span 7',
+            gridColumnStart: 6,
             margin: 0,
             padding: 0,
             listStyle: 'none',
@@ -182,7 +176,7 @@ export function Differentiators() {
             </li>
           ))}
         </ol>
-        </GlassPanel>
+        </div>
       </div>
     </section>
   );
@@ -220,10 +214,10 @@ function Metric({ value, unit }: { value: string; unit: string }) {
         className="tabular"
         style={{
           fontSize: 'var(--step-3)',
-          fontFamily: 'var(--font-display)',
-          letterSpacing: '-0.03em',
+          fontFamily: 'var(--font-text)',
+          letterSpacing: '-0.02em',
           color: 'var(--pv-blue)',
-          fontWeight: 400,
+          fontWeight: 700,
         }}
       >
         {value}
