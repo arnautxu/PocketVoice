@@ -33,9 +33,10 @@ export function Close() {
           <h2 className="vapor" style={{ margin: 0, fontSize: 'var(--step-5)', lineHeight: 1.0, letterSpacing: '-0.02em', maxWidth: '11ch', color: 'var(--graphite)', textShadow: 'none' }}>
             Press once.
             <br />
-            {/* de-emphasized second line — but via a real ink tone (graphite-2,
-                ~6.7:1 on the cloud), not low opacity that drops it below AA */}
-            <span style={{ color: 'var(--graphite-2)' }}>Walk away.</span>
+            {/* headline accent — Blue Deep italic (the descent's "landed" blue). Over
+                the bright, variable cloud bleed Blue Deep holds ~5–6:1; Pocket Blue
+                would be a borderline 3.5:1 and dip below AA over the lighter cloud. */}
+            <span style={{ color: 'var(--blue-deep)', fontStyle: 'italic' }}>Walk away.</span>
           </h2>
           <p style={{ margin: 0, maxWidth: '42ch', fontSize: 'var(--step-1)', lineHeight: 1.6, color: 'var(--ink-1)' }}>
             Pocket Voice exists to get out of your way. Speak your thought; by the time your hand

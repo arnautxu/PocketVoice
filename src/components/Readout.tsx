@@ -13,9 +13,9 @@ interface ReadoutProps {
 }
 
 /**
- * The hero number. Counts up to `value` ms in vermilion (the live, in-flight
- * colour), then settles to ink once it lands — speech resolving into text, in
- * colour. Reused in the hero and the live demo.
+ * The hero number. Counts up to `value` ms in Pocket Blue (the live, in-flight
+ * colour), then settles to ink once it lands — the moment of condensation, in
+ * colour: speech resolving into text. Reused in the hero and the live demo.
  */
 export function Readout({ value = 180, run, duration = 900, size = 'var(--step-2)', style }: ReadoutProps) {
   const [count, setCount] = useState(0);

@@ -53,6 +53,17 @@ function polish(raw: string): string {
 const ease = [0.4, 0, 0.2, 1] as const;
 const snap = [0.16, 1, 0.3, 1] as const;
 
+/* Droplet-streaks for the condensation seam — staggered so the precipitation reads
+ * as continuous rain rather than a metronome. */
+const SEAM_DRIPS = [
+  { left: 14, delay: 0,    dur: 2.4 },
+  { left: 30, delay: 0.9,  dur: 2.9 },
+  { left: 46, delay: 0.4,  dur: 2.2 },
+  { left: 60, delay: 1.4,  dur: 3.1 },
+  { left: 74, delay: 0.7,  dur: 2.6 },
+  { left: 88, delay: 1.8,  dur: 2.8 },
+] as const;
+
 /* Word-by-word condensation for the resolved ink: each word precipitates out of a
  * blur and settles sharp, staggered left→right — vapor becoming crisp text. */
 const inkContainer = {
@@ -60,10 +71,13 @@ const inkContainer = {
   show: { transition: { staggerChildren: 0.05, delayChildren: 0.04 } },
 };
 const inkWord = {
-  hidden: { opacity: 0, filter: 'blur(10px)', y: 9 },
+  // each word arrives out of the cloud — drifting in from the vapor side (left),
+  // blurred, then settling razor-sharp on the ground.
+  hidden: { opacity: 0, filter: 'blur(10px)', x: -12, y: 9 },
   show: {
     opacity: 1,
     filter: 'blur(0px)',
+    x: 0,
     y: 0,
     transition: { duration: 0.42, ease: snap },
   },
@@ -138,7 +152,9 @@ export function Demo() {
           <h2 className="vapor" style={{ margin: 0, fontSize: 'var(--step-5)', lineHeight: 1.0, letterSpacing: '-0.02em' }}>
             Say something.
             <br />
-            <span style={{ opacity: 0.62 }}>Watch it condense.</span>
+            {/* the words are still vapor here — white, not yet condensed. A blue
+                accent on the blue sky fails AA (1.9:1); the italic carries the accent. */}
+            <span style={{ color: 'var(--cloud-white)', fontStyle: 'italic' }}>Watch it condense.</span>
           </h2>
         </header>
 
@@ -168,6 +184,22 @@ export function Demo() {
                 'linear-gradient(100deg, rgba(7,19,42,0.88) 0%, rgba(7,19,42,0.84) 40%, rgba(7,19,42,0.42) 47%, rgba(7,19,42,0) 53%)',
             }}
           />
+
+          {/* PRECIPITATION — the condensation falling at the seam. Droplet-streaks
+              rain down where vapor meets ground; they intensify the moment the voice
+              is in flight and condensing. */}
+          <div
+            className={`condense-seam${phase === 'listening' || phase === 'thinking' || phase === 'reveal' ? ' is-active' : ''}`}
+            aria-hidden
+          >
+            {SEAM_DRIPS.map((d) => (
+              <span
+                key={d.left}
+                className="drip"
+                style={{ left: `${d.left}%`, animationDelay: `${d.delay}s`, animationDuration: `${d.dur}s` }}
+              />
+            ))}
+          </div>
 
           {/* VAPOR — you say */}
           <div
@@ -235,8 +267,12 @@ export function Demo() {
             className="condense-ink"
             style={{
               position: 'relative',
-              background: 'linear-gradient(180deg, #FBFCFE 0%, #F2F6FC 100%)',
-              borderLeft: '1px solid rgba(255,255,255,0.4)',
+              // the ground. Its left edge is the seam: a thin mist where the dark
+              // cloud bleeds in and resolves to Paper — so the two halves read as one
+              // continuous condensation field, not two boxes with a rule between them.
+              background:
+                'linear-gradient(100deg, rgba(7,19,42,0.40) 0%, rgba(7,19,42,0) 6%), linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%)',
+              borderLeft: 'none',
               display: 'flex',
               flexDirection: 'column',
               gap: '1.2rem',
@@ -316,7 +352,7 @@ export function Demo() {
             className="condense-controls"
             style={{
               gridColumn: '1 / -1',
-              background: '#F2F6FC',
+              background: 'var(--paper-deep)',
               borderTop: '1px solid var(--rule)',
               padding: 'clamp(1.1rem, 3vw, 1.6rem) clamp(1.6rem, 3.5vw, 2.6rem)',
               display: 'flex',
@@ -473,7 +509,7 @@ function MicButton({ active, disabled, onClick }: { active: boolean; disabled: b
         border: '1px solid var(--graphite)',
         background: active ? 'var(--live)' : 'var(--graphite)',
         borderColor: active ? 'var(--live)' : 'var(--graphite)',
-        color: '#FBFCFE',
+        color: 'var(--paper)',
         fontSize: 'var(--step--1)',
         fontWeight: 500,
         letterSpacing: '0.04em',
@@ -515,7 +551,7 @@ function PillButton({ onClick, filled, children }: { onClick: () => void; filled
       onMouseEnter={(e) => {
         if (!filled) return;
         e.currentTarget.style.background = 'var(--graphite)';
-        e.currentTarget.style.color = '#FBFCFE';
+        e.currentTarget.style.color = 'var(--paper)';
       }}
       onMouseLeave={(e) => {
         if (!filled) return;

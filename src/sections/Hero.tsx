@@ -59,7 +59,7 @@ export function Hero() {
         >
           Speak in clouds.
           <br />
-          <span style={{ color: 'var(--cloud-white)', opacity: 0.66 }}>Land in ink.</span>
+          <span style={{ color: 'var(--cobalt)', fontStyle: 'italic' }}>Land in ink.</span>
         </h1>
 
         {/* the literal promise — crisp Satoshi, the precision register */}

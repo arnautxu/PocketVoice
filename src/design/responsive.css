@@ -25,7 +25,15 @@
 
   /* The condensation card stacks: vapor over ink, the divider becomes a top rule. */
   .condense-card { grid-template-columns: 1fr !important; }
-  .condense-ink { border-left: 0 !important; border-top: 1px solid var(--rule) !important; }
+  /* Stacked: drop the left vapor-bleed (it would streak down the left edge) and the
+     vertical precipitation seam (anchored to the two-column boundary); the top rule
+     is the seam now. */
+  .condense-ink {
+    border-left: 0 !important;
+    border-top: 1px solid var(--rule) !important;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%) !important;
+  }
+  .condense-seam { display: none !important; }
 
   /* TEXT block gets a short left rule so the voice→text relationship survives. */
   .transcript > *:last-child {

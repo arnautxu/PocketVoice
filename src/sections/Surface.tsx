@@ -32,8 +32,8 @@ const EXAMPLES = [
 
 export function Surface() {
   return (
-    <section id="surface" className="section-light alt-light" style={{ padding: 'clamp(3.5rem, 8vh, 6rem) 0' }}>
-      <div className="rail" style={{ display: 'grid', gap: 'clamp(2rem, 4.5vh, 3rem)' }}>
+    <section id="surface" className="section-light alt-light" style={{ padding: 'clamp(3rem, 6.5vh, 5rem) 0' }}>
+      <div className="rail" style={{ display: 'grid', gap: 'clamp(1.5rem, 3.5vh, 2.25rem)' }}>
         {/* Header — asymmetric, left */}
         <header className="grid-12">
           <div style={{ gridColumn: 'span 8', display: 'grid', gap: '1.5rem' }}>
@@ -42,7 +42,9 @@ export function Surface() {
               Any app &middot; one press
             </span>
             <h2 className="ink-out" style={{ margin: 0, fontSize: 'var(--step-4)', lineHeight: 1.04, fontWeight: 600 }}>
-              Same voice. <span style={{ color: 'var(--ink-1)', fontWeight: 500 }}>Right register.</span>
+              {/* landed on light ground — the accent deepens to Blue Deep so the
+                  blue-italic signature holds AA on the pale band (Pocket Blue is 2.9:1). */}
+              Same voice. <span style={{ color: 'var(--blue-deep)', fontStyle: 'italic', fontWeight: 500 }}>Right register.</span>
             </h2>
             <p style={{ margin: 0, maxWidth: '52ch', fontSize: 'var(--step-1)', lineHeight: 1.5, color: 'var(--ink-1)' }}>
               Pocket Voice reads the surface before it writes. A thought in Linear becomes a ticket;
@@ -57,10 +59,10 @@ export function Surface() {
             <li
               key={ex.surface}
               className="transcript surface-row reveal"
-              style={{ padding: 'clamp(1.1rem, 2.6vh, 1.6rem) 0', borderTop: '1px solid var(--rule)' }}
+              style={{ padding: 'clamp(0.8rem, 2vh, 1.15rem) 0', borderTop: '1px solid var(--rule)' }}
             >
               {/* VOICE — vapor */}
-              <div style={{ display: 'grid', gap: '0.9rem' }}>
+              <div style={{ display: 'grid', gap: '0.6rem' }}>
                 <span className="track-label">{ex.surface}</span>
                 <p className="vapor" style={{ margin: 0, fontSize: 'var(--step-1)', color: 'var(--ink-2)', textShadow: 'none' }}>
                   &ldquo;{ex.spoken}&rdquo;
@@ -70,9 +72,9 @@ export function Surface() {
               <div className="transcript-rule" aria-hidden />
 
               {/* TEXT — ink */}
-              <div style={{ display: 'grid', gap: '0.9rem' }}>
+              <div style={{ display: 'grid', gap: '0.6rem' }}>
                 <span className="track-label" style={{ justifySelf: 'start' }}>{ex.register}</span>
-                <p className="ink-out" style={{ margin: 0, fontSize: 'var(--step-2)', lineHeight: 1.28, fontWeight: 500 }}>
+                <p className="ink-out" style={{ margin: 0, fontSize: 'var(--step-1)', lineHeight: 1.32, fontWeight: 500 }}>
                   {ex.output}
                 </p>
               </div>
@@ -81,7 +83,7 @@ export function Surface() {
         </ul>
 
         {/* Stats + a product slot for the surface picker */}
-        <div className="grid-12 surface-stats" style={{ alignItems: 'center', paddingTop: 'clamp(1rem, 3vh, 2rem)' }}>
+        <div className="grid-12 surface-stats" style={{ alignItems: 'center', paddingTop: 'clamp(0.5rem, 2vh, 1.25rem)' }}>
           <div style={{ gridColumn: 'span 6', display: 'flex', gap: 'clamp(2rem, 6vw, 4.5rem)', flexWrap: 'wrap' }}>
             <Stat figure="108" label="languages — switch mid-sentence, no toggle" />
             <Stat figure="94%" label="tone match — human-rated, internal corpus" />

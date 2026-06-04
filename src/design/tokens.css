@@ -1,48 +1,59 @@
-/* Pocket Voice — design tokens · "The Transcript" system.                      */
-/* The page is a document writing itself: VOICE (provisional) resolves into TEXT */
-/* (finished). Warm bone paper grounds it. Cobalt = composed/resolved. Vermilion */
-/* = live/now. Two complementary accents carry one idea. Decisions, not defaults.*/
+/* Pocket Voice — design tokens · Brand Manual palette.                          */
+/* The page is an atmospheric descent: spoken VOICE (vapor) condenses into finished*/
+/* TEXT (ink). Pocket Blue is THE accent. Paper is the only light ground. The      */
+/* descent is built from the real brand blues (Blue Deep → Pocket Blue). Functional*/
+/* colors (Success/Warning/Danger) are reserved for functional states only.        */
 
 :root {
-  /* ── Ground — warm bone paper ────────────────────────────────────────────── */
-  --paper:      #F5F2EC;  /* the page                                            */
-  --paper-deep: #ECE7DD;  /* recessed panels · text-side wash · asset slots      */
-  --paper-edge: #E2DCCF;  /* deeper edge for slot borders / fills                */
+  /* ── Brand core (exact Manual tokens — never invent a hex) ───────────────── */
+  --pocket-blue: #0E8ECE;  /* PRIMARY accent — links, CTA, live dot, counters    */
+  --blue-deep:   #0066A4;  /* deeper brand blue — hover/pressed, descent         */
+  --pocket-black:#1B1A19;  /* primary ink                                        */
+  --brand-graphite: #3A3937; /* secondary ink                                    */
+  --ash:         #8A8783;  /* tertiary ink / metadata                            */
+  --fog:         #E8E6E2;  /* warm neutral panel / recessed ground               */
+  --brand-paper: #FAFAF8;  /* the only light background — warm, not blue-tinted   */
 
-  /* ── Ink — warm near-black scale ─────────────────────────────────────────── */
-  --ink-0: #19171A;  /* primary text          · 16:1 on paper                   */
-  --ink-1: #57534B;  /* secondary text        · 6.9:1 on paper (AA)             */
-  --ink-2: #6B655A;  /* tertiary / metadata   · 5.2:1 on paper (AA, small text) */
+  /* ── Ground — warm Paper ─────────────────────────────────────────────────── */
+  --paper:      var(--brand-paper);  /* the page                                 */
+  --paper-deep: var(--fog);          /* recessed panels · asset slots            */
+  --paper-edge: #DDDAD5;             /* deeper Fog edge for slot borders / fills  */
 
-  /* ── Accents — the two-color narrative, both drawn from the sky ───────────── */
-  /* The "composed / resolved" accent is no longer a generic indigo: it is the     */
-  /* azure of clear high-altitude sky — the same blue family as the cloud layer    */
-  /* (--cloud-blue-0/1), pulled brighter for a CTA. Every color on the page now    */
-  /* comes from the atmosphere. The warm --live vermilion is the low-sun signal.   */
-  --cobalt:      #1D5FA8;  /* TEXT / composed / resolved — sky azure (links, CTA)  */
-  --cobalt-deep: #154A82;  /* hover / pressed — deeper azure                       */
-  --live:        #F4471E;  /* VOICE / live / recording / now — rec dot, counter   */
-  --live-deep:   #D63A14;  /* hover / pressed                                     */
-  --live-wash:   rgba(244, 71, 30, 0.10);
-  --cobalt-wash: rgba(29, 95, 168, 0.08);
+  /* ── Ink scale ───────────────────────────────────────────────────────────── */
+  --ink-0: var(--pocket-black);     /* primary text   · ~16:1 on Paper           */
+  --ink-1: var(--brand-graphite);   /* secondary text · ~9.6:1 on Paper (AA)     */
+  --ink-2: var(--ash);              /* tertiary / metadata (large/decorative)    */
+
+  /* ── Accent — Pocket Blue carries the whole narrative ─────────────────────── */
+  --cobalt:      var(--pocket-blue); /* accent — links, CTA, live signal, counter */
+  --cobalt-deep: var(--blue-deep);   /* hover / pressed — Blue Deep               */
+  --live:        var(--pocket-blue); /* live / recording / now — recolored to brand
+                                        accent (the coral was Danger, decorative use
+                                        is forbidden) — rec dot, counter, lead bar  */
+  --live-deep:   var(--blue-deep);   /* hover / pressed                           */
+  --live-wash:   rgba(14, 142, 206, 0.10);
+  --cobalt-wash: rgba(14, 142, 206, 0.08);
 
   /* ══ THE SKY — altitude palette ═══════════════════════════════════════════ */
   /* The page is an atmosphere. Scroll = descent. Color is derived from a real    */
   /* sky gradient: stratosphere navy at the top, a warm horizon band, cloud white,*/
   /* graphite ink for resolved text on the ground. Gradients are first-class.     */
-  --strato-0:     #081530;  /* deepest stratosphere navy — page top              */
-  --strato-1:     #102347;
-  --cloud-blue-0: #1E3A66;  /* upper cloud layer                                  */
-  --cloud-blue-1: #3A5B86;
-  --cloud-blue-2: #6E8FB8;  /* cloud break                                        */
-  --horizon-warm: #C9B79A;  /* the one warm band — vapor catching low light       */
-  --horizon-haze: #E6DECF;
-  --air:          #EEF3FA;  /* clearing air                                       */
-  --ground:       #F7FAFE;  /* near-white sky — the landing                       */
-  --cloud-white:  #EAF0F8;  /* type set into the sky                              */
-  --graphite:     #11151C;  /* resolved ink on the ground — surgically crisp      */
-  --graphite-1:   #39414E;  /* secondary ink on ground · 9.7:1 on --ground (AA)   */
-  --graphite-2:   #4F5663;  /* tertiary ink on ground — holds AA into the warm band */
+  /* The descent is the brand "Voice" gradient stood upright: Pocket Black at the   */
+  /* top, through Blue Deep, arriving at Pocket Blue, then breaking into Paper.      */
+  --strato-0:     #1B1A19;  /* Pocket Black — page top                            */
+  --strato-1:     #102233;
+  --cloud-blue-0: #003D6B;  /* deep brand blue (Voice-gradient mid)               */
+  --cloud-blue-1: #00568F;
+  --cloud-blue-2: #0066A4;  /* Blue Deep — cloud break                            */
+  --horizon-warm: #DCEAF1;  /* lit cloud underside, cooling toward Paper          */
+  --horizon-haze: #ECEDE9;
+  --air:          #ECEDE9;  /* clearing air                                       */
+  --ground:       var(--brand-paper);  /* Paper — the landing                     */
+  --cloud-white:  var(--brand-paper);  /* warm Paper type set into the dark sky   */
+  --graphite:     var(--pocket-black); /* resolved ink on the ground              */
+  --graphite-1:   var(--brand-graphite); /* secondary ink on ground (AA)          */
+  --graphite-2:   #57544F;  /* tertiary ink on ground — darker than Ash to hold AA
+                               across the pale surface band (small text)          */
 
   /* The descent — pinned to the DOM, not to fixed scroll percentages. Section     */
   /* heights shift with viewport width, so a single fixed-% body gradient drifts    */
@@ -60,27 +71,24 @@
   /* The 96.5% hold on --sky-descent keeps the break inside the Demo's bottom        */
   /* padding, below its last line, so cloud-white type never sits on light air.     */
   --sky-descent: linear-gradient(180deg,
-    #081530 0%,
-    #0F2143 20%,
-    #19335F 42%,
-    #284668 64%,
-    #37597E 84%,
-    #486485 96.5%,   /* demo floor — dark; last line sits above this   */
-    #C7D6E6 100%);   /* break through the deck into lit air — Surface top */
-  /* Surface rides the lit underside of the cloud deck warming toward the horizon:  */
-  /* a pale powder-blue cooling band that turns to warm bone. Kept deliberately     */
-  /* PALE so graphite ink (incl. --graphite-2 tertiary) holds WCAG AA across it.    */
+    #1B1A19 0%,       /* Pocket Black — top of the atmosphere           */
+    #102233 14%,
+    #003D6B 34%,      /* deep brand blue                                */
+    #00568F 56%,
+    #0066A4 76%,      /* Blue Deep                                      */
+    #0A80BC 95%,      /* nearly Pocket Blue — demo floor; white type AA */
+    #CDE6F4 100%);    /* break through into lit air — Surface top       */
+  /* Surface rides the lit underside of the cloud deck cooling toward Paper: a pale  */
+  /* powder Pocket-Blue band resolving to warm Paper. Kept deliberately PALE so      */
+  /* graphite ink (incl. --graphite-2 tertiary) holds WCAG AA across it.             */
   --surface-band: linear-gradient(180deg,
-    #C7D6E6 0%,       /* powder blue — matches the sky-descent seam     */
-    #CFD7DE 34%,
-    #DDD8D0 70%,
-    #E8E0D2 100%);    /* warm bone — the horizon, matches ground seam   */
+    #CDE6F4 0%,       /* pale Pocket Blue — matches the sky-descent seam */
+    #DCEAF1 32%,
+    #ECEDE9 66%,
+    #FAFAF8 100%);    /* Paper — matches the ground seam                 */
   --ground-rise: linear-gradient(180deg,
-    #E8E0D2 0%,       /* warm bone — matches the Surface seam exactly   */
-    #EDE9E2 12%,
-    #F0F2F5 30%,
-    #F4F7FB 60%,
-    #F7FAFE 100%);
+    #FAFAF8 0%,       /* Paper — matches the Surface seam exactly        */
+    #FAFAF8 100%);
 
   /* Legacy single-gradient alias (no longer applied to the body). */
   /* Stops are tuned to the measured section offsets: the dark zone (cloud-white   */
@@ -116,19 +124,20 @@
   /* ── Legacy brand aliases → remapped onto the new system ──────────────────── */
   /* Keeps existing call sites (Nav, Footer, InstallButton, StoreBadges, Wordmark)*/
   /* rendering in the new palette with no edits.                                  */
-  --pv-blue:      var(--cobalt);
-  --pv-blue-deep: var(--cobalt-deep);
-  --pv-black:     var(--ink-0);
-  --pv-graphite:  var(--ink-1);
-  --pv-ash:       var(--ink-2);
-  --pv-fog:       var(--paper-deep);
-  --pv-paper:     var(--paper);
-  --pv-success:   #2F8F5B;
-  --pv-warning:   #C77A1A;
-  --pv-danger:    var(--live-deep);
+  --pv-blue:      var(--pocket-blue);
+  --pv-blue-deep: var(--blue-deep);
+  --pv-black:     var(--pocket-black);
+  --pv-graphite:  var(--brand-graphite);
+  --pv-ash:       var(--ash);
+  --pv-fog:       var(--fog);
+  --pv-paper:     var(--brand-paper);
+  /* Functional only — never decorative (Manual). */
+  --pv-success:   #3FB67A;
+  --pv-warning:   #E8A33D;
+  --pv-danger:    #D94B3A;
 
   --accent-soft: var(--cobalt-wash);
-  --accent-glow: rgba(29, 95, 168, 0.16);
+  --accent-glow: rgba(14, 142, 206, 0.16);
 
   --color-ink:    var(--ink-0);
   --color-paper:  var(--paper);
@@ -151,7 +160,7 @@
   --gray-5: var(--ink-1);
   --color-success: var(--pv-success);
   --color-warning: var(--pv-warning);
-  --color-error:   var(--pv-danger);
+  --color-error:   var(--pv-danger);  /* Danger #D94B3A — functional states only */
 
   --hairline:        var(--rule-soft);
   --hairline-strong: var(--rule-strong);
@@ -206,7 +215,7 @@
   --shadow-soft: 0 1px 2px rgba(25, 23, 26, 0.04),
                  0 18px 44px -22px rgba(25, 23, 26, 0.18);
   --shadow-edge: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  --shadow-blue: 0 8px 22px -10px rgba(29, 95, 168, 0.40);
+  --shadow-blue: 0 8px 22px -10px rgba(14, 142, 206, 0.40);
 
   /* ── Layout ──────────────────────────────────────────────────────────────── */
   --gutter:    clamp(1.25rem, 4vw, 2.5rem);
