@@ -280,6 +280,94 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   to   { transform: translateY(-5px); }
 }
 
+/* ── Hero cloud marks — "Expressive · Cloud" brand assets drifting in the sky ────
+ * Real cloud-textured PNGs (app logos + filler/feature word-clouds) composed around
+ * the headline. Placed WHOLE (never cropped), as-is (no tint/blend), no drop shadow.
+ * Depth comes from scale + opacity + a touch of blur set per-instance inline. The
+ * layer sits above the photographic cloud sea but BELOW the type, and never receives
+ * pointer events. */
+.hero-clouds {
+  position: absolute;
+  inset: 0;
+  z-index: 1;            /* above .cloud-bleed/.hero-scrim (-1), below the rail (2) */
+  overflow: hidden;
+  pointer-events: none;
+  /* light scroll parallax — the cloud bank drifts slower than the phone for depth */
+  transform: translate3d(0, calc(var(--hero-shift, 0) * 0.045px), 0);
+  will-change: transform;
+}
+
+/* ── Two-column hero: type left, the Speak-to-Edit phone right ─────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.82fr);
+  align-items: center;
+  column-gap: var(--space-md);
+}
+.hero-text { min-width: 0; }
+/* Right cell — centres the device and carries the parallax (a touch faster than the
+ * clouds). The inner <img> floats, so the two transforms compose on separate nodes. */
+.hero-phone-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  transform: translate3d(0, calc(var(--hero-shift, 0) * 0.11px), 0);
+  will-change: transform;
+}
+.hero-phone {
+  height: clamp(380px, 64vh, 600px);
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 1578 / 3224;   /* reserves space → no layout shift */
+  /* soft device shadow lifts it off the bright cloud sea (it is a device, not a
+   * cloud mark — the no-shadow rule is for the marks) */
+  filter: drop-shadow(0 28px 48px rgba(8, 20, 40, 0.34));
+  animation: pv-phone-float 11s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes pv-phone-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%      { transform: translate3d(0, -8px, 0) rotate(0.4deg); }
+}
+.hero-cloud {
+  position: absolute;
+  height: auto;          /* width + aspect-ratio set inline → no layout shift */
+  user-select: none;
+  will-change: transform;
+  animation: pv-cloud-float 12s ease-in-out infinite;
+}
+/* Filler clouds (".umm", "...Actually") drift upward and dissolve as they rise —
+ * speech becoming clean text. Base visibility via --rise-peak so reduced-motion can
+ * still show them. */
+.hero-cloud.hc-rise {
+  animation-name: pv-cloud-rise;
+  will-change: transform, opacity;
+}
+@keyframes pv-cloud-float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
+}
+@keyframes pv-cloud-rise {
+  0%   { transform: translateY(14px); opacity: 0; }
+  20%  { opacity: var(--rise-peak, 0.5); }
+  72%  { opacity: calc(var(--rise-peak, 0.5) * 0.28); }
+  100% { transform: translateY(-52px); opacity: 0; }
+}
+/* Centre-ish clouds (gmail, umm, actually) only appear once the rail centres and the
+ * headline is proportionally narrow — below that they'd crowd the type. */
+@media (max-width: 1139px) {
+  .hero-cloud.hc-wide { display: none !important; }
+}
+/* Reduced motion: hold the clouds still and keep the risers visible (their animation
+ * rests at opacity 0, which would otherwise hide them). */
+@media (prefers-reduced-motion: reduce) {
+  .hero-cloud { animation: none !important; transform: none !important; }
+  .hero-cloud.hc-rise { opacity: var(--rise-peak, 0.45) !important; }
+  .hero-clouds, .hero-phone-col, .hero-phone { animation: none !important; transform: none !important; }
+}
+
 /* INK — resolved output. Satoshi, tight, tabular-crisp. NEVER blurred. */
 .ink-out {
   font-family: var(--font-text);

@@ -1,16 +1,39 @@
+import { useEffect, useRef } from 'react';
 import { StoreBadges } from '../components/StoreBadges';
+import { HeroClouds } from '../components/HeroClouds';
+import { HeroPhone } from '../components/HeroPhone';
 
 /* ══════════════════════════════════════════════════════════════════════════════
- * HERO — the full sky. The signature opening: a huge Erode headline set INTO the
- * stratosphere, not contained in a card. A cloud sea bleeds up from the bottom and
- * dissolves into deep navy; a gradient scrim keeps the type legible while the sky
- * still owns the frame. Speech is vapor up here; the page will condense it to ink
- * as you descend. No mechanic yet — that is the centerpiece below.
+ * HERO — a two-column product opening. The huge Erode headline + copy + CTAs sit in
+ * the left column; the Speak-to-Edit phone is featured on the right, emerging from a
+ * cloud bank. The "Expressive · Cloud" brand marks orbit the phone with depth, and
+ * the ".umm"/"…actually" filler clouds dissolve upward — echoing the struck words on
+ * the screen. A cloud sea bleeds up from the bottom; a left-anchored scrim keeps the
+ * type legible while the right side stays bright behind the device.
  * ════════════════════════════════════════════════════════════════════════════ */
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Light scroll parallax: phone + clouds ride --hero-shift at different rates for
+  // depth. Passive + rAF-throttled, transform-only, disabled under reduced motion.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      el.style.setProperty('--hero-shift', String(Math.min(window.scrollY, el.offsetHeight)));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="top"
       className="section-light alt-dark hero-sky"
       style={{
@@ -23,21 +46,23 @@ export function Hero() {
         // start the content high (just below the nav) instead of centring it in the
         // viewport, which left an empty top third reading as default padding. Nav
         // clearance + one deliberate step above; a full --space-xl below before the
-        // descent. The cloud sea still fills the open sky beneath the claims.
-        justifyContent: 'flex-start',
+        // descent.
+        justifyContent: 'center',
         paddingTop: 'clamp(6rem, 11vh, 8rem)',
         paddingBottom: 'var(--space-xl)',
       }}
     >
       {/* full-bleed cloud sea, rising from the bottom into the navy */}
       <div className="cloud-bleed cloud-hero" aria-hidden />
-      {/* scrim — the type lives in the lower atmosphere, where the cloud sea reads
-          brightest, so the veil is anchored at the bottom: it keeps every line AA
-          over even the whitest cumulus while the cloud still billows, lit, in the
-          band above the copy. The sky owns the frame; the scrim only earns legibility. */}
+      {/* scrim — left-anchored veil keeps the type column AA over the cloud sea while
+          the right side stays bright behind the phone. */}
       <div className="sky-scrim hero-scrim" aria-hidden />
 
-      <div className="rail" style={{ width: '100%' }}>
+      {/* brand cloud marks orbiting the phone (behind it; one front accent at z-3) */}
+      <HeroClouds />
+
+      <div className="rail hero-grid" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
+        <div className="hero-text">
         {/* eyebrow */}
         <span
           className="rise track-label"
@@ -140,6 +165,10 @@ export function Hero() {
           <Claim figure="108" label="languages, no toggle" />
           <Claim figure="94%" label="tone match, human-rated" />
         </ul>
+        </div>
+
+        {/* the product, featured — emerging from the cloud bank */}
+        <HeroPhone />
       </div>
     </section>
   );
