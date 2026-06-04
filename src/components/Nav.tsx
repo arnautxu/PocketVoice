@@ -1,15 +1,22 @@
-import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { InstallButton } from './InstallButton';
 import { Wordmark } from './Wordmark';
 
 export function Nav() {
-  const { scrollY } = useScroll();
+  // A plain scroll listener (not framer's useScroll) so the state is reliable in
+  // every runtime. The bar carries a stratosphere-navy scrim at ALL times — over
+  // the navy hero top it's invisible, but it's already there to catch the bright
+  // cloud field and warm band below, so the logo + links never wash out. Scrolling
+  // only deepens it slightly and draws the hairline.
   const [solid, setSolid] = useState(false);
 
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    setSolid(y > 40);
-  });
+  useEffect(() => {
+    const onScroll = () => setSolid(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <motion.header
@@ -23,12 +30,12 @@ export function Nav() {
         right: 0,
         zIndex: 50,
         padding: '1.25ch 0',
-        // Over the sky the bar is a translucent navy that keeps light type legible
-        // at every altitude — a strip of stratosphere that follows you down.
-        background: solid ? 'rgba(9, 20, 44, 0.55)' : 'transparent',
-        borderBottom: solid ? '1px solid var(--rule-sky-soft)' : '1px solid transparent',
-        backdropFilter: solid ? 'blur(16px) saturate(1.3)' : 'none',
-        WebkitBackdropFilter: solid ? 'blur(16px) saturate(1.3)' : 'none',
+        // Always-on navy scrim, dense enough (≥0.82) that white type clears WCAG AA
+        // even over the brightest near-white cloud; deepens to 0.9 once scrolled.
+        background: solid ? 'rgba(9, 20, 44, 0.9)' : 'rgba(9, 20, 44, 0.82)',
+        borderBottom: solid ? '1px solid rgba(234, 240, 248, 0.16)' : '1px solid transparent',
+        backdropFilter: 'blur(16px) saturate(1.3)',
+        WebkitBackdropFilter: 'blur(16px) saturate(1.3)',
         ['--ink-0' as string]: 'var(--cloud-white)',
         ['--ink-1' as string]: 'rgba(234, 240, 248, 0.82)',
         transition:

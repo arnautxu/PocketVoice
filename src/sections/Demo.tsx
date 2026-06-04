@@ -51,6 +51,23 @@ function polish(raw: string): string {
 }
 
 const ease = [0.4, 0, 0.2, 1] as const;
+const snap = [0.16, 1, 0.3, 1] as const;
+
+/* Word-by-word condensation for the resolved ink: each word precipitates out of a
+ * blur and settles sharp, staggered left→right — vapor becoming crisp text. */
+const inkContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.04 } },
+};
+const inkWord = {
+  hidden: { opacity: 0, filter: 'blur(10px)', y: 9 },
+  show: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    y: 0,
+    transition: { duration: 0.42, ease: snap },
+  },
+};
 
 export function Demo() {
   const [phase, setPhase] = useState<Phase>('idle');
@@ -168,16 +185,30 @@ export function Demo() {
               <span className="rec-dot" aria-hidden style={{ opacity: phase === 'listening' ? 1 : 0.4 }} />
               you say
             </span>
-            <p
+            <motion.p
               aria-live="polite"
-              className={`vapor${showVapor ? '' : ' vapor-soft'}`}
+              className="vapor"
+              initial={false}
+              animate={
+                phase === 'thinking'
+                  // the moment of condensation: vapor is pulled across the seam and
+                  // evaporates — blurring out, lifting, drifting toward the ink side
+                  ? { filter: 'blur(16px)', opacity: 0, x: 52, y: -18 }
+                  : phase === 'reveal'
+                    // a faint residue lingers, soft against the razor-crisp ink
+                    ? { filter: 'blur(5px)', opacity: 0.32, x: 0, y: 0 }
+                    : showVapor
+                      // live speech: nearly sharp, still hanging in the air
+                      ? { filter: 'blur(0.6px)', opacity: 0.96, x: 0, y: 0 }
+                      // idle: unresolved vapor, soft and translucent
+                      : { filter: 'blur(6px)', opacity: 0.6, x: 0, y: 0 }
+              }
+              transition={{ duration: phase === 'thinking' ? 0.5 : 0.3, ease }}
               style={{
                 margin: 0,
                 fontSize: 'var(--step-3)',
                 minHeight: '2.4em',
-                filter: showVapor ? 'blur(0.6px)' : undefined,
-                opacity: showVapor ? 0.96 : undefined,
-                transition: 'filter 300ms var(--ease), opacity 300ms var(--ease)',
+                willChange: 'filter, transform, opacity',
               }}
             >
               {phase === 'unsupported' ? (
@@ -196,7 +227,7 @@ export function Demo() {
                   {phase === 'listening' && <LiveCaret />}
                 </span>
               )}
-            </p>
+            </motion.p>
           </div>
 
           {/* INK — Pocket Voice writes, on clear ground */}
@@ -236,9 +267,25 @@ export function Demo() {
               <AnimatePresence mode="wait">
                 {phase === 'reveal' ? (
                   <motion.div key="out" initial={false} style={{ display: 'grid', gap: '0.7rem' }}>
-                    <p className="ink-out condense-in" style={{ margin: 0, fontSize: 'var(--step-3)' }}>
-                      {polished}
-                    </p>
+                    {/* Precipitation: each word condenses out of the blur and settles
+                        razor-sharp, left to right, like droplets resolving on glass. */}
+                    <motion.p
+                      className="ink-out"
+                      variants={inkContainer}
+                      initial="hidden"
+                      animate="show"
+                      style={{ margin: 0, fontSize: 'var(--step-3)' }}
+                    >
+                      {polished.split(' ').map((w, i) => (
+                        <motion.span
+                          key={`${i}-${w}`}
+                          variants={inkWord}
+                          style={{ display: 'inline-block', marginRight: '0.28em', willChange: 'filter, transform, opacity' }}
+                        >
+                          {w}
+                        </motion.span>
+                      ))}
+                    </motion.p>
                     <div className="ink-baseline" aria-hidden />
                   </motion.div>
                 ) : (

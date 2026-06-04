@@ -33,7 +33,9 @@ export function Close() {
           <h2 className="vapor" style={{ margin: 0, fontSize: 'var(--step-5)', lineHeight: 1.0, letterSpacing: '-0.02em', maxWidth: '11ch', color: 'var(--graphite)', textShadow: 'none' }}>
             Press once.
             <br />
-            <span style={{ opacity: 0.5 }}>Walk away.</span>
+            {/* de-emphasized second line — but via a real ink tone (graphite-2,
+                ~6.7:1 on the cloud), not low opacity that drops it below AA */}
+            <span style={{ color: 'var(--graphite-2)' }}>Walk away.</span>
           </h2>
           <p style={{ margin: 0, maxWidth: '42ch', fontSize: 'var(--step-1)', lineHeight: 1.6, color: 'var(--ink-1)' }}>
             Pocket Voice exists to get out of your way. Speak your thought; by the time your hand
@@ -49,11 +51,13 @@ export function Close() {
         <div
           style={{
             gridColumn: '7 / -1',
-            border: '1px solid rgba(17, 21, 28, 0.10)',
+            border: '1px solid rgba(17, 21, 28, 0.12)',
             borderRadius: 12,
-            background: 'rgba(255, 255, 255, 0.86)',
-            backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)',
+            // raised toward opaque so the Free/Pro values never read as faint gray
+            // over a bright cloud showing through — solid contrast ground for type
+            background: 'rgba(255, 255, 255, 0.94)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             overflow: 'hidden',
             boxShadow: '0 30px 70px -34px rgba(8, 22, 48, 0.28)',
           }}
@@ -84,8 +88,8 @@ export function Close() {
                 borderBottom: i < ROWS.length - 1 ? '1px solid var(--rule)' : 'none',
               }}
             >
-              <span style={{ color: 'var(--graphite-2)', fontSize: 'var(--step--1)', letterSpacing: '0.04em' }}>{r.label}</span>
-              <span style={{ color: 'var(--graphite-1)', fontSize: 'var(--step-0)' }}>{r.free}</span>
+              <span style={{ color: 'var(--graphite-1)', fontSize: 'var(--step--1)', letterSpacing: '0.04em', fontWeight: 500 }}>{r.label}</span>
+              <span style={{ color: 'var(--graphite)', fontSize: 'var(--step-0)', fontWeight: 500 }}>{r.free}</span>
               <span style={{ color: 'var(--graphite)', fontSize: 'var(--step-0)', fontWeight: 600 }}>{r.pro}</span>
             </div>
           ))}

@@ -36,15 +36,21 @@ export default function App() {
     <>
       <Nav />
       <main style={{ position: 'relative', zIndex: 1 }}>
-        {/* The descent, anchored to the DOM: the sky zone (cloud-white type) holds
-            dark through the live demo, then breaks through the warm horizon into the
-            ground zone (graphite type). The two share --horizon-warm at the seam. */}
+        {/* The descent, anchored to the DOM, in three pieces that meet at shared
+            colors so the join is seamless at any width: the sky zone (cloud-white
+            type) holds dark through the live demo, breaks through the cloud deck into
+            the surface zone — a pale lit band riding the cloud underside toward the
+            horizon (graphite type) — then settles into the ground zone's clear,
+            near-white landing. Seams: sky→surface at powder-blue, surface→ground at
+            warm bone. */}
         <div className="sky-zone">
           <Hero />
           <Demo />
         </div>
-        <div className="ground-zone">
+        <div className="surface-zone">
           <Surface />
+        </div>
+        <div className="ground-zone">
           <Close />
           <Footer />
         </div>

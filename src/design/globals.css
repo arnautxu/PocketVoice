@@ -66,8 +66,9 @@ body {
 /* The two descent pieces, each sized to its own content height (background-size
  * 100% 100% so the gradient stretches across the wrapper, not the viewport). They
  * meet at --horizon-warm, so the join is seamless. */
-.sky-zone    { background: var(--sky-descent) no-repeat; background-size: 100% 100%; }
-.ground-zone { background: var(--ground-rise) no-repeat; background-size: 100% 100%; }
+.sky-zone     { background: var(--sky-descent) no-repeat; background-size: 100% 100%; }
+.surface-zone { background: var(--surface-band) no-repeat; background-size: 100% 100%; }
+.ground-zone  { background: var(--ground-rise) no-repeat; background-size: 100% 100%; }
 
 /* Altitude-aware ink. Set on a section to resolve its text to the right register
  * for its height in the sky. */
