@@ -292,6 +292,11 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   z-index: 1;            /* above .cloud-bleed/.hero-scrim (-1), below the rail (2) */
   overflow: hidden;     /* belt-and-suspenders: clip any cloud spill to the hero */
   pointer-events: none;
+  /* 3D stage for the forward-travelling dolly: FLY marks + ambient WISPs animate on
+   * translateZ and the perspective makes them physically grow (tiny → huge) + spread
+   * radially from this centre vanishing point as they rush the camera. */
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
 }
 
 /* ── Two-column hero: type left, the Speak-to-Edit phone right ─────────────────── */
@@ -302,15 +307,22 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   column-gap: var(--space-md);
 }
 .hero-text { min-width: 0; }
-/* Right cell — centres the device and carries the parallax (a touch faster than the
- * clouds). The inner <img> floats, so the two transforms compose on separate nodes. */
+/* Right cell — centres the device and provides the perspective for its push-in. The
+ * .hero-phone-dolly child takes the scroll-driven translateZ (the device arrives from
+ * depth as the fly-through resolves); the inner <img> keeps its idle float, so the
+ * three transforms compose on separate nodes. */
 .hero-phone-col {
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  transform: translate3d(0, calc(var(--hero-shift, 0) * 0.11px), 0);
-  will-change: transform;
+  perspective: 1400px;
+}
+.hero-phone-dolly {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
 }
 .hero-phone {
   height: clamp(380px, 64vh, 600px);
@@ -327,36 +339,22 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
   50%      { transform: translate3d(0, -8px, 0) rotate(0.4deg); }
 }
+/* The marks are scroll-scrubbed in JS (Hero.tsx master timeline): the FLY group rides
+ * translateZ toward the camera, the REST group fades into place. No CSS keyframe loop —
+ * GSAP owns transform + opacity; we only declare the layer and the GPU hint here. */
 .hero-cloud {
   position: absolute;
   height: auto;          /* width + aspect-ratio set inline → no layout shift */
   user-select: none;
-  will-change: transform;
-  animation: pv-cloud-float 12s ease-in-out infinite;
-}
-/* Filler clouds (".umm", "...Actually") drift upward and dissolve as they rise —
- * speech becoming clean text. Base visibility via --rise-peak so reduced-motion can
- * still show them. */
-.hero-cloud.hc-rise {
-  animation-name: pv-cloud-rise;
   will-change: transform, opacity;
+  backface-visibility: hidden;   /* steadier compositing through the Z push-in */
 }
-@keyframes pv-cloud-float {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-14px); }
-  100% { transform: translateY(0); }
-}
-@keyframes pv-cloud-rise {
-  0%   { transform: translateY(14px); opacity: 0; }
-  20%  { opacity: var(--rise-peak, 0.5); }
-  72%  { opacity: calc(var(--rise-peak, 0.5) * 0.28); }
-  100% { transform: translateY(-52px); opacity: 0; }
-}
-/* Reduced motion: hold the clouds + phone still (risers, if any, kept visible). */
+/* While the travelling plays, the on-load .rise entrance is suppressed inside the hero
+ * — the master timeline owns the headline/copy settle so the two don't fight. */
+.htravel .hero-text .rise { animation: none !important; }
+/* Reduced motion: no travelling — hold the phone still in its resting state. */
 @media (prefers-reduced-motion: reduce) {
-  .hero-cloud { animation: none !important; transform: none !important; }
-  .hero-cloud.hc-rise { opacity: var(--rise-peak, 0.45) !important; }
-  .hero-phone-col, .hero-phone { animation: none !important; transform: none !important; }
+  .hero-phone-col, .hero-phone, .hero-phone-dolly { animation: none !important; transform: none !important; }
 }
 
 /* INK — resolved output. Satoshi, tight, tabular-crisp. NEVER blurred. */

@@ -75,17 +75,20 @@
   .hero-phone-col { transform: none !important; }
   .hero-phone { height: auto !important; width: clamp(208px, 56vw, 264px) !important; }
 
+  /* The forward dolly is desktop-only; on the stacked layout the FLY marks are hidden
+     and only the .hc-keep ambient pair (faster, dictionary) remain — a calm, simpler
+     push-in (handled in Hero.tsx). Flank the centred phone: faster upper-right,
+     dictionary lower-left. */
   .hero-cloud:not(.hc-keep) { display: none !important; }
-  /* flank the centred phone: slack upper-right, faster lower-left */
-  .hc-slack {
-    top: auto !important; bottom: 28% !important; right: 5% !important; left: auto !important;
-    width: clamp(56px, 15vw, 84px) !important; opacity: 0.95 !important; filter: none !important;
-  }
   .hc-faster {
-    top: auto !important; bottom: 4% !important; right: auto !important; left: 4% !important;
+    top: 6% !important; bottom: auto !important; right: 5% !important; left: auto !important;
+    width: clamp(56px, 15vw, 96px) !important;
+  }
+  .hc-dictionary {
     /* min/vw kept small so the mark fully clears the centred phone on a 375 screen
        (the phone is proportionally wide there); still ~full size on tablets. */
-    width: clamp(56px, 16vw, 116px) !important; opacity: 0.95 !important;
+    top: auto !important; bottom: 4% !important; right: auto !important; left: 4% !important;
+    width: clamp(56px, 16vw, 108px) !important;
   }
 }
 
