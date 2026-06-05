@@ -529,3 +529,198 @@ button, [role='button'], a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 720px) {
   nav .navlink { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ * TRY-IT DEMO — two columns (copy · transformation panel) with a circular mic and
+ * a live waveform that bridges the button up into the panel.
+ * ════════════════════════════════════════════════════════════════════════════ */
+.demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-lg);
+  /* top-align the copy with the top of the panel (not vertically centred) */
+  align-items: start;
+}
+.demo-copy { min-width: 0; }
+.demo-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin: clamp(2rem, 4vh, 2.75rem) 0 0;
+  padding: clamp(1.4rem, 3vh, 1.8rem) 0 0;
+  border-top: 1px solid var(--rule-sky);
+}
+
+/* Right column — panel, waveform, button stacked + centred so they read as one unit. */
+.demo-stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The transformation panel — a considered light object set into the dark sky: a
+ * vapor-cool top resolving to clean Paper at the ink end, with a hint of device frame. */
+.demo-panel {
+  width: 100%;
+  max-width: 440px;
+  min-height: clamp(420px, 56vh, 560px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--paper-edge);
+  background:
+    linear-gradient(180deg, #E7ECF1 0%, #F2F2EF 38%, var(--paper) 60%, var(--paper-deep) 100%);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 10px 26px -18px rgba(25, 23, 26, 0.18);
+  /* resolve ink tokens to dark so inner text reads on the bright panel */
+  --ink-0: var(--graphite);
+  --ink-1: var(--graphite-1);
+  --ink-2: var(--graphite-2);
+  color: var(--graphite);
+}
+.demo-panel-handle {
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--paper-edge);
+  margin: 0.8rem 0 0.1rem;
+  flex: none;
+}
+.demo-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+/* VAPOR — cool, soft tint fading down */
+.demo-zone--vapor { background: linear-gradient(180deg, rgba(222, 230, 238, 0.6) 0%, rgba(222, 230, 238, 0) 100%); }
+/* INK — clean ground deepening toward the base */
+.demo-zone--ink { background: linear-gradient(180deg, rgba(250, 250, 248, 0) 0%, var(--paper-deep) 100%); }
+.demo-heard {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--step-1);
+  line-height: 1.6;
+  letter-spacing: 0.002em;
+  color: var(--graphite-1);
+  min-height: 3em;
+}
+.demo-ink {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: var(--step-2);
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--pocket-black);
+}
+/* SEAM — the fall line between vapor and ink */
+.demo-seam {
+  position: relative;
+  height: 1px;
+  margin: 0 clamp(1.4rem, 3vw, 1.9rem);
+  background: linear-gradient(90deg, transparent, var(--rule) 18%, var(--rule) 82%, transparent);
+  flex: none;
+}
+.demo-seam-chevron {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  transform: translateX(-50%);
+  transition: opacity 320ms var(--ease);
+  animation: pv-chev 1.7s ease-in-out infinite;
+}
+@keyframes pv-chev {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.55; }
+  50%      { transform: translate(-50%, 3px); opacity: 1; }
+}
+
+/* Mic console — waveform bridges down a connector into the circular button. */
+.demo-mic {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+.demo-bridge {
+  width: min(300px, 80%);
+  display: flex;
+  justify-content: center;
+  filter: drop-shadow(0 0 8px rgba(14, 142, 206, 0.12));
+  transition: filter var(--t-micro) var(--ease);
+}
+.demo-bridge.is-live { filter: drop-shadow(0 0 12px rgba(14, 142, 206, 0.4)); }
+.demo-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 54px;
+  width: 100%;
+}
+.demo-wave-bar {
+  flex: 1 1 0;
+  max-width: 5px;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--pocket-blue), var(--blue-deep));
+  transform: scaleY(0.1);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.demo-connector {
+  width: 2px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(14, 142, 206, 0.7), rgba(14, 142, 206, 0.15));
+}
+.demo-mic-btn {
+  position: relative;
+  width: clamp(66px, 8vw, 82px);
+  height: clamp(66px, 8vw, 82px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  color: var(--paper);
+  background: radial-gradient(120% 120% at 50% 25%, #1AA0DC 0%, var(--pocket-blue) 55%, var(--blue-deep) 100%);
+  box-shadow: 0 12px 30px -8px rgba(14, 142, 206, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform var(--t-micro) var(--ease), box-shadow var(--t-micro) var(--ease), filter var(--t-micro) var(--ease);
+}
+.demo-mic-btn.is-live { background: radial-gradient(120% 120% at 50% 25%, var(--pocket-blue) 0%, var(--blue-deep) 70%, #004E80 100%); }
+.demo-mic-btn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 16px 34px -8px rgba(14, 142, 206, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+.demo-mic-btn:not(:disabled):active { transform: scale(0.95); }
+.demo-mic-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid var(--pocket-blue);
+  pointer-events: none;
+  animation: pv-pulse 1.6s ease-out infinite;
+}
+.demo-mic-ring--idle { opacity: 0.5; animation-duration: 2.8s; }
+.demo-mic-label {
+  margin-top: 0.85rem;
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--ink-1);
+  min-height: 1.4em;
+  display: inline-flex;
+  align-items: center;
+  gap: 1ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-mic-ring, .demo-mic-ring--idle, .demo-seam-chevron { animation: none; }
+}

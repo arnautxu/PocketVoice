@@ -44,6 +44,18 @@
   .surface-row { row-gap: 1rem; }
 }
 
+/* ─── ≤ 900 px — the Try-it demo stacks: copy first, panel + mic below ──────── */
+@media (max-width: 900px) {
+  .demo-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-md) !important;
+  }
+  /* centre the copy with the panel when stacked so the column reads as one piece */
+  .demo-copy { text-align: left; }
+  .demo-panel { max-width: 480px; }
+  .demo-stage { width: 100%; }
+}
+
 /* ─── ≤ 768 px — section grids stack ───────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Collapse the 12-col rail to a single column. Without resetting the track count
