@@ -3,6 +3,7 @@ import App from './App';
 import './design/fonts.css';
 import './design/globals.css';
 import './design/responsive.css';
+import './design/site.css';
 
 // Note: React.StrictMode is intentionally omitted - its dev-only double-invocation
 // of effects breaks GSAP's imperative fromTo/ScrollTrigger setup (tweens get stuck

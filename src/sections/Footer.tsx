@@ -1,105 +1,66 @@
 import { Wordmark } from '../components/Wordmark';
+import { COMPANY_JOBS, POCKET_SITE } from '../config/links';
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ * FOOTER — the big, in-brand close (anything-style): a deep blue cloud field with
+ * the name set enormous across the base. The descent lands on Paper above; the
+ * footer is the one deliberate return to the sky — clouds + blue, name in lights.
+ * ════════════════════════════════════════════════════════════════════════════ */
 
 export function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer
-      className="alt-light"
-      style={{
-        paddingBlock: '4ch 5ch',
-        marginTop: '4ch',
-      }}
-    >
-      {/* Hairline separator */}
-      <div className="rail" aria-hidden="true" style={{ marginBottom: '3ch' }}>
-        <div style={{ height: 1, background: 'var(--rule)' }} />
-      </div>
+    <footer className="big-footer">
+      <div className="big-footer-clouds" aria-hidden />
 
-      <div
-        className="rail"
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: '2rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        <div style={{ display: 'grid', gap: '1ch' }}>
-          <Wordmark />
-          <span style={{ color: 'var(--ink-2)', fontSize: 'var(--step--1)' }}>
-            From Pocket · Open Vision Engineering Inc.
-          </span>
+      <div className="rail" style={{ display: 'flex', justifyContent: 'space-between', gap: '2.5rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'grid', gap: '1rem', maxWidth: '28ch' }}>
+          <Wordmark height="1.7rem" tone="paper" />
+          <p style={{ margin: 0, color: 'var(--ink-1)', fontSize: 'var(--step-0)', lineHeight: 1.5 }}>
+            Your voice is your fastest keyboard. From Pocket.
+          </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '4ch', flexWrap: 'wrap', color: 'var(--ink-1)' }}>
-          <Group title="Product">
-            <FootLink href="#demo">Try it</FootLink>
-            <FootLink href="#surface">Surfaces</FootLink>
-            <FootLink href="#close">Pricing</FootLink>
-          </Group>
-          <Group title="Company">
-            <FootLink href="https://pocket.computer">Pocket</FootLink>
-            <FootLink href="mailto:hello@pocket.voice">Contact</FootLink>
-            <FootLink href="/legal/privacy">Privacy</FootLink>
-            <FootLink href="/legal/terms">Terms</FootLink>
-          </Group>
-          <Group title="Follow">
-            <FootLink href="https://x.com/pocketvoice">X</FootLink>
-            <FootLink href="https://github.com/arnautxu/PocketVoice">GitHub</FootLink>
-          </Group>
+        <nav className="big-footer__links" aria-label="Footer">
+          <div className="big-footer__col">
+            <FootHead>Product</FootHead>
+            <a href="#features">Product</a>
+            <a href="#for-you">For you</a>
+            <a href="#pricing">Pricing</a>
+          </div>
+          <div className="big-footer__col">
+            <FootHead>Company</FootHead>
+            <a href={POCKET_SITE} target="_blank" rel="noreferrer">Pocket</a>
+            <a href={COMPANY_JOBS} target="_blank" rel="noreferrer">Careers</a>
+            <a href="mailto:hello@heypocket.com">Contact</a>
+          </div>
+          <div className="big-footer__col">
+            <FootHead>Legal</FootHead>
+            <a href="/legal/privacy">Privacy</a>
+            <a href="/legal/terms">Terms</a>
+          </div>
+        </nav>
+      </div>
+
+      {/* the name, enormous */}
+      <div className="rail">
+        <div className="big-footer__wordmark" aria-hidden>
+          <Wordmark tone="paper" height="auto" style={{ width: '100%', height: 'auto', color: 'inherit' }} />
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div
-        className="rail"
-        style={{
-          marginTop: '3ch',
-          display: 'flex',
-          justifyContent: 'space-between',
-          color: 'var(--ink-2)',
-          fontSize: 'var(--step--1)',
-          flexWrap: 'wrap',
-          gap: '1ch',
-        }}
-      >
-        <span>© {new Date().getFullYear()} Open Vision Engineering Inc.</span>
-        <span>v0.1 · Designed for the next decade.</span>
+      <div className="rail big-footer__bottom">
+        <span>© {year} Open Vision Engineering Inc.</span>
+        <span>Type out loud.</span>
       </div>
     </footer>
   );
 }
 
-function Group({ title, children }: { title: string; children: React.ReactNode }) {
+function FootHead({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'grid', gap: '0.75ch' }}>
-      <span
-        style={{
-          color: 'var(--ink-2)',
-          fontSize: 'var(--step--1)',
-          letterSpacing: '0.08em',
-        }}
-      >
-        {title}
-      </span>
-      <div style={{ display: 'grid', gap: '0.5ch' }}>{children}</div>
-    </div>
-  );
-}
-
-function FootLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      style={{
-        color: 'var(--ink-1)',
-        fontSize: 'var(--step-0)',
-        transition: 'color var(--t-micro) var(--ease)',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ink-0)')}
-      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-1)')}
-    >
+    <span style={{ color: 'var(--ink-2)', fontSize: 'var(--step--1)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
       {children}
-    </a>
+    </span>
   );
 }

@@ -1,11 +1,16 @@
 import { useLayoutEffect } from 'react';
 import { gsap } from './lib/gsap';
 import { Nav } from './components/Nav';
-import { Footer } from './sections/Footer';
+import { CookieBanner } from './components/CookieBanner';
+import { MobileGetBanner } from './components/MobileGetBanner';
 import { Hero } from './sections/Hero';
-import { Demo } from './sections/Demo';
-import { Surface } from './sections/Surface';
-import { Close } from './sections/Close';
+import { AllInOne } from './sections/AllInOne';
+import { SocialProof } from './sections/SocialProof';
+import { Features } from './sections/Features';
+import { MadeForEveryone } from './sections/MadeForEveryone';
+import { Pricing } from './sections/Pricing';
+import { FinalCTA } from './sections/FinalCTA';
+import { Footer } from './sections/Footer';
 
 export default function App() {
   // One-shot reveal for sections as they enter (no scrub → no per-frame churn).
@@ -36,25 +41,33 @@ export default function App() {
     <>
       <Nav />
       <main style={{ position: 'relative', zIndex: 1 }}>
-        {/* The descent, anchored to the DOM, in three pieces that meet at shared
-            colors so the join is seamless at any width: the sky zone (cloud-white
-            type) holds dark through the live demo, breaks through the cloud deck into
-            the surface zone — a pale lit band riding the cloud underside toward the
-            horizon (graphite type) — then settles into the ground zone's clear,
-            near-white landing. Seams: sky→surface at powder-blue, surface→ground at
-            warm bone. */}
+        {/* the single continuous scene photo (clouds → sky → grass), behind it all */}
+        <div className="page-scene" aria-hidden />
+
+        {/* The landscape descent, anchored to the DOM in three pieces that meet at
+            shared colors so the join is seamless at any width — and each zone holds
+            ONE text register so the dark↔light flip lands on a zone boundary:
+              · sky zone     — luminous cloud sky, the Hero            (DARK text)
+              · surface zone — pale blue deepening down, the body      (DARK text)
+              · ground zone  — Blue Deep settling into Pocket-Black terra,
+                               pricing → final CTA → footer            (LIGHT text) */}
         <div className="sky-zone">
           <Hero />
-          <Demo />
         </div>
         <div className="surface-zone">
-          <Surface />
+          <AllInOne />
+          <SocialProof />
+          <Features />
+          <MadeForEveryone />
         </div>
         <div className="ground-zone">
-          <Close />
+          <Pricing />
+          <FinalCTA />
           <Footer />
         </div>
       </main>
+      <MobileGetBanner />
+      <CookieBanner />
     </>
   );
 }

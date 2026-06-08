@@ -7,3 +7,8 @@ dist-ssr
 .vite
 *.log
 .claude
+
+# Raw design sources (heavy) — keep out of the bundle/history; export to .webp instead
+public/assets/
+public/brand/sky/*.png
+public/brand/sky/scene_prev.webp

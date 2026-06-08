@@ -125,7 +125,9 @@ h3 {
   font-weight: 500;
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--ink-2);
+  /* on the sky-blue surface band the tertiary Ash dropped below AA; step up to
+   * secondary ink (the v2t card overrides --ink-2 locally, so it's unaffected). */
+  color: var(--ink-1);
 }
 
 /* VOICE text — Satoshi, raw, provisional. */
