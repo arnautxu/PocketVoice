@@ -1,88 +1,188 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /* ══════════════════════════════════════════════════════════════════════════════
- * VOICE → TEXT — a compact, auto-looping demonstration of the core promise, set
- * into the hero sky. Three beats, left → right: sound BARS (you speak) · a SEAM
- * (the condensation) · finished TEXT (what Pocket Voice writes). While "listening"
- * the raw transcript shows with its fillers and repeats; on "resolve" those strike
- * out and the clean sentence precipitates in Erode. Loops gently; reduced motion
- * holds the resolved end-state.
+ * VOICE → TEXT — the hero's core promise, enacted in ONE place. A synthetic audio
+ * waveform (you speak) condenses, in the SAME stage, into finished text — and the
+ * edits Pocket Voice makes are shown one at a time, each named as it happens:
+ *   listening (wave)  →  raw transcript  →  remove fillers  →  fix wording
+ *                     →  punctuation + caps  →  tone matched to the surface.
+ * Rotates through Email · Slack · Notes. Auto-loops; reduced motion holds the
+ * finished line of the first example. Decorative (aria-hidden) — the headline copy
+ * carries the real promise for assistive tech.
  * ════════════════════════════════════════════════════════════════════════════ */
 
-type Phase = 'listening' | 'resolving' | 'done';
+// One spoken token and what the tool does with it.
+//   keep   — survives; `out` is its formatted form (caps / punctuation appear here)
+//   filler — removed ("um", "like", a repeated word, a false start)
+//   fix    — mis-said / mis-spelled; `raw` is replaced by `out`
+type Tok = { t: 'keep' | 'filler' | 'fix'; raw: string; out?: string };
+type Example = { surface: string; tokens: Tok[] };
 
-// One token = a word + whether it survives composition. Struck tokens are the
-// fillers / repeats Pocket Voice removes.
-const TOKENS: Array<{ w: string; cut?: boolean }> = [
-  { w: 'um', cut: true },
-  { w: 'can you' },
-  { w: 'can you', cut: true },
-  { w: 'send me the' },
-  { w: 'the', cut: true },
-  { w: 'notes by friday' },
-  { w: 'like', cut: true },
-  { w: 'before the standup' },
+const EXAMPLES: Example[] = [
+  {
+    surface: 'Email',
+    tokens: [
+      { t: 'filler', raw: 'um' },
+      { t: 'keep', raw: 'can you', out: 'Can you' },
+      { t: 'keep', raw: 'send me the', out: 'send me the' },
+      { t: 'fix', raw: 'noats', out: 'notes' },
+      { t: 'keep', raw: 'by', out: 'by' },
+      { t: 'fix', raw: 'fryday', out: 'Friday,' },
+      { t: 'filler', raw: 'like' },
+      { t: 'keep', raw: 'before the standup', out: 'before the standup?' },
+    ],
+  },
+  {
+    surface: 'Slack',
+    tokens: [
+      { t: 'keep', raw: 'pushed the', out: 'Pushed the' },
+      { t: 'filler', raw: 'the' },
+      { t: 'keep', raw: 'fix', out: 'fix,' },
+      { t: 'keep', raw: 'could someone', out: 'could someone' },
+      { t: 'fix', raw: 'smoke test', out: 'smoke-test' },
+      { t: 'keep', raw: 'before we', out: 'before we' },
+      { t: 'filler', raw: 'uh' },
+      { t: 'keep', raw: 'ship', out: 'ship?' },
+    ],
+  },
+  {
+    surface: 'Notes',
+    tokens: [
+      { t: 'filler', raw: 'um' },
+      { t: 'keep', raw: 'idea', out: 'Idea:' },
+      { t: 'keep', raw: 'pocket', out: 'Pocket,' },
+      { t: 'keep', raw: 'but for meetings', out: 'but for meetings,' },
+      { t: 'fix', raw: 'auto sumary', out: 'an automatic summary' },
+      { t: 'keep', raw: 'after each call', out: 'after each call.' },
+    ],
+  },
 ];
 
-const CLEAN = 'Can you send me the notes by Friday, before the standup?';
+// The animation reads as a fixed sequence of beats. Each beat holds for `dur` ms.
+type Step = 'listen' | 'raw' | 'cut' | 'fix' | 'punct' | 'done';
+const TIMELINE: Array<{ step: Step; dur: number }> = [
+  { step: 'listen', dur: 1600 },
+  { step: 'raw', dur: 1000 },
+  { step: 'cut', dur: 950 },
+  { step: 'fix', dur: 1000 },
+  { step: 'punct', dur: 1000 },
+  { step: 'done', dur: 2100 },
+];
+const ORDER: Step[] = ['listen', 'raw', 'cut', 'fix', 'punct', 'done'];
+const rank = (s: Step) => ORDER.indexOf(s);
+
+// What the tool is doing right now — shown as a small badge so the EDITS are legible.
+const EDIT_LABEL: Partial<Record<Step, string>> = {
+  cut: 'Removing fillers',
+  fix: 'Fixing wording',
+  punct: 'Punctuation + caps',
+};
+const STATUS_LABEL: Record<Step, string> = {
+  listen: 'Listening',
+  raw: 'Transcribing',
+  cut: 'Editing',
+  fix: 'Editing',
+  punct: 'Editing',
+  done: 'Written',
+};
 
 const prefersReduced = () =>
   typeof window !== 'undefined' &&
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 export function VoiceToText() {
-  const [phase, setPhase] = useState<Phase>(prefersReduced() ? 'done' : 'listening');
+  const reduced = prefersReduced();
+  const [ex, setEx] = useState(0);
+  const [step, setStep] = useState<Step>(reduced ? 'done' : 'listen');
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
-    if (prefersReduced()) return; // hold resolved state, no loop
-    let timers: ReturnType<typeof setTimeout>[] = [];
-    const run = () => {
-      setPhase('listening');
-      timers.push(setTimeout(() => setPhase('resolving'), 2200));
-      timers.push(setTimeout(() => setPhase('done'), 3100));
-      timers.push(setTimeout(run, 6000)); // hold the finished line, then replay
+    if (reduced) return; // hold the finished first example, no loop
+    let exIdx = 0;
+    const clear = () => { timers.current.forEach(clearTimeout); timers.current = []; };
+    const runExample = () => {
+      clear();
+      setEx(exIdx);
+      let t = 0;
+      TIMELINE.forEach(({ step: s, dur }) => {
+        timers.current.push(setTimeout(() => setStep(s), t));
+        t += dur;
+      });
+      // advance to the next example after the full timeline
+      timers.current.push(
+        setTimeout(() => {
+          exIdx = (exIdx + 1) % EXAMPLES.length;
+          runExample();
+        }, t),
+      );
     };
-    run();
-    return () => timers.forEach(clearTimeout);
-  }, []);
+    runExample();
+    return clear;
+  }, [reduced]);
 
-  const live = phase === 'listening';
-  const struck = phase !== 'listening';
+  const example = EXAMPLES[ex];
+  const r = rank(step);
+  const live = step === 'listen';
+  const showWave = step === 'listen'; // the wave owns the stage only while listening
+  const showLine = r >= rank('raw');
+  const done = step === 'done';
+  const editLabel = EDIT_LABEL[step];
 
   return (
     <div className={`v2t reveal${live ? ' is-live' : ''}`} aria-hidden="true">
-      {/* BARS — you speak */}
-      <div className="v2t-bars">
-        {BARHEIGHTS.map((h, i) => (
-          <span key={i} className="v2t-bar" style={{ animationDelay: `${i * 0.07}s`, ['--h' as string]: h }} />
-        ))}
+      {/* status — what's happening, and (when finished) which surface the tone matched */}
+      <div className="v2t-status">
+        <span className="v2t-status-label">
+          <span className={`v2t-dot${live ? ' is-live' : ''}`} aria-hidden /> {STATUS_LABEL[step]}
+        </span>
+        <span className={`v2t-surface${done ? ' is-on' : ''}`}>{example.surface} tone</span>
       </div>
 
-      {/* SEAM — the condensation */}
-      <div className="v2t-seam" aria-hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-          <path d="M5 9l7 7 7-7" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
+      {/* the stage — wave and text share the SAME box; the wave condenses into the words */}
+      <div className="v2t-stage">
+        <div className={`v2t-wave${showWave ? ' is-on' : ''}${live ? ' is-live' : ''}`} aria-hidden>
+          {BARHEIGHTS.map((h, i) => (
+            <span key={i} className="v2t-bar" style={{ animationDelay: `${i * 0.06}s`, ['--h' as string]: h }} />
+          ))}
+        </div>
 
-      {/* TEXT — what Pocket Voice writes */}
-      <div className="v2t-out">
-        <span className="v2t-label">{phase === 'done' ? 'Written' : 'Heard'}</span>
-        {phase === 'done' ? (
-          <p className="v2t-text v2t-clean condense-in" key="clean">{CLEAN}</p>
-        ) : (
-          <p className="v2t-text v2t-raw">
-            {TOKENS.map((t, i) => (
-              <span key={i}>
-                {t.cut && struck ? <s>{t.w}</s> : t.w}{' '}
+        <p className={`v2t-line${showLine ? ' is-on' : ''}${done ? ' is-clean' : ''}`}>
+          {example.tokens.map((tk, i) => {
+            const isCut = tk.t === 'filler' && r >= rank('cut');
+            // when each token flips to its formatted `out`
+            const flip =
+              (tk.t === 'fix' && r >= rank('fix')) ||
+              (tk.t === 'keep' && r >= rank('punct'));
+            const justFixed = tk.t === 'fix' && step === 'fix';
+            const text = (flip && tk.out ? tk.out : tk.raw) + (i < example.tokens.length - 1 ? ' ' : '');
+            return (
+              <span
+                key={i}
+                className={
+                  'v2t-tok' +
+                  (tk.t === 'filler' ? ' is-filler' : '') +
+                  (isCut ? ' is-cut' : '') +
+                  (justFixed ? ' is-flash' : '') +
+                  (flip ? ' is-out' : '')
+                }
+              >
+                {text}
               </span>
-            ))}
-          </p>
-        )}
+            );
+          })}
+        </p>
+
+        {/* the edit currently being applied — names the tool's work */}
+        <span className={`v2t-edit${editLabel ? ' is-on' : ''}`} aria-hidden>
+          {editLabel ?? ''}
+        </span>
       </div>
     </div>
   );
 }
 
-// A fixed, organic-looking set so the waveform reads as speech, not a uniform comb.
-const BARHEIGHTS = ['0.4', '0.7', '0.5', '0.9', '0.6', '1', '0.7', '0.45', '0.8', '0.55', '0.85', '0.5'];
+// A fixed, organic set so the waveform reads as speech, not a uniform comb.
+const BARHEIGHTS = [
+  '0.30', '0.55', '0.40', '0.75', '0.50', '0.95', '0.62', '0.38', '1', '0.58',
+  '0.82', '0.46', '0.70', '0.34', '0.60', '0.88', '0.50', '0.72', '0.42', '0.64',
+];

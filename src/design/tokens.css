@@ -27,6 +27,12 @@
   /* ── Accent — Pocket Blue carries the whole narrative ─────────────────────── */
   --cobalt:      var(--pocket-blue); /* accent — links, CTA, live signal, counter */
   --cobalt-deep: var(--blue-deep);   /* hover / pressed — Blue Deep               */
+  /* Headline italic accents (and the 86k stat) that ride DIRECTLY on the vivid sky
+   * photo: no Manual BLUE is legible there (Pocket Blue ~1.9:1, Blue Deep ~2.5:1)
+   * and there is no light backing, so the accent resolves to Pocket Black ink — the
+   * italic alone carries the signature. Blue Deep is kept only where a lighter
+   * ground makes it legible (e.g. Pricing). */
+  --accent-sky:  var(--pocket-black);
   --live:        var(--pocket-blue); /* live / recording / now — recolored to brand
                                         accent (the coral was Danger, decorative use
                                         is forbidden) — rec dot, counter, lead bar  */
@@ -149,6 +155,25 @@
 
   --accent-soft: var(--cobalt-wash);
   --accent-glow: rgba(14, 142, 206, 0.16);
+
+  /* ── Sky glass — cards read as glass cut from the sky, not clinical white ─────
+   * A pale Pocket-Blue tint (not pure white) over the photo, with heavy blur +
+   * saturation so the sky behind is smoothed into a cool frosted pane. -solid is a
+   * more opaque variant for the lower (ground) zone, where the photo deepens and a
+   * too-transparent card would drop the dark card text below AA. -edge is the bright
+   * top hairline that catches light. All light enough that the ink scale holds. */
+  /* A real, READABLE blue tint (a near-white wash vanished over the blue sky): a
+   * pale→deeper Pocket-Blue gradient so the pane reads as glass cut from the sky,
+   * distinct from the background. Still light enough that the dark ink scale holds. */
+  --glass-sky: linear-gradient(158deg,
+    rgba(203, 229, 246, 0.78) 0%,
+    rgba(166, 207, 237, 0.70) 100%);
+  --glass-sky-solid: linear-gradient(158deg,
+    rgba(212, 234, 248, 0.92) 0%,
+    rgba(186, 218, 242, 0.86) 100%);
+  --glass-sky-soft: rgba(203, 229, 246, 0.6);
+  --glass-edge: rgba(255, 255, 255, 0.7);
+  --glass-blur: blur(18px) saturate(1.7);
 
   --color-ink:    var(--ink-0);
   --color-paper:  var(--paper);

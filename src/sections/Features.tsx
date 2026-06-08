@@ -9,12 +9,12 @@ import type { ReactNode } from 'react';
 const FEATURES: Array<{ title: string; body: string; icon: ReactNode }> = [
   {
     title: 'Faster than typing',
-    body: 'Speak at 150 words a minute; you type at 40. Finished text lands the moment you stop — about 180 ms.',
+    body: 'Speak at 150 words a minute; you type at 40. Finished text lands the moment you stop, about 180 ms.',
     icon: <BoltIcon />,
   },
   {
     title: 'You ramble. It edits.',
-    body: 'Half-starts, “um”, repeated words, thinking out loud — all removed. What stays is what you meant.',
+    body: 'Half-starts, “um”, repeated words, thinking out loud, all removed. What stays is what you meant.',
     icon: <ScissorsIcon />,
   },
   {
@@ -24,7 +24,7 @@ const FEATURES: Array<{ title: string; body: string; icon: ReactNode }> = [
   },
   {
     title: 'Vocabulary',
-    body: 'Names, jargon, product terms and acronyms spelled the way your world spells them — it learns yours.',
+    body: 'Names, jargon, product terms and acronyms spelled the way your world spells them. It learns yours.',
     icon: <BookIcon />,
   },
   {
@@ -34,7 +34,7 @@ const FEATURES: Array<{ title: string; body: string; icon: ReactNode }> = [
   },
   {
     title: 'Language',
-    body: 'Speak any of 108 languages — switch mid-sentence, no toggle. It writes in the one you’re using.',
+    body: 'Speak any of 108 languages. Switch mid-sentence, no toggle. It writes in the one you’re using.',
     icon: <GlobeIcon />,
   },
 ];
@@ -46,7 +46,7 @@ export function Features() {
         <header className="on-sky" style={{ display: 'grid', gap: '1.25rem', maxWidth: '40rem' }}>
           <span className="sec-eyebrow">What it does</span>
           <h2 style={{ margin: 0, fontSize: 'var(--step-4)', lineHeight: 1.02, color: 'var(--ink-0)' }}>
-            Not dictation. <span style={{ color: 'var(--blue-deep)', fontStyle: 'italic' }}>Composition.</span>
+            Not dictation. <span style={{ color: 'var(--accent-sky)', fontStyle: 'italic' }}>Composition.</span>
           </h2>
         </header>
 

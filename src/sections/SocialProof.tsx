@@ -15,14 +15,14 @@ export function SocialProof() {
           <div className="proof-figure">
             <span
               className="tabular"
-              style={{ fontFamily: 'var(--font-text)', fontWeight: 700, fontSize: 'var(--step-6)', lineHeight: 0.9, letterSpacing: '-0.03em', color: 'var(--blue-deep)' }}
+              style={{ fontFamily: 'var(--font-text)', fontWeight: 700, fontSize: 'var(--step-6)', lineHeight: 0.9, letterSpacing: '-0.03em', color: 'var(--accent-sky)' }}
             >
               86k
             </span>
             <span style={{ fontSize: 'var(--step-0)', color: 'var(--ink-1)' }}>people typing out loud</span>
           </div>
           <p style={{ margin: 0, maxWidth: '24ch', fontFamily: 'var(--font-display)', fontSize: 'var(--step-2)', lineHeight: 1.2, textAlign: 'center', color: 'var(--ink-0)' }}>
-            From Pocket — the team behind the device 86,000 people already speak to.
+            From Pocket, the team behind the device 86,000 people already speak to.
           </p>
         </div>
 

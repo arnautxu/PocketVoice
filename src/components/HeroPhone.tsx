@@ -17,7 +17,7 @@ export function HeroPhone() {
         <img
           className="hero-phone"
           src="/brand/hero/phone-demo.webp"
-          alt="Pocket Voice cleaning up a spoken WhatsApp message in real time — the filler words struck out, the finished message composed."
+          alt="Pocket Voice cleaning up a spoken WhatsApp message in real time: the filler words struck out, the finished message composed."
           width={700}
           height={1430}
           loading="eager"

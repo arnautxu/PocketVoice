@@ -6,7 +6,7 @@
 
 const TESTIMONIALS: Array<{ quote: string; name: string; role: string }> = [
   { quote: 'I answer 60 emails between patients now. I talk while I wash my hands and it’s written by the time I look up.', name: 'Dr. Lena Ortiz', role: 'Physician' },
-  { quote: 'My ideas come out faster than I can type them. Pocket Voice keeps up — and cleans up the mess.', name: 'Marcus Bell', role: 'Founder' },
+  { quote: 'My ideas come out faster than I can type them. Pocket Voice keeps up and cleans up the mess.', name: 'Marcus Bell', role: 'Founder' },
   { quote: 'Field notes used to wait until I got back to the truck. Now I just talk and the report writes itself.', name: 'Sam Whitfield', role: 'Site engineer' },
   { quote: 'English isn’t my first language. I speak how I think and it comes out reading perfectly professional.', name: 'Yuki Tanaka', role: 'Product designer' },
   { quote: 'Thirty Slack threads a day. I reply by talking and nobody can tell I didn’t type a word.', name: 'Priya Nair', role: 'Engineering lead' },
@@ -20,7 +20,7 @@ export function MadeForEveryone() {
         <header className="on-sky" style={{ display: 'grid', gap: '1.25rem', maxWidth: '42rem' }}>
           <span className="sec-eyebrow">Made for everyone</span>
           <h2 style={{ margin: 0, fontSize: 'var(--step-4)', lineHeight: 1.02, color: 'var(--ink-0)' }}>
-            However you work, <span style={{ color: 'var(--blue-deep)', fontStyle: 'italic' }}>you already know how to use it.</span>
+            However you work, <span style={{ color: 'var(--accent-sky)', fontStyle: 'italic' }}>you already know how to use it.</span>
           </h2>
           <p style={{ margin: 0, maxWidth: '46ch', fontSize: 'var(--step-1)', lineHeight: 1.5, color: 'var(--ink-1)' }}>
             If you can talk, you can write with Pocket Voice. Here&rsquo;s who already does.

@@ -22,11 +22,18 @@ const LINKS = [
 
 export function Nav() {
   const [solid, setSolid] = useState(false);
+  // while the mobile top Get banner is showing (page near the top) the header sits
+  // below it; matches MobileGetBanner's scrollY>320 hide threshold.
+  const [belowBanner, setBelowBanner] = useState(true);
   const [open, setOpen] = useState(false);
   const { storeHref, downloadLabel } = usePlatform();
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setSolid(y > 40);
+      setBelowBanner(y <= 300);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -42,13 +49,13 @@ export function Nav() {
 
   return (
     <motion.header
-      className="site-header"
+      className={`site-header${belowBanner ? ' is-below-banner' : ''}`}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
     >
       <div className={`site-header__bar${solid ? ' is-solid' : ''}`}>
-        <a href="#top" aria-label="Pocket Voice — top" style={{ display: 'inline-flex' }}>
+        <a href="#top" aria-label="Pocket Voice, back to top" style={{ display: 'inline-flex' }}>
           <Wordmark height="1.55rem" tone="paper" />
         </a>
 

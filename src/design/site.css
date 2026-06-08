@@ -98,9 +98,11 @@
 .site-header__right { display: flex; align-items: center; gap: 1.4ch; }
 .header-menu-btn { display: none; }
 
-/* mobile header: logo · download · hamburger */
+/* mobile header: logo · hamburger (download lives in the Get banner, so it's hidden
+ * here — it used to overflow the pill and push the hamburger off-screen) */
 @media (max-width: 860px) {
   .site-header__nav.is-center { display: none; }
+  .site-header__right > :not(.header-menu-btn) { display: none !important; }
   .header-menu-btn {
     display: inline-flex;
     align-items: center;
@@ -109,7 +111,12 @@
     border-radius: 999px;
     color: var(--cloud-white);
   }
-  .site-header__bar { border-radius: 18px; padding: 0.6rem 0.8rem 0.6rem 1rem; }
+  .site-header__bar { border-radius: 18px; padding: 0.6rem 0.8rem; }
+  /* the floating header must NOT sit on top of the top Get banner: while the banner
+   * is shown (page near the top) the header drops below it; once you scroll and the
+   * banner slides away, the header rises to its normal floating offset. */
+  .site-header { transition: top var(--t-macro) var(--ease); }
+  .site-header.is-below-banner { top: 67px; }
 }
 
 /* dropdown sheet under the mobile header */
@@ -221,13 +228,19 @@
   /* opacity is NEVER animated → it can't get trapped at 0 when a backgrounded tab
    * pauses animations (house rule). Only transform drifts. */
   opacity: var(--amb-op, 0.5);
+  /* depth: distant marks are softened + sit behind nearer, sharper ones */
+  filter: blur(var(--amb-blur, 0px));
+  z-index: var(--amb-z, 1);
+  /* each mark sits at its own slight tilt (kept even with reduced motion) */
+  transform: rotate(var(--amb-rot, 0deg));
   will-change: transform;
   animation: pv-float-amb var(--amb-dur, 13s) ease-in-out infinite alternate;
   animation-delay: var(--amb-delay, 0s);
 }
 @keyframes pv-float-amb {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(var(--amb-dx, 0px), var(--amb-dy, -16px), 0) scale(1.05); }
+  from { transform: translate3d(0, 0, 0) rotate(var(--amb-rot, 0deg)) scale(1); }
+  to   { transform: translate3d(var(--amb-dx, 0px), var(--amb-dy, -16px), 0)
+                    rotate(calc(var(--amb-rot, 0deg) + var(--amb-rot-d, 2deg))) scale(1.06); }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-ambient img { animation: none; }
@@ -237,72 +250,147 @@
   .hero-ambient img.amb-secondary { display: none; }
 }
 
-/* ── VOICE → TEXT strip (Wispr-style, auto-looping) ────────────────────────────
- * bars (left)  →  cloud/seam (middle)  →  clean text (right). A frosted glass card
- * set into the sky. */
+/* ── VOICE → TEXT — single-stage morph (audio wave condenses INTO finished text) ──
+ * A frosted glass card set into the sky. One stage: the synthetic waveform and the
+ * text occupy the SAME box and crossfade, so speech literally becomes writing; the
+ * tool's edits (cut fillers · fix wording · punctuate · tone) animate in place, each
+ * named by the floating edit badge. Driven by VoiceToText.tsx. */
 .v2t {
   position: relative; z-index: 3;
   width: 100%;
-  max-width: 56rem;
+  max-width: 46rem;
   margin: clamp(2rem, 5vh, 3.5rem) auto 0;
   display: grid;
-  grid-template-columns: 0.7fr auto 1.3fr;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 2rem);
-  padding: clamp(1.1rem, 3vw, 1.75rem) clamp(1.25rem, 3.5vw, 2rem);
+  gap: clamp(0.85rem, 2vw, 1.25rem);
+  padding: clamp(1.1rem, 3vw, 1.6rem) clamp(1.25rem, 3.5vw, 1.9rem);
   border-radius: 20px;
-  /* light glass card on the bright sky, with its own dark ink so the readout reads */
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-          backdrop-filter: blur(18px) saturate(1.4);
+  /* sky glass card on the bright hero sky, with its own dark ink so the readout reads */
+  background: var(--glass-sky);
+  border: 1px solid var(--glass-edge);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
   box-shadow: 0 30px 70px -34px rgba(13, 75, 130, 0.45), inset 0 1px 0 rgba(255,255,255,0.9);
   text-align: left;
   --ink-2: var(--graphite-2);
 }
-.v2t-bars { display: flex; align-items: center; gap: 4px; height: 56px; }
+
+/* status row — what's happening · which surface tone matched (appears at the end) */
+.v2t-status {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  font-size: var(--step--1); letter-spacing: var(--track-label); text-transform: uppercase;
+}
+.v2t-status-label { display: inline-flex; align-items: center; gap: 0.7ch; color: var(--graphite-2); font-weight: 500; }
+.v2t-dot {
+  width: 8px; height: 8px; border-radius: 999px; background: var(--ash); flex: none;
+  transition: background var(--t-macro) var(--ease);
+}
+.v2t-dot.is-live { background: var(--pocket-blue); animation: pv-rec 1.3s ease-in-out infinite; }
+.v2t-surface {
+  display: inline-flex; align-items: center; gap: 0.6ch;
+  padding: 0.28rem 0.7rem; border-radius: 999px;
+  color: var(--blue-deep); background: var(--cobalt-wash);
+  font-weight: 600; letter-spacing: 0.04em;
+  opacity: 0; transform: translateY(4px) scale(0.96);
+  transition: opacity var(--t-macro) var(--ease), transform var(--t-macro) var(--ease);
+}
+.v2t-surface.is-on { opacity: 1; transform: none; }
+
+/* the shared stage — wave and text live on top of each other and crossfade */
+.v2t-stage {
+  position: relative;
+  min-height: clamp(5.5rem, 16vh, 7.5rem);
+  display: flex; align-items: center;
+}
+
+/* synthetic waveform — centred, condenses (scale+blur+fade) as the text resolves */
+.v2t-wave {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; gap: clamp(3px, 0.9vw, 6px);
+  opacity: 0; transform: scale(0.96);
+  filter: blur(0px);
+  transition: opacity var(--t-snap) var(--ease), transform var(--t-snap) var(--ease), filter var(--t-snap) var(--ease);
+}
+.v2t-wave.is-on { opacity: 1; transform: none; }
+.v2t-wave:not(.is-on) { transform: scale(0.86) translateY(-2px); filter: blur(6px); } /* condense into the line */
 .v2t-bar {
-  flex: 1 1 0; max-width: 6px; min-width: 3px;
+  flex: 1 1 0; max-width: 7px; min-width: 2px; height: clamp(40px, 9vh, 64px);
   border-radius: 999px;
   background: linear-gradient(180deg, var(--pocket-blue), var(--blue-deep));
-  transform: scaleY(var(--h, 0.18)); transform-origin: center;
+  transform: scaleY(var(--h, 0.3)); transform-origin: center;
   transition: transform var(--t-macro) var(--ease);
 }
-.v2t.is-live .v2t-bar { animation: pv-v2t-bar 1s ease-in-out infinite; }
+.v2t-wave.is-live .v2t-bar { animation: pv-v2t-bar 0.9s var(--ease) infinite; }
 @keyframes pv-v2t-bar {
-  0%, 100% { transform: scaleY(0.2); }
-  50%      { transform: scaleY(1); }
+  0%, 100% { transform: scaleY(calc(var(--h, 0.3) * 0.4)); }
+  50%      { transform: scaleY(var(--h, 0.3)); }
 }
-.v2t-seam {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  color: var(--blue-deep);
+
+/* the text line — rises out of the wave; tokens carry their own edit transitions */
+.v2t-line {
+  margin: 0; position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  font-family: var(--font-text);
+  font-size: clamp(1.05rem, 2.1vw, 1.4rem); line-height: 1.42;
+  color: var(--graphite-1);
+  opacity: 0; transform: translateY(8px); filter: blur(4px);
+  transition: opacity var(--t-snap) var(--ease), transform var(--t-snap) var(--ease),
+              filter var(--t-snap) var(--ease), color var(--t-macro) var(--ease);
 }
-.v2t-seam svg { width: 26px; height: 26px; }
-.v2t-out { min-width: 0; }
-.v2t-label {
-  display: block;
-  font-size: var(--step--1);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: var(--ink-2);
-  margin-bottom: 0.5rem;
+.v2t-line.is-on { opacity: 1; transform: none; filter: blur(0); }
+.v2t-line.is-clean {
+  font-family: var(--font-display); letter-spacing: -0.01em; color: var(--graphite);
 }
-.v2t-text { margin: 0; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.4; }
-.v2t-raw { color: var(--graphite-1); font-family: var(--font-text); }
-.v2t-raw s {
-  text-decoration: line-through;
-  text-decoration-color: rgba(58, 57, 55, 0.5);
-  opacity: 0.5;
+
+/* tokens — inline-block so fillers can collapse their own width when cut */
+.v2t-tok {
+  display: inline-block; white-space: pre; max-width: 30ch; overflow: hidden;
+  transition: max-width var(--t-snap) var(--ease), opacity var(--t-macro) var(--ease),
+              transform var(--t-macro) var(--ease), color var(--t-macro) var(--ease),
+              background-color var(--t-macro) var(--ease);
+  border-radius: 4px;
 }
-.v2t-clean {
-  color: var(--graphite);
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+.v2t-tok.is-filler { color: var(--ash); }
+.v2t-tok.is-cut {
+  max-width: 0; opacity: 0; transform: translateY(-2px) scale(0.85);
+  text-decoration: line-through; text-decoration-color: rgba(138,135,131,0.7);
 }
-@media (max-width: 640px) {
-  .v2t { grid-template-columns: auto 1fr; }
-  .v2t-seam { display: none; }
-  .v2t-bars { height: 44px; }
+.v2t-tok.is-out { color: inherit; }
+.v2t-tok.is-flash {
+  /* the moment a mis-said word is corrected */
+  background: var(--cobalt-wash); color: var(--blue-deep);
+  box-shadow: 0 0 0 3px var(--cobalt-wash);
+  animation: pv-v2t-flash var(--t-snap) var(--ease);
+}
+@keyframes pv-v2t-flash {
+  0% { transform: translateY(3px); opacity: 0.5; filter: blur(2px); }
+  100% { transform: none; opacity: 1; filter: blur(0); }
+}
+
+/* edit badge — names the operation the tool is performing right now */
+.v2t-edit {
+  position: absolute; top: -0.4rem; right: 0; z-index: 2;
+  display: inline-flex; align-items: center; gap: 0.55ch;
+  padding: 0.26rem 0.7rem; border-radius: 999px;
+  font-size: var(--step--1); font-weight: 600; letter-spacing: 0.01em;
+  color: var(--paper); background: linear-gradient(150deg, var(--pocket-blue), var(--blue-deep));
+  box-shadow: var(--shadow-blue);
+  opacity: 0; transform: translateY(-4px) scale(0.94);
+  transition: opacity var(--t-macro) var(--ease), transform var(--t-macro) var(--ease);
+  pointer-events: none;
+}
+.v2t-edit::before {
+  content: ''; width: 6px; height: 6px; border-radius: 999px; background: var(--paper);
+  box-shadow: 0 0 0 3px rgba(250,250,248,0.3);
+}
+.v2t-edit.is-on { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v2t-wave.is-live .v2t-bar { animation: none; }
+  .v2t-dot.is-live { animation: none; }
+}
+@media (max-width: 560px) {
+  .v2t-stage { min-height: clamp(6rem, 22vh, 8rem); }
+  .v2t-edit { position: static; align-self: flex-start; margin-top: 0.4rem; }
 }
 
 /* ── All-in-one — cap the featured phone; stack on narrow ──────────────────── */
@@ -329,15 +417,6 @@
  * the saturated photo locally so the Pocket-palette ink + Blue Deep accents clear
  * AA, without paling the whole sky. Paper-white only — no new colours. */
 .on-sky { position: relative; }
-.on-sky::before,
-.proof::before {
-  content: ''; position: absolute; z-index: -1; pointer-events: none;
-  left: -7%; right: -7%; top: -14%; bottom: -14%;
-  background: radial-gradient(72% 66% at 42% 46%,
-    rgba(252, 253, 255, 0.52) 0%,
-    rgba(252, 253, 255, 0.28) 46%,
-    rgba(252, 253, 255, 0) 80%);
-}
 .proof { position: relative; }
 .sec-eyebrow::before { content: ''; width: 2ch; height: 1px; background: currentColor; opacity: 0.6; }
 
@@ -370,12 +449,12 @@
   display: grid; gap: 0.75rem; align-content: start;
   padding: clamp(1.5rem, 2.5vw, 2rem);
   border-radius: 18px;
-  /* solid-ish so the card reads as an object over the bright scene photo */
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(8px) saturate(1.2);
-          backdrop-filter: blur(8px) saturate(1.2);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 26px 60px -34px rgba(8, 40, 80, 0.5);
+  /* glass cut from the sky — a cool frosted pane, not a clinical white box */
+  background: var(--glass-sky);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 12px -8px rgba(10,46,90,0.40), 0 30px 64px -34px rgba(10,46,90,0.55);
 }
 .feature-card__icon {
   width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;
@@ -398,11 +477,11 @@
   display: grid; gap: 1.25rem; align-content: space-between;
   padding: clamp(1.5rem, 2.5vw, 2rem);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(8px) saturate(1.2);
-          backdrop-filter: blur(8px) saturate(1.2);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 26px 60px -34px rgba(8, 40, 80, 0.5);
+  background: var(--glass-sky);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 12px -8px rgba(10,46,90,0.40), 0 30px 64px -34px rgba(10,46,90,0.55);
 }
 .testi-card blockquote { margin: 0; font-family: var(--font-display); font-size: var(--step-1); line-height: 1.4; color: var(--ink-0); }
 .testi-who { display: flex; align-items: center; gap: 0.85rem; }
@@ -429,9 +508,13 @@
   display: grid; gap: 1.25rem; align-content: start;
   padding: clamp(1.6rem, 3vw, 2.25rem);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.93);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 30px 70px -34px rgba(4, 22, 44, 0.6);
+  /* deeper down the page the photo darkens — use the more opaque sky glass so the
+   * dark card copy keeps AA */
+  background: var(--glass-sky-solid);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 30px 70px -34px rgba(4, 22, 44, 0.6), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 /* On the dark ground zone the section ink is light; the light plan cards carry their
  * own dark ink so the copy reads on the white card. */
@@ -528,6 +611,9 @@
 .get-banner--bottom.is-shown { transform: translateY(0); opacity: 1; }
 @media (max-width: 860px) {
   .get-banner { display: flex; }
+  /* the persistent bottom Get banner is fixed over the page; keep the footer's last
+   * row from hiding behind it */
+  .big-footer { padding-bottom: 76px; }
 }
 
 /* ── Cookie banner (bottom-left card) ──────────────────────────────────────── */

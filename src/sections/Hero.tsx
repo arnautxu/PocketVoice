@@ -14,17 +14,31 @@ import { usePlatform } from '../hooks/usePlatform';
 
 // Ambient marks scattered to the edges, away from the centred type. dx/dy drive a
 // slow alternating drift; secondary marks drop on small screens to avoid crowding.
+// Few, LARGE marks composed for depth: two big sharp clouds anchor the lower corners
+// (foreground), two softer mid clouds sit high in the corners (distance), and one
+// faint far puff fills the low-centre gap. The centre stays open for the headline.
+// Marks are kept WHOLE (just inside the frame — brand "no crop"), never sliced.
+// Composed for a real sky, NOT a grid: sizes vary a lot (huge → tiny), heights are
+// staggered (no two share a baseline), every mark sits at its own slight tilt and
+// drifts on its own clock. Marks live in the open top + bottom bands so the centred
+// headline stays clear; kept WHOLE (brand "no crop"). rot = resting tilt, rotD = how
+// far it rocks while floating; dur/delay all differ so nothing pulses in sync.
 const AMBIENT: Array<{
   name: string; ar: string; width: string;
   top?: string; bottom?: string; left?: string; right?: string;
-  op: number; dx: string; dy: string; dur: string; delay: string; secondary?: boolean;
+  op: number; blur: string; z: number; rot: string; rotD: string;
+  dx: string; dy: string; dur: string; delay: string; secondary?: boolean;
 }> = [
-  { name: 'slack',      ar: '560 / 498', width: 'clamp(58px, 7vw, 104px)', top: '16%', left: '7%',  op: 0.55, dx: '10px',  dy: '-18px', dur: '13s', delay: '0s' },
-  { name: 'gmail',      ar: '560 / 444', width: 'clamp(52px, 6vw, 92px)',  top: '24%', right: '9%', op: 0.5,  dx: '-12px', dy: '-14px', dur: '15s', delay: '1.2s' },
-  { name: 'whatsapp',   ar: '560 / 497', width: 'clamp(48px, 5.5vw, 84px)', bottom: '30%', left: '12%', op: 0.45, dx: '8px', dy: '16px', dur: '17s', delay: '0.6s', secondary: true },
-  { name: 'umm',        ar: '560 / 446', width: 'clamp(56px, 6.5vw, 96px)', top: '12%', right: '24%', op: 0.5, dx: '6px', dy: '-12px', dur: '14s', delay: '0.4s', secondary: true },
-  { name: 'actually',   ar: '560 / 460', width: 'clamp(58px, 6.5vw, 100px)', bottom: '22%', right: '14%', op: 0.5, dx: '-10px', dy: '14px', dur: '16s', delay: '1.6s' },
-  { name: 'faster',     ar: '560 / 440', width: 'clamp(54px, 6vw, 92px)', bottom: '16%', left: '28%', op: 0.42, dx: '12px', dy: '-10px', dur: '18s', delay: '0.9s', secondary: true },
+  // foreground — large, sharp, lower band (staggered heights + sizes)
+  { name: 'slack',      ar: '560 / 498', width: 'clamp(86px, 21vw, 330px)', bottom: '1%', left: '1%',  op: 0.92, blur: '0px',   z: 3, rot: '-6deg', rotD: '2.5deg',  dx: '10px',  dy: '-15px', dur: '19s', delay: '0s' },
+  { name: 'actually',   ar: '560 / 460', width: 'clamp(74px, 15vw, 232px)', bottom: '9%', right: '0%', op: 0.86, blur: '0.3px', z: 2, rot: '7deg',  rotD: '-3deg',   dx: '-9px',  dy: '-12px', dur: '23s', delay: '0.8s', secondary: true },
+  { name: 'whatsapp',   ar: '560 / 497', width: 'clamp(60px, 11vw, 178px)', bottom: '2%', left: '41%', op: 0.78, blur: '0.6px', z: 2, rot: '-4deg', rotD: '3.5deg',  dx: '7px',   dy: '-11px', dur: '17s', delay: '0.3s' },
+  // distance — mid, softened, high band (not corner-aligned)
+  { name: 'umm',        ar: '560 / 446', width: 'clamp(78px, 11vw, 176px)', top: '4%',  left: '3%',  op: 0.6,  blur: '1.3px', z: 1, rot: '5deg',  rotD: '-2.5deg', dx: '8px',   dy: '-12px', dur: '15s', delay: '0.5s', secondary: true },
+  { name: 'gmail',      ar: '560 / 444', width: 'clamp(72px, 10vw, 150px)', top: '11%', right: '4%', op: 0.55, blur: '1.7px', z: 1, rot: '-9deg', rotD: '3deg',    dx: '-10px', dy: '-9px',  dur: '20s', delay: '1.2s', secondary: true },
+  { name: 'dictionary', ar: '560 / 470', width: 'clamp(54px, 7vw, 118px)',  top: '3%',  left: '23%', op: 0.42, blur: '2.3px', z: 0, rot: '8deg',  rotD: '-3.5deg', dx: '6px',   dy: '-8px',  dur: '22s', delay: '1.6s', secondary: true },
+  // far — small, very soft, low-centre gap beneath the demo card
+  { name: 'faster',     ar: '560 / 440', width: 'clamp(56px, 7vw, 120px)',  bottom: '7%', left: '63%', op: 0.45, blur: '2.5px', z: 0, rot: '-7deg', rotD: '4deg',    dx: '8px', dy: '-9px', dur: '18s', delay: '1s', secondary: true },
 ];
 
 export function Hero() {
@@ -74,6 +88,10 @@ export function Hero() {
               top: c.top, bottom: c.bottom, left: c.left, right: c.right,
               width: c.width, aspectRatio: c.ar,
               ['--amb-op' as string]: c.op,
+              ['--amb-blur' as string]: c.blur,
+              ['--amb-z' as string]: c.z,
+              ['--amb-rot' as string]: c.rot,
+              ['--amb-rot-d' as string]: c.rotD,
               ['--amb-dx' as string]: c.dx,
               ['--amb-dy' as string]: c.dy,
               ['--amb-dur' as string]: c.dur,

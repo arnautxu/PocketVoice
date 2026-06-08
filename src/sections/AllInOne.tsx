@@ -10,9 +10,9 @@ import { HeroPhone } from '../components/HeroPhone';
 const USES = ['Emails', 'Slack & chats', 'Notes & ideas', 'Call follow-ups', 'Issues & tickets', 'Search bars'];
 
 const EXAMPLES = [
-  { surface: 'Mail', register: 'Email', spoken: 'hey anna loved the deck two thoughts on pricing', output: 'Anna — loved the deck. Two thoughts on the pricing section when you have a moment.' },
-  { surface: 'Slack', register: 'Message', spoken: 'pushed the fix could someone smoke test before we ship', output: 'Pushed the fix — could someone smoke-test before we deploy?' },
-  { surface: 'Notes', register: 'Idea', spoken: 'um idea pocket but for meetings auto summary after', output: 'Idea: Pocket, but for meetings — an automatic summary after each call.' },
+  { surface: 'Mail', register: 'Email', spoken: 'hey anna loved the deck two thoughts on pricing', output: 'Anna, loved the deck. Two thoughts on the pricing section when you have a moment.' },
+  { surface: 'Slack', register: 'Message', spoken: 'pushed the fix could someone smoke test before we ship', output: 'Pushed the fix, could someone smoke-test before we deploy?' },
+  { surface: 'Notes', register: 'Idea', spoken: 'um idea pocket but for meetings auto summary after', output: 'Idea: Pocket, but for meetings, an automatic summary after each call.' },
 ];
 
 export function AllInOne() {
@@ -22,11 +22,11 @@ export function AllInOne() {
         <div className="all-in-one-copy on-sky" style={{ display: 'grid', gap: 'clamp(1.5rem, 3.5vh, 2.25rem)' }}>
           <span className="sec-eyebrow">One app · everywhere you type</span>
           <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 400, letterSpacing: '-0.022em', fontSize: 'var(--step-4)', lineHeight: 1.02, maxWidth: '16ch', color: 'var(--ink-0)' }}>
-            Wherever you&rsquo;d type, <span style={{ color: 'var(--blue-deep)', fontStyle: 'italic' }}>talk instead.</span>
+            Wherever you&rsquo;d type, <span style={{ color: 'var(--accent-sky)', fontStyle: 'italic' }}>talk instead.</span>
           </h2>
           <p style={{ margin: 0, maxWidth: '48ch', fontSize: 'var(--step-1)', lineHeight: 1.5, color: 'var(--ink-1)' }}>
             One press works in every app on your phone and Mac. Pocket Voice reads the surface before
-            it writes — a thought in Notes becomes an idea, a reply in Mail becomes prose.
+            it writes: a thought in Notes becomes an idea, a reply in Mail becomes prose.
           </p>
 
           {/* use-case chips */}
@@ -38,8 +38,10 @@ export function AllInOne() {
                   fontSize: 'var(--step--1)',
                   padding: '0.45rem 0.9rem',
                   borderRadius: 999,
-                  border: '1px solid rgba(255,255,255,0.7)',
-                  background: 'rgba(255,255,255,0.72)',
+                  border: '1px solid var(--glass-edge)',
+                  background: 'var(--glass-sky)',
+                  backdropFilter: 'var(--glass-blur)',
+                  WebkitBackdropFilter: 'var(--glass-blur)',
                   color: 'var(--ink-1)',
                 }}
               >
