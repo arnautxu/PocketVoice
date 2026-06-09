@@ -791,6 +791,9 @@
   /* full-bleed so the wall can run edge to edge, with soft fades at the margins */
   position: relative;
   width: 100vw; margin-left: 50%; transform: translateX(-50%);
+  /* clip the marquee track (width:max-content) so it never expands the page width
+   * and lets it scroll sideways — the auto-roll animation handles the motion */
+  overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
           mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
 }
