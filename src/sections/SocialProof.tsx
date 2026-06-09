@@ -9,12 +9,14 @@ import { useInViewOnce } from '../hooks/useInViewOnce';
  * the same paths to swap them 1:1. (Only show press you've genuinely earned.)
  * ════════════════════════════════════════════════════════════════════════════ */
 
-const LOGOS = [
-  { name: 'TechCrunch', src: '/brand/press/techcrunch.svg' },
-  { name: 'Product Hunt', src: '/brand/press/producthunt.svg' },
-  { name: 'The Verge', src: '/brand/press/theverge.svg' },
-  { name: 'Wired', src: '/brand/press/wired.svg' },
-  { name: 'Fast Company', src: '/brand/press/fastcompany.svg' },
+// viewBoxes are cropped to each logo's ink, so a uniform height = uniform visual size.
+// `scale` only trims the one square mark (Product Hunt) so its mass matches the wordmarks.
+const LOGOS: Array<{ name: string; src: string; scale?: number }> = [
+  { name: 'TechCrunch', src: '/brand/logos/techcrunch-vector-logo.svg' },
+  { name: 'Product Hunt', src: '/brand/logos/product-hunt-vector-logo.svg', scale: 0.85 },
+  { name: 'The Verge', src: '/brand/logos/the-verge-vector-logo-2022.svg' },
+  { name: 'Wired', src: '/brand/logos/Wired_logo.svg' },
+  { name: 'Fast Company', src: '/brand/logos/Fast_Company_logo.svg' },
 ];
 
 const TARGET = 86_000;
@@ -71,7 +73,16 @@ export function SocialProof() {
 
         <div className="proof-logos" aria-label="As featured in">
           {LOGOS.map((logo) => (
-            <img key={logo.name} className="proof-logo" src={logo.src} alt={logo.name} loading="lazy" decoding="async" draggable={false} />
+            <img
+              key={logo.name}
+              className="proof-logo"
+              src={logo.src}
+              alt={logo.name}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              style={logo.scale ? ({ ['--logo-scale' as string]: logo.scale }) : undefined}
+            />
           ))}
         </div>
       </div>

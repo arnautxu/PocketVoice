@@ -42,11 +42,9 @@ export function Footer() {
         </nav>
       </div>
 
-      {/* the name, enormous — filled with the cloud sky (anything-style) */}
+      {/* the name, enormous — the real lockup, full-width, filled with the cloud sky */}
       <div className="rail">
-        <div className="big-footer__wordmark" aria-hidden>
-          <span className="big-footer__wordmark-text">Pocket Voice</span>
-        </div>
+        <div className="big-footer__wordmark" aria-hidden />
       </div>
 
       <div className="rail big-footer__bottom">

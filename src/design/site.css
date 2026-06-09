@@ -97,7 +97,8 @@
 }
 .site-header__nav .navlink {
   font-weight: 600;
-  letter-spacing: 0.005em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ink-1);
   transition: color var(--t-micro) var(--ease);
 }
@@ -163,8 +164,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: clamp(7rem, 14vh, 10rem);
-  padding-bottom: var(--space-xl);
+  /* extra top padding nudges the centred stack down so "Type out loud" reads more
+   * vertically centred on the page (clearing the floating header up top) */
+  padding-top: clamp(9rem, 19vh, 13rem);
+  padding-bottom: var(--space-lg);
 }
 /* Luminous landscape hero: bright cloud sky, DARK type. A soft PALE wash lifts a
  * calm light pool behind the headline so the ink reads over busier cloud, while the
@@ -218,9 +221,8 @@
   color: var(--ink-1);
 }
 .hero-cta-row {
-  display: flex; align-items: center; justify-content: center;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
-  flex-wrap: wrap;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.75rem;
   margin-top: 0.5rem;
 }
 .hero-cta-note { font-size: var(--step--1); color: var(--ink-2); }
@@ -668,12 +670,14 @@
   gap: clamp(1.5rem, 4vw, 3rem); flex-wrap: wrap;
 }
 .proof-logo {
-  height: clamp(20px, 2.4vw, 28px); width: auto;
-  opacity: 0.62; filter: saturate(0) brightness(1.6);
+  /* real outlet logos at original colour — sit calmly on the sky at ~80%, brighten on hover.
+   * viewBoxes are cropped to the ink, so a single height gives equal visual size; the
+   * per-logo --logo-scale only trims the square mark (Product Hunt) to match the wordmarks. */
+  height: calc(clamp(22px, 2.6vw, 30px) * var(--logo-scale, 1)); width: auto;
+  opacity: 0.8;
   transition: opacity var(--t-macro) var(--ease);
 }
-.alt-light .proof-logo { filter: saturate(0) brightness(0.4); opacity: 0.5; }
-.proof-logo:hover { opacity: 0.95; }
+.proof-logo:hover { opacity: 1; }
 
 /* ── Features carousel (3 cards at a time · arrows · scroll-snap) ───────────── */
 .features-head {
@@ -699,18 +703,17 @@
   display: flex; gap: clamp(1.25rem, 2.5vw, 2rem);
   padding-block: 4px;          /* room for card shadows, no clipping */
   overflow-x: auto; overflow-y: hidden;
-  scroll-snap-type: x proximity;
+  /* free momentum scroll — no snapping, cards glide naturally */
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
 }
 .features-track::-webkit-scrollbar { display: none; }
-.features-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+.features-track.is-dragging { cursor: grabbing; scroll-behavior: auto; }
 .features-track.is-dragging .feature-card { pointer-events: none; }
 
 .feature-card {
   flex: 0 0 calc((100% - clamp(1.25rem, 2.5vw, 2rem) * 2) / 3);
-  scroll-snap-align: start;
   display: grid; gap: 0.75rem; align-content: start;
   padding: clamp(1.5rem, 2.5vw, 2rem);
   border-radius: 18px;
@@ -760,9 +763,24 @@
 }
 .fv-chips span.is-on { background: var(--cobalt-wash); color: var(--blue-deep); font-weight: 600; }
 
-/* show ~2 cards on tablet, ~1.15 on phones (peek hints there's more) */
+/* show ~2 cards on tablet, ~1.15 on phones (peek hints there's more). Below the
+ * 3-up width the cards peek past the rail, so the carousel goes full-bleed with a
+ * soft edge-fade — peeking cards dissolve at the screen edge instead of being
+ * sliced by the rail's clip box, and the track is padded to the gutter so the
+ * resting first/last card still lines up with the heading above. */
 @media (max-width: 900px) {
   .feature-card { flex-basis: calc((100% - clamp(1.25rem, 2.5vw, 2rem)) / 2); }
+  .features-carousel {
+    /* break out to the full viewport from inside the grid rail (percentage margins
+     * resolve against the grid area, so use the calc form, not margin-left:50%) */
+    margin-inline: calc(50% - 50vw);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+  }
+  .features-track {
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
 }
 @media (max-width: 600px) {
   .feature-card { flex-basis: 82%; }
@@ -776,25 +794,31 @@
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
           mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
 }
-.testi-controls {
-  display: flex; justify-content: flex-end;
-  margin-bottom: clamp(1.25rem, 3vh, 2rem);
-}
+/* continuous auto-roll marquee: the track holds two copies of the list and slides
+ * left by exactly half its width, looping seamlessly. Pauses on hover. */
 .testi-track {
   display: flex; gap: clamp(1.25rem, 2.5vw, 1.75rem);
-  padding: 4px clamp(1.25rem, 6vw, 5rem);
-  overflow-x: auto; overflow-y: hidden;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  cursor: grab;
+  width: max-content;
+  padding-block: 4px;
+  animation: pv-testi-marquee 64s linear infinite;
+  will-change: transform;
 }
-.testi-track::-webkit-scrollbar { display: none; }
-.testi-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
-.testi-track.is-dragging .testi-card { pointer-events: none; }
+.testi-rail:hover .testi-track { animation-play-state: paused; }
+@keyframes pv-testi-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-50% - clamp(1.25rem, 2.5vw, 1.75rem) / 2)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* no auto-motion — fall back to a static, manually scrollable rail */
+  .testi-track {
+    animation: none; width: auto;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    padding-inline: clamp(1.25rem, 6vw, 5rem);
+  }
+  .testi-track::-webkit-scrollbar { display: none; }
+}
 .testi-card {
   flex: 0 0 clamp(280px, 30vw, 380px);
-  scroll-snap-align: center;
   display: grid; gap: 1.25rem; align-content: space-between;
   padding: clamp(1.5rem, 2.5vw, 2rem);
   border-radius: 18px;
@@ -887,44 +911,35 @@
 .big-footer__col { display: grid; gap: 0.8ch; align-content: start; }
 .big-footer__col a { color: var(--ink-1); transition: color var(--t-micro) var(--ease); }
 .big-footer__col a:hover { color: var(--cloud-white); }
+/* The name, enormous — the real Pocket Voice lockup set full-width and filled with
+ * the cloud sky (so the clouds read INSIDE the letters, giving it depth — "like
+ * before, but with the cloud"). The official SVG masks a cloud-painted box. */
 .big-footer__wordmark {
   width: 100%;
   margin-top: clamp(2.5rem, 6vh, 4.5rem);
-  line-height: 0.9;
-  overflow: visible;          /* never clip the glyphs */
+  aspect-ratio: 451.8 / 87.8;        /* the horizontal-lockup ratio */
+  /* the cloud sky, lit a touch so the glyphs glow against the dark terra */
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04)),
+    url(/brand/sky/hero.webp);
+  background-size: cover, cover;
+  background-position: center, center 28%;
+  /* the lockup shape is the window onto the sky */
+  -webkit-mask: url(/brand/official/10_Neutral_H.svg) center / contain no-repeat;
+          mask: url(/brand/official/10_Neutral_H.svg) center / contain no-repeat;
+  filter: drop-shadow(0 18px 40px rgba(4, 22, 44, 0.45));
 }
-.big-footer__wordmark-text {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  /* fallback size (no container-query units): conservative so it can't outgrow the
-   * rail on wide screens */
-  font-size: clamp(2.5rem, 13vw, 13rem);
-  line-height: 0.9;
-  letter-spacing: -0.035em;
-  white-space: nowrap;
-  padding-block: 0.04em 0.08em;   /* breathing room so caps/descenders aren't cut */
-  /* fallback when background-clip:text is unsupported */
-  color: rgba(255,255,255,0.18);
-}
-/* size by the CONTAINER (the rail), not the viewport — so the word always fits the
- * box no matter how wide the screen gets (the vw version outgrew the capped rail) */
-@supports (width: 1cqw) {
-  .big-footer__wordmark { container-type: inline-size; }
-  .big-footer__wordmark-text { font-size: clamp(2.5rem, 16cqw, 16rem); }
-}
-/* fill the letters with the cloud sky — anything.com-style */
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .big-footer__wordmark-text {
-    color: transparent;
-    background-image:
-      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04)),
-      url(/brand/sky/hero.webp);
-    background-size: cover, 120% auto;
-    background-position: center, center 30%;
-    -webkit-background-clip: text;
-            background-clip: text;
-    -webkit-text-fill-color: transparent;
+/* fallback where mask isn't supported: a soft translucent-paper wordmark via the
+ * same official lockup tinted to Paper (keeps depth from the terra showing through) */
+@supports not ((-webkit-mask: url(#x)) or (mask: url(#x))) {
+  .big-footer__wordmark {
+    background: none;
+    -webkit-mask: none; mask: none;
+    -webkit-mask-image: none;
+    /* render the lockup as a faint paper image */
+    background-image: url(/brand/official/10_Neutral_H.svg);
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    opacity: 0.85;
   }
 }
 .big-footer__bottom {

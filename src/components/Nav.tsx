@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { InstallButton } from './InstallButton';
-import { Wordmark, BrandIcon } from './Wordmark';
 import { usePlatform } from '../hooks/usePlatform';
 import { COMPANY_JOBS, POCKET_SITE } from '../config/links';
 import { GET_DISMISSED_EVENT, GET_DISMISSED_KEY } from './MobileGetBanner';
@@ -68,10 +67,14 @@ export function Nav() {
         <a
           href="#top"
           aria-label="Pocket Voice, back to top"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
+          style={{ display: 'inline-flex', alignItems: 'center' }}
         >
-          <BrandIcon size="2rem" />
-          <Wordmark height="1.25rem" tone="paper" lockup="text" />
+          <img
+            src="/brand/official/10_Neutral_H.svg"
+            alt="Pocket Voice"
+            style={{ height: '1.6rem', width: 'auto', display: 'block' }}
+            draggable={false}
+          />
         </a>
 
         <nav aria-label="Primary" className="site-header__nav is-center">

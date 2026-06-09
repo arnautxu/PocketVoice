@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useDragScroll, pageByCards } from '../hooks/useDragScroll';
 
 /* ══════════════════════════════════════════════════════════════════════════════
  * MADE FOR EVERYONE — the "For you" anchor. Voices from different professions in a
@@ -21,25 +20,20 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export function MadeForEveryone() {
-  const trackRef = useDragScroll<HTMLDivElement>();
+  // duplicate the list so the marquee can loop seamlessly (translateX(-50%))
+  const loop = [...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
     <section id="for-you" className="sec alt-light" aria-label="What people say">
-      <div className="rail testi-controls">
-        <div className="features-arrows" aria-hidden="true">
-          <button type="button" className="features-arrow" aria-label="Previous" onClick={() => pageByCards(trackRef.current, -1)}>
-            <Chevron dir="left" />
-          </button>
-          <button type="button" className="features-arrow" aria-label="Next" onClick={() => pageByCards(trackRef.current, 1)}>
-            <Chevron dir="right" />
-          </button>
-        </div>
-      </div>
-
       <div className="testi-rail">
-        <div className="testi-track" ref={trackRef}>
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="testi-card">
+        <div className="testi-track" role="list">
+          {loop.map((t, i) => (
+            <figure
+              key={`${t.name}-${i}`}
+              className="testi-card"
+              role="listitem"
+              aria-hidden={i >= TESTIMONIALS.length ? 'true' : undefined}
+            >
               <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
               <figcaption className="testi-who">
                 <Avatar t={t} />
@@ -53,14 +47,6 @@ export function MadeForEveryone() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Chevron({ dir }: { dir: 'left' | 'right' }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      {dir === 'left' ? <path d="M15 6l-6 6 6 6" /> : <path d="M9 6l6 6-6 6" />}
-    </svg>
   );
 }
 
