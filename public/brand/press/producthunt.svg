@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 32" role="img" aria-label="Product Hunt">
+  <circle cx="15" cy="16" r="14" fill="none" stroke="#1B1A19" stroke-width="2.4"/>
+  <text x="9" y="22" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" fill="#1B1A19">P</text>
+  <text x="38" y="22" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="-0.3" fill="#1B1A19">Product Hunt</text>
+</svg>

@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { InstallButton } from './InstallButton';
-import { Wordmark } from './Wordmark';
+import { Wordmark, BrandIcon } from './Wordmark';
 import { usePlatform } from '../hooks/usePlatform';
 import { COMPANY_JOBS, POCKET_SITE } from '../config/links';
+import { GET_DISMISSED_EVENT, GET_DISMISSED_KEY } from './MobileGetBanner';
 
 /* ══════════════════════════════════════════════════════════════════════════════
  * HEADER — a floating, centred liquid-glass bar (anything-style: air above it, not
@@ -25,6 +26,8 @@ export function Nav() {
   // while the mobile top Get banner is showing (page near the top) the header sits
   // below it; matches MobileGetBanner's scrollY>320 hide threshold.
   const [belowBanner, setBelowBanner] = useState(true);
+  // once the mobile Get banner is dismissed the header no longer drops below it
+  const [bannerDismissed, setBannerDismissed] = useState(false);
   const [open, setOpen] = useState(false);
   const { storeHref, downloadLabel } = usePlatform();
 
@@ -39,6 +42,13 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    setBannerDismissed(localStorage.getItem(GET_DISMISSED_KEY) === '1');
+    const onDismiss = () => setBannerDismissed(true);
+    window.addEventListener(GET_DISMISSED_EVENT, onDismiss);
+    return () => window.removeEventListener(GET_DISMISSED_EVENT, onDismiss);
+  }, []);
+
   // close the sheet on Escape / when a link is chosen
   useEffect(() => {
     if (!open) return;
@@ -49,14 +59,19 @@ export function Nav() {
 
   return (
     <motion.header
-      className={`site-header${belowBanner ? ' is-below-banner' : ''}`}
+      className={`site-header${belowBanner && !bannerDismissed ? ' is-below-banner' : ''}`}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
     >
       <div className={`site-header__bar${solid ? ' is-solid' : ''}`}>
-        <a href="#top" aria-label="Pocket Voice, back to top" style={{ display: 'inline-flex' }}>
-          <Wordmark height="1.55rem" tone="paper" />
+        <a
+          href="#top"
+          aria-label="Pocket Voice, back to top"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
+        >
+          <BrandIcon size="2rem" />
+          <Wordmark height="1.25rem" tone="paper" lockup="text" />
         </a>
 
         <nav aria-label="Primary" className="site-header__nav is-center">

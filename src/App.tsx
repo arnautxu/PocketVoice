@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react';
 import { gsap } from './lib/gsap';
 import { Nav } from './components/Nav';
+import { AmbientClouds } from './components/AmbientClouds';
 import { CookieBanner } from './components/CookieBanner';
 import { MobileGetBanner } from './components/MobileGetBanner';
 import { Hero } from './sections/Hero';
@@ -55,6 +56,7 @@ export default function App() {
           <Hero />
         </div>
         <div className="surface-zone">
+          <AmbientClouds />
           <AllInOne />
           <SocialProof />
           <Features />

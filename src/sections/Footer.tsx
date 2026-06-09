@@ -42,10 +42,10 @@ export function Footer() {
         </nav>
       </div>
 
-      {/* the name, enormous */}
+      {/* the name, enormous — filled with the cloud sky (anything-style) */}
       <div className="rail">
         <div className="big-footer__wordmark" aria-hidden>
-          <Wordmark tone="paper" height="auto" style={{ width: '100%', height: 'auto', color: 'inherit' }} />
+          <span className="big-footer__wordmark-text">Pocket Voice</span>
         </div>
       </div>
 

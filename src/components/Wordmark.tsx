@@ -1,5 +1,9 @@
 import type { CSSProperties } from 'react';
 
+/** The engineered Pocket symbol (pinwheel + I-beam), shared by the wordmark and the app-icon tile. */
+const SYMBOL_PATH =
+  'M26.8,26.4l13.5-22.4,3.5,3.5-12.1,19.5.4.4,19.6-11.9,3.5,3.5-22.5,13.2c-1.3-2.4-3.3-4.3-5.7-5.6l-.2-.2ZM59.2,33.5v-4.9s-25.3,6.3-25.3,6.3c.4,1.3.6,2.7.6,4.2s-.2,2.8-.6,4.1l25.2,6.6v-4.9s-22.2-5.5-22.2-5.5v-.5s22.3-5.2,22.3-5.2ZM26.9,51.6l13.2,22.6,3.5-3.5-11.9-19.6.4-.4,19.5,12.1,3.5-3.5-22.4-13.5c-1.3,2.4-3.4,4.4-5.9,5.7ZM13,45.8v-13.6s0-6.8,0-6.8h11s.2,0,.2,0L30.8,0h-4.9l-5.5,22.3h-.5S18,0,18,0H0v87.8h17.7l2.2-32h.5s5.2,22.3,5.2,22.3h4.9s-6.3-25.4-6.3-25.4h-.5s-10.8,0-10.8,0v-6.9Z';
+
 interface WordmarkProps {
   style?: CSSProperties;
   className?: string;
@@ -12,6 +16,40 @@ interface WordmarkProps {
    *  - 'blue'  - Pocket Blue
    */
   tone?: 'ink' | 'paper' | 'blue';
+  /**
+   * 'full' - symbol + "PocketVoice" (the official horizontal lockup).
+   * 'text' - just "PocketVoice" (use beside <BrandIcon /> for an app-icon lockup).
+   */
+  lockup?: 'full' | 'text';
+}
+
+/**
+ * The app-icon tile — the engineered symbol on a sky gradient, rounded like an App
+ * Store icon. This is the "cloud icon" badge that fronts the header lockup; the
+ * sky gradient ties it to the brand's "sky as material" direction.
+ */
+export function BrandIcon({ size = '2rem', style, className }: { size?: string; style?: CSSProperties; className?: string }) {
+  return (
+    <span
+      className={className}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: size,
+        height: size,
+        borderRadius: '24%',
+        background: 'linear-gradient(150deg, var(--pocket-blue) 0%, var(--blue-deep) 100%)',
+        boxShadow: '0 6px 16px -8px rgba(6,18,40,0.6), inset 0 1px 0 rgba(255,255,255,0.30)',
+        flexShrink: 0,
+        ...style,
+      }}
+    >
+      <svg viewBox="0 0 60 88" width="48%" height="48%" fill="var(--pv-paper)" aria-hidden style={{ display: 'block' }}>
+        <path d={SYMBOL_PATH} />
+      </svg>
+    </span>
+  );
 }
 
 /**
@@ -19,21 +57,24 @@ interface WordmarkProps {
  * brand deliverable (…/Logo · *_H.svg): the engineered symbol + "PocketVoice"
  * set in Erode. Recolored to `currentColor` so one file serves every surface.
  */
-export function Wordmark({ style, className, height = '2rem', tone = 'ink' }: WordmarkProps) {
+export function Wordmark({ style, className, height = '2rem', tone = 'ink', lockup = 'full' }: WordmarkProps) {
   const color =
     tone === 'paper' ? 'var(--pv-paper)' : tone === 'blue' ? 'var(--pv-blue)' : 'var(--pv-black)';
+
+  // 'text' crops the leading symbol out of the viewBox so only "PocketVoice" shows.
+  const viewBox = lockup === 'text' ? '72 0 379.8 87.8' : '0 0 451.8 87.8';
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 451.8 87.8"
+      viewBox={viewBox}
       role="img"
       aria-label="Pocket Voice"
       fill="currentColor"
       className={className}
       style={{ height, width: 'auto', display: 'block', flexShrink: 0, color, ...style }}
     >
-      <path d="M26.8,26.4l13.5-22.4,3.5,3.5-12.1,19.5.4.4,19.6-11.9,3.5,3.5-22.5,13.2c-1.3-2.4-3.3-4.3-5.7-5.6l-.2-.2ZM59.2,33.5v-4.9s-25.3,6.3-25.3,6.3c.4,1.3.6,2.7.6,4.2s-.2,2.8-.6,4.1l25.2,6.6v-4.9s-22.2-5.5-22.2-5.5v-.5s22.3-5.2,22.3-5.2ZM26.9,51.6l13.2,22.6,3.5-3.5-11.9-19.6.4-.4,19.5,12.1,3.5-3.5-22.4-13.5c-1.3,2.4-3.4,4.4-5.9,5.7ZM13,45.8v-13.6s0-6.8,0-6.8h11s.2,0,.2,0L30.8,0h-4.9l-5.5,22.3h-.5S18,0,18,0H0v87.8h17.7l2.2-32h.5s5.2,22.3,5.2,22.3h4.9s-6.3-25.4-6.3-25.4h-.5s-10.8,0-10.8,0v-6.9Z" />
+      {lockup === 'full' && <path d={SYMBOL_PATH} />}
       <g>
         <path d="M89.3,12.4v45.4c0,1.7.3,2.8,1,3.4.7.6,1.8,1,3.5,1.4v2.3h-14.9v-2.3c1.7-.3,2.9-.8,3.5-1.4.7-.6,1-1.7,1-3.3V19.4c0-1.6-.3-2.7-1-3.3-.7-.6-1.8-1-3.5-1.4v-2.3h10.4ZM95.3,44.6h-6.8v-3.4l6.4-.3c4.4-.2,7.8-1.3,10.3-3.3,2.5-2,3.7-5.1,3.7-9.3s-1.3-7.2-4-9.2c-2.7-2-6.1-3.1-10.3-3.3l-6-.3v-3.2h6.9c4.1,0,7.6.6,10.5,1.8,3,1.2,5.3,2.9,7,5.2,1.7,2.3,2.5,5.1,2.5,8.6s-.8,6.3-2.5,8.8c-1.7,2.5-4,4.4-7,5.8-3,1.4-6.5,2-10.6,2Z" />
         <path d="M133.9,65.6c-3.4,0-6.5-.8-9.1-2.5-2.7-1.7-4.8-4-6.3-7-1.5-3-2.3-6.5-2.3-10.4s.7-7.5,2.2-10.6,3.5-5.4,6.2-7.1c2.6-1.7,5.7-2.6,9.3-2.6s6.4.8,9.1,2.5c2.7,1.7,4.9,3.9,6.5,6.9,1.6,2.9,2.4,6.4,2.4,10.3s-.8,7.5-2.3,10.6c-1.6,3.1-3.7,5.5-6.4,7.3-2.7,1.8-5.8,2.7-9.3,2.7ZM134.2,62.2c2.6,0,4.7-.8,6.3-2.3,1.7-1.5,2.9-3.5,3.7-6,.8-2.5,1.2-5.1,1.2-8s-.5-6-1.4-8.6c-1-2.6-2.3-4.7-4-6.2-1.7-1.5-3.9-2.3-6.4-2.3s-4.4.7-6,2.1c-1.6,1.4-2.9,3.3-3.7,5.7s-1.3,5-1.3,8,.4,6.1,1.3,8.7c.9,2.6,2.2,4.8,3.9,6.4,1.7,1.6,3.8,2.4,6.4,2.4Z" />

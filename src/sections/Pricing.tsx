@@ -1,3 +1,4 @@
+import { InstallButton } from '../components/InstallButton';
 import { usePlatform } from '../hooks/usePlatform';
 import { COMPANY_JOBS } from '../config/links';
 
@@ -75,25 +76,35 @@ export function Pricing() {
                   ))}
                 </ul>
 
-                <a
-                  href={href}
-                  target={external ? '_blank' : undefined}
-                  rel={external ? 'noreferrer' : undefined}
-                  className="pv-cta"
-                  style={{
-                    display: 'inline-block',
-                    textAlign: 'center',
-                    padding: '0.75ch 2ch',
-                    borderRadius: '0.6ch',
-                    fontWeight: 600,
-                    fontSize: 'var(--step-0)',
-                    background: p.featured ? 'var(--paper)' : 'var(--pocket-blue)',
-                    color: p.featured ? 'var(--blue-deep)' : 'var(--paper)',
-                    boxShadow: p.featured ? 'none' : 'var(--shadow-blue)',
-                  }}
-                >
-                  {p.cta}
-                </a>
+                {external ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pv-cta"
+                    style={{
+                      display: 'inline-block',
+                      textAlign: 'center',
+                      padding: '0.8ch 2ch',
+                      borderRadius: '0.6ch',
+                      fontWeight: 600,
+                      fontSize: 'var(--step-0)',
+                      background: 'transparent',
+                      color: 'var(--ink-0)',
+                      border: '1px solid rgba(11,24,41,0.18)',
+                    }}
+                  >
+                    {p.cta}
+                  </a>
+                ) : (
+                  <InstallButton
+                    size="lg"
+                    label={p.cta}
+                    href={href}
+                    inverted={p.featured}
+                    style={{ width: '100%', justifyContent: 'center' }}
+                  />
+                )}
               </article>
             );
           })}

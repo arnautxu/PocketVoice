@@ -119,12 +119,16 @@ export function Hero() {
 
         <div className="hero-cta-row rise" style={{ animationDelay: '0.22s' }}>
           <InstallButton size="lg" label={downloadLabel} href={storeHref} />
-          <a href="#features" className="navlink" style={{ color: 'var(--ink-1)', fontSize: 'var(--step-0)' }}>
-            See how it works ↓
-          </a>
+          <span className="hero-cta-note">Free to start · iPhone &amp; Mac</span>
         </div>
 
         <VoiceToText />
+
+        {/* quiet scroll cue, sat below the animation it points at */}
+        <a href="#all-in-one" className="hero-scrollcue" aria-label="See how it works">
+          See how it works
+          <span className="hero-scrollcue__arrow" aria-hidden>↓</span>
+        </a>
       </div>
     </section>
   );
