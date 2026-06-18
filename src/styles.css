@@ -18,14 +18,21 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+/* `overflow-x: clip` (not hidden) on the root stops the full-bleed visuals
+   (footer cloud, phone shadow) from creating horizontal scroll, without turning
+   the root into a scroll container — so the sticky nav keeps working. It must be
+   on html too: html is the scroll element, so body-only clipping left an x-scroll. */
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
 
 body {
   font-family: var(--sans);
   background: var(--sky);
   color: var(--paper);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .site-bg {
