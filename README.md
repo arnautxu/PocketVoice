@@ -1,43 +1,45 @@
 # Pocket Voice — Launch Site
 
-Sub-brand launch website for Pocket Voice. React + Three.js (react-three-fiber).
+Marketing site for **Pocket Voice**, an iOS dictation keyboard. React + Vite + TypeScript
+port of the static `PocketVoice Website` design (1:1 in layout, copy, and motion).
 
 ## Stack
 
 - Vite + React 18 + TypeScript
-- react-three-fiber + drei + custom shader (`src/scene/voiceShader.ts`)
-- Framer Motion for UI choreography
-- Tailwind CSS v4 + tokens layer (`src/design/tokens.css`)
-- Geist + Geist Mono (variable, MIT)
+- Plain CSS, single stylesheet (`src/styles.css`) — design source of truth
+- Erode (display serif) + Satoshi (sans) via Fontshare (`index.html`)
+- WebGPU animated cloud sky, IntersectionObserver-driven typewriter/morph demos
 
 ## Run
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # type-check + production build
+npm run build    # tsc --noEmit + production build
 npm run preview  # serve the build
 ```
-
-## Brand source of truth
-
-See [`PRODUCT.md`](./PRODUCT.md). Every design pass reads it first.
 
 ## Structure
 
 ```
+index.html          font links, meta, #root mount
 src/
-├─ design/     OKLCH tokens, globals, Tailwind theme
-├─ scene/      Three.js — isolated client component, custom shader
-├─ sections/   Hero · MagicMoment · Differentiators · AnywhereYouType · SpeedProof · FromPocket · Footer
-├─ components/ Nav, Wordmark, InstallButton
-└─ hooks/      useInViewOnce
+├─ main.tsx         mounts <App>, imports styles.css
+├─ App.tsx          the full single-page layout (all sections, in JSX)
+├─ styles.css       all styling (ported verbatim from the static site)
+└─ effects/         DOM-driven animations, run from App's useEffect:
+   ├─ clouds.ts            WebGPU cloud sky (#webgpuClouds canvas)
+   ├─ demoTyping.ts        demo card, tones, snippets, speed, speak-morph
+   ├─ audienceCarousel.ts  prev/next audience cards
+   └─ navMenu.ts           mobile nav toggle
+public/assets/      all SVG/PNG assets, served at /assets/*
 ```
 
-## Non-negotiables
+## Notes
 
-- No `#000` / `#fff`. OKLCH only, neutrals tinted toward the brand hue.
-- No microphone icon as the primary mark. No sparkles. No "powered by AI".
-- No 3-up icon-heading-text feature card grid.
-- One accent (electric blue) used ≤10% of surface.
-- Animate `transform` + `opacity` only.
+- `App.tsx` renders the static markup; the `effects/*` modules then animate it by
+  querying the rendered DOM (the same approach the original static site used). The
+  app has no React state, so React never re-renders those nodes — manual DOM
+  mutation inside them is safe.
+- `prefers-reduced-motion` is respected throughout (static fallbacks in the effects).
+- The cloud sky degrades gracefully (blue background) when WebGPU is unavailable.
