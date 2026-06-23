@@ -34,6 +34,93 @@ const audiences = [
   ['Recruiters', "Candidate notes after every call, outreach that doesn't sound like outreach. It reads natural because it started as you talking."],
 ];
 
+// One line icon per role. Decorative only — the cards stay non-interactive
+// (a draggable carousel isn't a control). Stroke inherits brand blue via CSS.
+const roleIcons: Record<string, JSX.Element> = {
+  Writers: (
+    <>
+      <path d="M4 20l4-1L19 7.5a2.12 2.12 0 0 0-3-3L4.5 16 4 20z" />
+      <path d="M14.5 6.5l3 3" />
+    </>
+  ),
+  Founders: (
+    <>
+      <path d="M12 3c2.8 1.2 4.5 4 4.5 7.5L14 13h-4l-2.5-2.5C7.5 7 9.2 4.2 12 3z" />
+      <circle cx="12" cy="9" r="1.6" />
+      <path d="M9.5 14l-2 5 3.2-1.8M14.5 14l2 5-3.2-1.8" />
+    </>
+  ),
+  Developers: (
+    <>
+      <path d="M9 8l-4.5 4L9 16" />
+      <path d="M15 8l4.5 4L15 16" />
+    </>
+  ),
+  'HR people': (
+    <>
+      <circle cx="9" cy="8" r="3" />
+      <path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
+      <path d="M17.5 11.5c.9-1 2.5-.4 2.5.9 0 1.4-2.5 3.1-2.5 3.1s-2.5-1.7-2.5-3.1c0-1.3 1.6-1.9 2.5-.9z" />
+    </>
+  ),
+  Sales: (
+    <>
+      <path d="M4 4v16h16" />
+      <path d="M7 14l3.5-4 3 2.2L19 6" />
+      <path d="M15.5 6H19v3.5" />
+    </>
+  ),
+  'Support Teams': (
+    <>
+      <path d="M5 13a7 7 0 0 1 14 0" />
+      <rect x="3.5" y="13" width="3.5" height="6" rx="1.5" />
+      <rect x="17" y="13" width="3.5" height="6" rx="1.5" />
+      <path d="M19 19a3 3 0 0 1-3 3h-2" />
+    </>
+  ),
+  Executives: (
+    <>
+      <rect x="3.5" y="8" width="17" height="11" rx="2" />
+      <path d="M9 8V6.5A2.5 2.5 0 0 1 11.5 4h1A2.5 2.5 0 0 1 15 6.5V8" />
+      <path d="M3.5 13h17" />
+    </>
+  ),
+  Students: (
+    <>
+      <path d="M3 9l9-4 9 4-9 4-9-4z" />
+      <path d="M7 11.2V15c0 1.1 2.2 2.2 5 2.2s5-1.1 5-2.2v-3.8" />
+      <path d="M21 9v4" />
+    </>
+  ),
+  'Healthcare workers': (
+    <>
+      <path d="M12 20s-7-4.4-7-9.3A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.7C19 15.6 12 20 12 20z" />
+      <path d="M12 9.5v4M10 11.5h4" />
+    </>
+  ),
+  Lawyers: (
+    <>
+      <path d="M12 4v16M7 20h10" />
+      <path d="M5 7h14" />
+      <path d="M5 7l-2.2 4.6h4.4L5 7zM19 7l-2.2 4.6h4.4L19 7z" />
+    </>
+  ),
+  'Product Managers': (
+    <>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <path d="M9 4v16M15 4v16" />
+    </>
+  ),
+  Recruiters: (
+    <>
+      <circle cx="10" cy="8.5" r="3" />
+      <path d="M4.5 19c0-3 2.4-5 5.5-5" />
+      <circle cx="16.5" cy="15.5" r="3" />
+      <path d="M18.7 17.7L21 20" />
+    </>
+  ),
+};
+
 const speakWord = ['s', 'p', 'e', 'a', 'k'];
 
 export default function App() {
@@ -185,6 +272,45 @@ export default function App() {
             </div>
           </section>
 
+          {/* SPEED — promoted to its own moment, right after the demo */}
+          <section className="speed" aria-labelledby="speed-title">
+            <div className="speed-panel">
+              <div className="speed-intro">
+                <p className="feature-kicker speed-kicker">
+                  <span className="pop-dot" aria-hidden="true" />
+                  Speed
+                </p>
+                <h3 id="speed-title">Your keyboard just can't keep up.</h3>
+              </div>
+              <div className="speed-compare">
+                <div className="speed-card">
+                  <p
+                    className="js-speed-demo"
+                    data-type-text="Hey, any chance we can move our 1:1 to Thursday? Today completely got away from me and I don't want to rush it. Same time works if that's good for you."
+                    data-type-speed="52"
+                  >
+                    Hey, any chance we can move our 1:1 to Thursday? Today completely got away from
+                    me and I don't want to rush it. Same time works if that's good for you.
+                    <span className="caret">|</span>
+                  </p>
+                  <span>Traditional Typing</span>
+                </div>
+                <div className="speed-card speed-card--blue">
+                  <p
+                    className="js-speed-demo"
+                    data-type-text="Hey, any chance we can move our 1:1 to Thursday? Today completely got away from me and I don't want to rush it. Same time works if that's good for you."
+                    data-type-speed="16"
+                  >
+                    Hey, any chance we can move our 1:1 to Thursday? Today completely got away from
+                    me and I don't want to rush it. Same time works if that's good for you.
+                    <span className="caret">|</span>
+                  </p>
+                  <span>Pocket Voice</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ANYWHERE */}
           <section className="anywhere" id="features">
             <div className="anywhere-copy">
@@ -230,19 +356,36 @@ export default function App() {
                   <img className="phone-app-shot" src="/assets/app-messages-reply.png" alt="" />
                 </div>
                 <div className="kb" role="group" aria-label="Pocket Voice keyboard preview">
-                  <div className="kb-bar">
-                    <button className="kb-close" type="button" aria-label="Close keyboard">
-                      <svg className="kb-symbol kb-symbol--close" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M7.5 7.5 16.5 16.5M16.5 7.5 7.5 16.5" />
-                      </svg>
-                    </button>
-                    <button className="kb-voice" type="button" aria-label="Recording">
-                      <span className="kb-voice-bar kb-voice-bar--tall" />
-                      <span className="kb-voice-bar" />
-                      <span className="kb-voice-bar kb-voice-bar--tall" />
-                      <span className="kb-voice-bar" />
-                      <span className="kb-voice-bar kb-voice-bar--tall" />
-                    </button>
+                  <div className="kb-bar" aria-hidden="true">
+                    {/* Resting state — tone selector + mic (mic off) */}
+                    <div className="kb-state kb-state--rest">
+                      <span className="kb-tone">
+                        <span className="kb-tone-pill">
+                          <svg className="kb-tone-chev" viewBox="0 0 24 24"><path d="M15 6 9 12l6 6" /></svg>
+                          <img className="kb-tone-face" src="/assets/tone-smile.svg" alt="" />
+                          <svg className="kb-tone-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" /></svg>
+                        </span>
+                        <span className="kb-tone-label">Friendly</span>
+                      </span>
+                      <span className="kb-mic">
+                        <svg className="kb-mic-glyph" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 19v3" />
+                          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                          <rect x="9" y="2" width="6" height="13" rx="3" />
+                        </svg>
+                      </span>
+                    </div>
+                    {/* Recording state — close + live indicator (mic on) */}
+                    <div className="kb-state kb-state--rec">
+                      <span className="kb-close-btn">
+                        <svg viewBox="0 0 24 24"><path d="M7.5 7.5 16.5 16.5M16.5 7.5 7.5 16.5" /></svg>
+                      </span>
+                      <span className="kb-record">
+                        <span className="kb-dot" />
+                        <span className="kb-dot" />
+                        <span className="kb-dot" />
+                      </span>
+                    </div>
                   </div>
                   <div className="kb-row">
                     {'qwertyuiop'.split('').map((k) => (
@@ -430,39 +573,6 @@ export default function App() {
                 </div>
               </article>
             </div>
-
-            <section className="speed-panel" aria-labelledby="speed-title">
-              <div className="speed-intro">
-                <p className="feature-kicker">Speed</p>
-                <h3 id="speed-title">Your keyboard just can't keep up.</h3>
-              </div>
-              <div className="speed-compare">
-                <div className="speed-card">
-                  <p
-                    className="js-speed-demo"
-                    data-type-text="Hey, any chance we can move our 1:1 to Thursday? Today completely got away from me and I don't want to rush it. Same time works if that's good for you."
-                    data-type-speed="52"
-                  >
-                    Hey, any chance we can move our 1:1 to Thursday? Today completely got away from
-                    me and I don't want to rush it. Same time works if that's good for you.
-                    <span className="caret">|</span>
-                  </p>
-                  <span>Traditional Typing</span>
-                </div>
-                <div className="speed-card speed-card--blue">
-                  <p
-                    className="js-speed-demo"
-                    data-type-text="Hey, any chance we can move our 1:1 to Thursday? Today completely got away from me and I don't want to rush it. Same time works if that's good for you."
-                    data-type-speed="16"
-                  >
-                    Hey, any chance we can move our 1:1 to Thursday? Today completely got away from
-                    me and I don't want to rush it. Same time works if that's good for you.
-                    <span className="caret">|</span>
-                  </p>
-                  <span>Pocket Voice</span>
-                </div>
-              </div>
-            </section>
           </section>
 
           {/* AUDIENCES */}
@@ -496,7 +606,12 @@ export default function App() {
             <div className="audience-grid">
               {audiences.map(([title, body]) => (
                 <article key={title}>
-                  <h3>{title}</h3>
+                  <div className="audience-head">
+                    <span className="audience-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">{roleIcons[title]}</svg>
+                    </span>
+                    <h3>{title}</h3>
+                  </div>
                   <p>{body}</p>
                 </article>
               ))}
@@ -507,7 +622,7 @@ export default function App() {
           <section className="pricing" id="pricing" aria-labelledby="pricing-title">
             <div className="section-intro section-intro--center">
               <h2 id="pricing-title">Free to start. Fair to stay.</h2>
-              <p>Try everything before paying anything. Upgrade when speaking becomes how you write.</p>
+              <p>Speak free in every app. Go Pro for snippets, your own dictionary, and no weekly cap.</p>
             </div>
 
             <div className="pricing-grid">
@@ -517,12 +632,12 @@ export default function App() {
                   <p className="price">
                     <span>$0</span>/m
                   </p>
-                  <p className="price-note">For trying it properly.</p>
+                  <p className="price-note">For seeing how you write when you talk.</p>
                 </div>
                 <ul>
+                  <li>Speak to text in every app, every language</li>
+                  <li>Friendly and neutral tones</li>
                   <li>2,000 words a week</li>
-                  <li>Every feature included</li>
-                  <li>All languages</li>
                   <li>No card required</li>
                 </ul>
                 <a className="btn price-cta price-cta--dark" href="#get-app">
@@ -530,19 +645,21 @@ export default function App() {
                 </a>
               </article>
 
-              <article className="price-card">
+              <article className="price-card price-card--featured">
+                <span className="price-badge">Most popular</span>
                 <div>
                   <h3>Pro</h3>
                   <p className="price">
                     <span>$12</span>/m
                   </p>
-                  <p className="price-note">For every day, every app.</p>
+                  <p className="price-note">For when speaking becomes how you write.</p>
                 </div>
                 <ul>
-                  <li>Unlimited words</li>
-                  <li>Tones, snippets, and dictionary</li>
-                  <li>Early access to new features</li>
-                  <li>Priority support</li>
+                  <li>Everything in Free, with no weekly cap</li>
+                  <li>Snippets: your repeated messages, saved</li>
+                  <li>Personal dictionary: names, jargon, acronyms</li>
+                  <li>Every tone</li>
+                  <li>Priority speed and support</li>
                 </ul>
                 <a className="btn price-cta price-cta--blue" href="#get-app">
                   Go Pro

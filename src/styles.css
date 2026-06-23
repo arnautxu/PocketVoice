@@ -14,6 +14,11 @@
   --Brand-Colors-Graphite: var(--graphite);
   --sans: "Satoshi", system-ui, -apple-system, "Segoe UI", sans-serif;
   --serif: "Erode", Georgia, "Times New Roman", serif;
+  /* Tertiary pop — coral. Decorative only; never carries legible body text.
+     Blue stays the brand; this is a hit, not a theme. */
+  --coral: #FF6B5C;
+  --pop: var(--coral);
+  --pop-wash: rgba(255, 107, 92, 0.16);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -678,11 +683,120 @@ body {
   align-items: center;
 }
 .kb-bar {
+  position: relative;
   width: 344px;
+  height: 30.81px;
+  margin-bottom: 10.27px;
+  padding: 0 11.98px;
+}
+/* Two real keyboard states crossfading: resting (mic off) → recording (mic on),
+   matching the actual Voice keyboard. Reduced motion settles to resting. */
+.kb-state {
+  position: absolute;
+  top: 0;
+  left: 11.98px;
+  right: 11.98px;
+  height: 30.81px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 11.98px 10.27px;
+}
+.kb-state--rec { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .kb-state--rest { animation: kb-state-rest 6.4s ease-in-out infinite; }
+  .kb-state--rec { animation: kb-state-rec 6.4s ease-in-out infinite; }
+}
+@keyframes kb-state-rest {
+  0%, 40% { opacity: 1; }
+  50%, 90% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes kb-state-rec {
+  0%, 40% { opacity: 0; }
+  50%, 90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+/* Resting — tone selector pill + white mic */
+.kb-tone { display: inline-flex; align-items: center; gap: 7px; }
+.kb-tone-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30.81px;
+  padding: 0 9px;
+  background: #fff;
+  border-radius: 32px;
+}
+.kb-tone-chev {
+  width: 8px;
+  height: 8px;
+  display: block;
+  fill: none;
+  stroke: #8A8783;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kb-tone-face { width: 18px; height: 18px; display: block; }
+.kb-tone-label { color: #8A8783; font-size: 14px; font-weight: 500; }
+.kb-mic {
+  width: 50px;
+  height: 30.81px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 32px;
+}
+.kb-mic-glyph {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: none;
+  stroke: #3A3937;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Recording — close + live coral indicator (three dots) */
+.kb-close-btn {
+  width: 30.81px;
+  height: 30.81px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 72px;
+}
+.kb-close-btn svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+  fill: none;
+  stroke: #1B1A19;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kb-record {
+  width: 56px;
+  height: 30.81px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: #D94B3A;
+  border-radius: 32px;
+}
+.kb-dot { width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+@media (prefers-reduced-motion: no-preference) {
+  .kb-dot { animation: kb-dot 1.05s ease-in-out infinite; }
+  .kb-dot:nth-child(2) { animation-delay: 0.16s; }
+  .kb-dot:nth-child(3) { animation-delay: 0.32s; }
+}
+@keyframes kb-dot {
+  0%, 100% { opacity: 0.45; transform: translateY(0.5px); }
+  50% { opacity: 1; transform: translateY(-1px); }
 }
 .kb-close,
 .kb-voice {
@@ -1367,6 +1481,24 @@ body {
   margin: 0;
   text-align: center;
 }
+/* Speed — promoted to its own section right after the demo. */
+.speed {
+  margin-top: 152px;
+  width: 100%;
+}
+.speed .speed-panel { margin-top: 0; }
+.speed-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.pop-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pop);
+}
+
 .speed-panel {
   margin-top: 172px;
   background: var(--paper);
@@ -1463,6 +1595,30 @@ body {
   font-size: 15px;
   font-weight: 500;
   line-height: 1.45;
+}
+.audience-head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.audience-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--pop-wash);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.audience-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .audience-controls {
   display: flex;
@@ -1624,6 +1780,26 @@ body {
 }
 .price-cta--dark { background: var(--black); }
 .price-cta--blue { background: var(--blue); }
+
+/* Pro is the featured plan — coral "Most popular" badge + coral-tinted lift. */
+.price-card--featured {
+  position: relative;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.08), 0 10px 26px rgba(255, 107, 92, 0.18);
+}
+.price-badge {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--pop);
+  color: var(--black);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 7px 13px;
+  border-radius: 999px;
+}
 
 /* ---------- Final CTA ---------- */
 .final-cta {
